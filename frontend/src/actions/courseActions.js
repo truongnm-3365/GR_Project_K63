@@ -1,0 +1,409 @@
+import axios from 'axios';
+
+import {
+    ALL_COURSES_REQUEST,
+    ALL_COURSES_SUCCESS,
+    ALL_COURSES_FAIL,
+    ADMIN_COURSES_REQUEST,
+    ADMIN_COURSES_SUCCESS,
+    ADMIN_COURSES_FAIL,
+    NEW_COURSE_REQUEST,
+    NEW_COURSE_SUCCESS,
+    NEW_COURSE_FAIL,
+    DELETE_COURSE_REQUEST,
+    DELETE_COURSE_SUCCESS,
+    DELETE_COURSE_FAIL,
+    UPDATE_COURSE_REQUEST,
+    UPDATE_COURSE_SUCCESS,
+    UPDATE_COURSE_FAIL,
+    COURSE_DETAILS_REQUEST,
+    COURSE_DETAILS_SUCCESS,
+    COURSE_DETAILS_FAIL,
+    NEW_LESSON_REQUEST,
+    NEW_LESSON_SUCCESS,
+    NEW_LESSON_FAIL,
+    GET_LESSONS_REQUEST,
+    GET_LESSONS_SUCCESS,
+    GET_LESSONS_FAIL,
+    GET_LESSON_REQUEST,
+    GET_LESSON_SUCCESS,
+    GET_LESSON_FAIL,
+    DELETE_LESSON_REQUEST,
+    DELETE_LESSON_SUCCESS,
+    DELETE_LESSON_RESET,
+    DELETE_LESSON_FAIL,
+    NEW_REVIEW_REQUEST,
+    NEW_REVIEW_SUCCESS,
+    NEW_REVIEW_FAIL,
+    GET_REVIEWS_REQUEST,
+    GET_REVIEWS_SUCCESS,
+    GET_REVIEWS_FAIL,
+    DELETE_REVIEW_REQUEST,
+    DELETE_REVIEW_SUCCESS,
+    DELETE_REVIEW_RESET,
+    DELETE_REVIEW_FAIL,
+    CLEAR_ERRORS
+
+} from '../constants/courseConstants'
+
+export const getCourses = (keyword = '', currentPage = 1, price, category, rating = 0) => async (dispatch) => {
+    try {
+
+        dispatch({ type: ALL_COURSES_REQUEST })
+
+        let link = `/api/v1/courses?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}&ratings[gte]=${rating}`
+
+        if (category) {
+            link = `/api/v1/courses?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}&category=${category}&ratings[gte]=${rating}`
+        }
+
+        const { data } = await axios.get(link)
+
+        dispatch({
+            type: ALL_COURSES_SUCCESS,
+            payload: data
+        })
+
+    } catch (error) {
+        dispatch({
+            type: ALL_COURSES_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const newCourse = (courseData) => async (dispatch) => {
+    try {
+
+        dispatch({ type: NEW_COURSE_REQUEST })
+
+        const config = {
+            credentials: 'include',
+            headers: {'Content-type': 'multipart/form-data; boundary=XXX' },
+            body: '--XXX\r\nContent-Disposition: form-data; name="file"; filename="filename.csv"\r\nContent-Type: text/csv\r\n\r\nA,B,C\r\n1,1.1,name1\r\n2,2.2,name2\r\n\r\n--XXX--'
+        }
+
+        const { data } = await axios.post(`/api/v1/course/new`, courseData, config)
+
+        dispatch({
+            type: NEW_COURSE_SUCCESS,
+            payload: data
+        })
+
+    } catch (error) {
+        dispatch({
+            type: NEW_COURSE_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+// Delete course (Admin)
+export const deleteCourse = (id) => async (dispatch) => {
+    try {
+
+        dispatch({ type: DELETE_COURSE_REQUEST })
+
+        const { data } = await axios.delete(`/api/v1/course/${id}`)
+
+        dispatch({
+            type: DELETE_COURSE_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+        dispatch({
+            type: DELETE_COURSE_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+// Update Course (ADMIN)
+export const updateCourse = (id, courseData) => async (dispatch) => {
+    try {
+
+        dispatch({ type: UPDATE_COURSE_REQUEST })
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        const { data } = await axios.put(`/api/v1/course/${id}`, courseData, config)
+
+        dispatch({
+            type: UPDATE_COURSE_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+        dispatch({
+            type: UPDATE_COURSE_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const acceptCourse = (id, courseData) => async (dispatch) => {
+    try {
+
+        dispatch({ type: UPDATE_COURSE_REQUEST })
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        const { data } = await axios.put(`/api/v1/admin/course/accept/${id}`, courseData, config)
+
+        dispatch({
+            type: UPDATE_COURSE_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+        dispatch({
+            type: UPDATE_COURSE_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const getCourseDetails = (id) => async (dispatch) => {
+    try {
+
+        dispatch({ type: COURSE_DETAILS_REQUEST })
+
+        const { data } = await axios.get(`/api/v1/course/${id}`)
+
+        dispatch({
+            type: COURSE_DETAILS_SUCCESS,
+            payload: data.course
+        })
+
+    } catch (error) {
+        dispatch({
+            type: COURSE_DETAILS_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const newLesson = (lessonData) => async (dispatch) => {
+    try {
+
+        dispatch({ type: NEW_LESSON_REQUEST })
+
+        const config = {
+            credentials: 'include',
+            headers: {'Content-type': 'multipart/form-data; boundary=XXX' },
+            body: '--XXX\r\nContent-Disposition: form-data; name="file"; filename="filename.csv"\r\nContent-Type: text/csv\r\n\r\nA,B,C\r\n1,1.1,name1\r\n2,2.2,name2\r\n\r\n--XXX--'
+        }
+
+       
+
+        const { data } = await axios.post(`/api/v1/media/create`, lessonData, config)
+
+        dispatch({
+            type: NEW_LESSON_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+        dispatch({
+            type: NEW_LESSON_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const getCourseLessons = (id) => async (dispatch) => {
+    try {
+
+        dispatch({ type: GET_LESSONS_REQUEST })
+
+        const { data } = await axios.get(`/api/v1/media/all/${id}`)
+
+        dispatch({
+            type: GET_LESSONS_SUCCESS,
+            payload: data.media
+        })
+
+    } catch (error) {
+
+        dispatch({
+            type: GET_LESSONS_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const getCourseLesson = (courseId,index) => async (dispatch) => {
+    try {
+
+        dispatch({ type: GET_LESSON_REQUEST })
+
+        const { data } = await axios.get(`/api/v1/media/${courseId}/${index}`)
+
+        dispatch({
+            type: GET_LESSON_SUCCESS,
+            payload: data.media
+        })
+
+    } catch (error) {
+
+        dispatch({
+            type: GET_LESSON_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const deleteLesson = (id) => async (dispatch) => {
+    try {
+
+        dispatch({ type: DELETE_LESSON_REQUEST })
+
+        const { data } = await axios.delete(`/api/v1/media/delete/${id}`)
+
+        dispatch({
+            type: DELETE_LESSON_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+
+        console.log(error.response);
+
+        dispatch({
+            type: DELETE_LESSON_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+
+export const newReview = (reviewData) => async (dispatch) => {
+    try {
+
+        dispatch({ type: NEW_REVIEW_REQUEST })
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        const { data } = await axios.put(`/api/v1/review`, reviewData, config)
+
+        dispatch({
+            type: NEW_REVIEW_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+        dispatch({
+            type: NEW_REVIEW_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+
+export const getAdminCourses = () => async (dispatch) => {
+    try {
+
+        dispatch({ type: ADMIN_COURSES_REQUEST })
+
+        const { data } = await axios.get(`/api/v1/admin/courses`)
+
+        dispatch({
+            type: ADMIN_COURSES_SUCCESS,
+            payload: data.courses
+        })
+
+    } catch (error) {
+
+        dispatch({
+            type: ADMIN_COURSES_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const getMeCourses = (userId) => async (dispatch) => {
+    try {
+
+        dispatch({ type: ADMIN_COURSES_REQUEST })
+
+        const { data } = await axios.get(`/api/v1/me/courses/${userId}`)
+
+        dispatch({
+            type: ADMIN_COURSES_SUCCESS,
+            payload: data.courses
+        })
+
+    } catch (error) {
+
+        dispatch({
+            type: ADMIN_COURSES_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+// Get course reviews
+export const getCourseReviews = (id) => async (dispatch) => {
+    try {
+
+        dispatch({ type: GET_REVIEWS_REQUEST })
+
+        const { data } = await axios.get(`/api/v1/reviews?id=${id}`)
+
+        dispatch({
+            type: GET_REVIEWS_SUCCESS,
+            payload: data.reviews
+        })
+
+    } catch (error) {
+
+        dispatch({
+            type: GET_REVIEWS_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+// Delete course review
+export const deleteReview = (id, courseId) => async (dispatch) => {
+    try {
+
+        dispatch({ type: DELETE_REVIEW_REQUEST })
+
+        const { data } = await axios.delete(`/api/v1/reviews?id=${id}&courseId=${courseId}`)
+
+        dispatch({
+            type: DELETE_REVIEW_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+
+        console.log(error.response);
+
+        dispatch({
+            type: DELETE_REVIEW_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+// Clear Errors
+export const clearErrors = () => async (dispatch) => {
+    dispatch({
+        type: CLEAR_ERRORS
+    })
+}
