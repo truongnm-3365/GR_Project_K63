@@ -1,19 +1,25 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Route, Link } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
 import { logout } from '../../actions/userActions'
-
+import { getMeNotifies, deleteAllNotifies } from '../../actions/notifyAction'
 import Search from './Search'
-
+import NotifyMe from './NotifyMe/NotifyMe'
+import { DELETE_ALL_NOTIFIES_RESET } from '../../constants/notifyContants'
 import '../../App.css'
+
+
+
+
 
 const Header = () => {
     const alert = useAlert();
     const dispatch = useDispatch();
 
     const { user, loading } = useSelector(state => state.auth)
+    const { notifies, error, isDeleted } = useSelector(state => state.notifies)
     const { cartItems } = useSelector(state => state.cart)
 
     const logoutHandler = () => {
@@ -21,7 +27,26 @@ const Header = () => {
         alert.success('Đăng xuất thành công.')
     }
 
+    const deleteNotifiesHandler = () =>{
+        dispatch(deleteAllNotifies(user._id))
+    }
+
+    useEffect(() => {
+        if (error) {
+            return alert.error(error)
+        }
+        if(user)
+            dispatch(getMeNotifies(user._id))
+            
+        if (isDeleted) {
+                
+            dispatch({ type: DELETE_ALL_NOTIFIES_RESET })
+        }
+
+    }, [dispatch, alert, error,user,isDeleted])
+
     return (
+        
         <Fragment>
             <nav className="navbar row">
                 <div className="col-12 col-md-3">
@@ -37,13 +62,30 @@ const Header = () => {
                     <Route render={({ history }) => <Search history={history} />} />
                 </div> */}
 
-                <div className="col-12 col-md-3 mt-4 mt-md-0 text-center">
+                <div className="col-12 col-md-3 mt-4 mt-md-0 text-center d-flex">
                     {/* <Link to="/cart" style={{ textDecoration: 'none' }} >
                         <span id="cart" className="ml-3">Cart</span>
                         <span className="ml-1" id="cart_count">{cartItems.length}</span>
                     </Link> */}
+                    
+
 
                     {user ? (
+                        <>
+                            <span className='ml-3'>
+                                <NotifyMe
+                                    data={notifies.reverse()}
+                                    storageKey="notific_key"
+                                    notific_key="createdAt"
+                                    notific_value="content"
+                                    heading="Thông báo"
+                                    sortedByKey={false}
+                                    showDate={true}
+                                    size={24}
+                                    color="white"
+                                    deleteNotifiesHandler={deleteNotifiesHandler}
+                                />
+                            </span>
                         <div className="ml-4 dropdown d-inline">
                             <Link to="#!" className="btn dropdown-toggle text-white mr-4" type="button" id="dropDownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
@@ -75,6 +117,10 @@ const Header = () => {
 
 
                         </div>
+
+                        </>
+                        
+                        
 
                     ) : !loading && <Link to="/login" className="btn ml-4" id="login_btn">Đăng nhập</Link>}
 

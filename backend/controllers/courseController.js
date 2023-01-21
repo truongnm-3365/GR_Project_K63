@@ -1,4 +1,7 @@
 const Course = require('../models/course')
+const Notify = require('../models/notify');
+const Media = require('../models/media')
+const mongoose = require('mongoose')
 const ErrorHandler = require('../utils/errorHandler');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const APIFeatures = require('../utils/apiFeatures')
@@ -94,6 +97,11 @@ exports.adminAcceptCourse = catchAsyncErrors(async (req, res, next) => {
         useFindAndModify: false
     });
 
+    const notify = await Notify.create({
+        user: course.user,
+        content: `Quản trị viên đã phê duyệt khóa học ${course.name} của bạn`
+    })
+
     res.status(200).json({
         success: true,
         course
@@ -168,18 +176,26 @@ exports.deleteCourse = catchAsyncErrors(async (req, res, next) => {
 
     const course = await Course.findById(req.params.id);
 
+    const medias = await Media.find({course: req.params.id})
+
     if (!course) {
         return next(new ErrorHandler('Course not found', 404));
     }
+
+    for(let i = 0; i < medias.length; i++) {
+        console.log(medias[i])
+        fs.unlink("../backend" + medias[i].videos[0], (err => {
+            if (err) console.log(err);
+          }));
+    }
+
+    await Media.deleteMany({course: req.params.id})
 
     // Deleting images associated with the course
     for (let i = 0; i < course.images.length; i++) {
         //const result = await cloudinary.v2.uploader.destroy(course.images[i].public_id)
         fs.unlink("../backend" + course.images[i].url, (err => {
             if (err) console.log(err);
-            else {
-              console.log("\nDeleled file succesffully");
-            }
         }));
     }
 

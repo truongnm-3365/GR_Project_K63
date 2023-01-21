@@ -31,8 +31,6 @@ exports.create = catchAsyncErrors(async (req, res, next) => {
     }
   }
 
-  console.log(req.files)
-
     const createdMedia = await Media.create({
       name,
       videos: videosPaths,

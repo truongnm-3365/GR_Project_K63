@@ -1,8 +1,7 @@
 # Online courses E-commerce Project
 
-> Complete E-commerce site built with Node.js, React, Redux, Express, MongoDB
+> Complete site built with Node.js, React, Redux, Express, MongoDB
 
-More about this project and course on Udemy. Course Name: [MERN Stack Full Ecommerce Site - Using React, Redux, Node.j](https://www.udemy.com/course/3678044)
 
 ### Env Variables
 
@@ -18,14 +17,21 @@ npm i
 ### Install Dependencies (Backend)
 
 ```
+cd backend
 npm i
 ```
 
-### Seed Database
-
-Use the following commeand to put some dummy courses in that database.
-Run it in the root folder.
+### Run project (Frontend)
 
 ```
-npm run seeder
+cd frontend
+npm start
 ```
+
+### Run project (Backend)
+
+```
+cd backend
+npm run dev
+```
+

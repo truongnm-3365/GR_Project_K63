@@ -28,6 +28,7 @@ const auth = require('./routes/auth');
 const payment = require('./routes/payment');
 const order = require('./routes/order');
 const mediaRoutes = require("./routes/media");
+const notify = require("./routes/notify");
 
 app.use('/api/v1/media', mediaRoutes);
 app.use("/public", express.static(path.join(__dirname, "/public")));
@@ -37,6 +38,7 @@ app.use('/api/v1', courses)
 app.use('/api/v1', auth)
 app.use('/api/v1', payment)
 app.use('/api/v1', order)
+app.use('/api/v1', notify)
 
 if (process.env.NODE_ENV === 'PRODUCTION') {
     app.use(express.static(path.join(__dirname, '../frontend/build')))
