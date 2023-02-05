@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useAlert } from 'react-alert'
 import { useDispatch } from 'react-redux'
 
-const UploadForm = ({courseId, newLesson }) => {
+const UploadForm = ({courseId, newLesson,topics }) => {
   const [name, setName] = useState("");
+  const [topicId,setTopicId] = useState(topics[0] ? topics[0]._id : '');
   const [videos, setVideos] = useState([]);
   const [videoName, setVideoName] = useState("");
   const alert = useAlert();
@@ -19,6 +20,8 @@ const UploadForm = ({courseId, newLesson }) => {
 
     formdata.append("name", name);
     formdata.append("courseId",courseId);
+    formdata.append("topicId",topicId)
+    console.log(topicId)
     setName("");
     console.log(videos.length)
     dispatch(newLesson(formdata));
@@ -38,6 +41,16 @@ const UploadForm = ({courseId, newLesson }) => {
             className="form-control"
             onChange={(e) => setName(e.target.value)}
           />
+        </div>
+        <div className="form-group">
+          <label htmlFor="name">Chủ đề</label>
+          <select className="form-control" value={topicId} onChange={(e) => setTopicId(e.target.value)}>
+            {topics && topics.map(topic => {
+              return <option key={topic._id} value={topic._id}>{topic.name}</option>
+            })} 
+            
+            
+          </select>
         </div>
         <div className="form-group">
           <label htmlFor="videos">Đăng tải video bài giảng</label>

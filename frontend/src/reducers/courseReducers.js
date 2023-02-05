@@ -45,9 +45,42 @@ import {
     DELETE_REVIEW_SUCCESS,
     DELETE_REVIEW_RESET,
     DELETE_REVIEW_FAIL,
+    NEW_TOPIC_REQUEST,
+    NEW_TOPIC_SUCCESS,
+    NEW_TOPIC_RESET,
+    NEW_TOPIC_FAIL,
+    GET_TOPICS_REQUEST,
+    GET_TOPICS_SUCCESS,
+    GET_TOPICS_FAIL,
+    DELETE_TOPIC_REQUEST,
+    DELETE_TOPIC_SUCCESS,
+    DELETE_TOPIC_RESET,
+    DELETE_TOPIC_FAIL,
+    UPDATE_TOPIC_REQUEST,
+    UPDATE_TOPIC_SUCCESS,
+    UPDATE_TOPIC_RESET,
+    UPDATE_TOPIC_FAIL,
+
+    NEW_QUIZ_REQUEST,
+    NEW_QUIZ_SUCCESS,
+    NEW_QUIZ_RESET,
+    NEW_QUIZ_FAIL,
+    GET_QUIZS_REQUEST,
+    GET_QUIZS_SUCCESS,
+    GET_QUIZS_FAIL,
+    DELETE_QUIZ_REQUEST,
+    DELETE_QUIZ_SUCCESS,
+    DELETE_QUIZ_RESET,
+    DELETE_QUIZ_FAIL,
+    UPDATE_QUIZ_REQUEST,
+    UPDATE_QUIZ_SUCCESS,
+    UPDATE_QUIZ_RESET,
+    UPDATE_QUIZ_FAIL,
+
     CLEAR_ERRORS
 
 } from '../constants/courseConstants'
+
 
 export const coursesReducer = (state = { courses: [] }, action) => {
     switch (action.type) {
@@ -469,3 +502,246 @@ export const reviewReducer = (state = {}, action) => {
             return state
     }
 }
+
+export const newTopicReducer = (state = {}, action) => {
+    switch (action.type) {
+
+        case NEW_TOPIC_REQUEST:
+            return {
+                ...state,
+                loading: true
+            }
+
+        case NEW_TOPIC_SUCCESS:
+            return {
+                loading: false,
+                success: action.payload
+            }
+
+        case NEW_TOPIC_FAIL:
+            return {
+                ...state,
+                error: action.payload
+            }
+
+        case NEW_TOPIC_RESET:
+            return {
+                ...state,
+                success: false
+            }
+
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+
+        default:
+            return state
+    }
+}
+
+export const courseTopicsReducer = (state = {topics:[]}, action) => {
+    switch (action.type) {
+
+        case GET_TOPICS_REQUEST:
+            return {
+                ...state,
+                loading: true
+            }
+
+        case GET_TOPICS_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                topics: action.payload
+            }
+
+        case GET_TOPICS_FAIL:
+            return {
+                ...state,
+                error: action.payload
+            }
+
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+
+        default:
+            return state
+    }
+}
+
+export const courseTopicReducer = (state = {topic:{}}, action) => {
+    switch (action.type) {
+
+        case UPDATE_TOPIC_REQUEST:
+        case DELETE_TOPIC_REQUEST:
+                return {
+                    ...state,
+                    loading: true
+                }
+    
+        case DELETE_TOPIC_SUCCESS:
+                return {
+                    ...state,
+                    loading: false,
+                    isDeleted: action.payload
+                }
+        case UPDATE_TOPIC_SUCCESS:
+                return {
+                        ...state,
+                        loading: false,
+                        isUpdated: action.payload
+            }
+        case UPDATE_TOPIC_FAIL:
+        case DELETE_TOPIC_FAIL:
+                return {
+                    ...state,
+                    error: action.payload
+                }
+    
+        case DELETE_TOPIC_RESET:
+                return {
+                    ...state,
+                    isDeleted: false
+                }
+        case UPDATE_TOPIC_RESET:
+                    return {
+                        ...state,
+                        isDeleted: false
+                }
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+
+        default:
+            return state
+    }
+}
+
+export const newQuizReducer = (state = {}, action) => {
+    switch (action.type) {
+
+        case NEW_QUIZ_REQUEST:
+            return {
+                ...state,
+                loading: true
+            }
+
+        case NEW_QUIZ_SUCCESS:
+            return {
+                loading: false,
+                success: action.payload
+            }
+
+        case NEW_QUIZ_FAIL:
+            return {
+                ...state,
+                error: action.payload
+            }
+
+        case NEW_QUIZ_RESET:
+            return {
+                ...state,
+                success: false
+            }
+
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+
+        default:
+            return state
+    }
+}
+
+export const topicQuizsReducer = (state = {quizs:[]}, action) => {
+    switch (action.type) {
+
+        case GET_QUIZS_REQUEST:
+            return {
+                ...state,
+                loading: true
+            }
+
+        case GET_QUIZS_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                quizs: action.payload
+            }
+
+        case GET_QUIZS_FAIL:
+            return {
+                ...state,
+                error: action.payload
+            }
+
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+
+        default:
+            return state
+    }
+}
+
+export const topicQuizReducer = (state = {quiz:{}}, action) => {
+    switch (action.type) {
+
+        case UPDATE_QUIZ_REQUEST:
+        case DELETE_QUIZ_REQUEST:
+                return {
+                    ...state,
+                    loading: true
+                }
+    
+        case DELETE_QUIZ_SUCCESS:
+                return {
+                    ...state,
+                    loading: false,
+                    isDeleted: action.payload
+                }
+        case UPDATE_QUIZ_SUCCESS:
+                return {
+                        ...state,
+                        loading: false,
+                        isUpdated: action.payload
+            }
+        case UPDATE_QUIZ_FAIL:
+        case DELETE_QUIZ_FAIL:
+                return {
+                    ...state,
+                    error: action.payload
+                }
+    
+        case DELETE_QUIZ_RESET:
+                return {
+                    ...state,
+                    isDeleted: false
+                }
+        case UPDATE_QUIZ_RESET:
+                    return {
+                        ...state,
+                        isDeleted: false
+                }
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+
+        default:
+            return state
+    }
+}
+

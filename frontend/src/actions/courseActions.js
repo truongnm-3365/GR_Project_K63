@@ -42,6 +42,38 @@ import {
     DELETE_REVIEW_SUCCESS,
     DELETE_REVIEW_RESET,
     DELETE_REVIEW_FAIL,
+    NEW_TOPIC_REQUEST,
+    NEW_TOPIC_SUCCESS,
+    NEW_TOPIC_RESET,
+    NEW_TOPIC_FAIL,
+    GET_TOPICS_REQUEST,
+    GET_TOPICS_SUCCESS,
+    GET_TOPICS_FAIL,
+
+    DELETE_TOPIC_REQUEST,
+    DELETE_TOPIC_SUCCESS,
+    DELETE_TOPIC_RESET,
+    DELETE_TOPIC_FAIL,
+    UPDATE_TOPIC_REQUEST,
+    UPDATE_TOPIC_SUCCESS,
+    UPDATE_TOPIC_RESET,
+    UPDATE_TOPIC_FAIL,
+
+    NEW_QUIZ_REQUEST,
+    NEW_QUIZ_SUCCESS,
+    NEW_QUIZ_RESET,
+    NEW_QUIZ_FAIL,
+    GET_QUIZS_REQUEST,
+    GET_QUIZS_SUCCESS,
+    GET_QUIZS_FAIL,
+    DELETE_QUIZ_REQUEST,
+    DELETE_QUIZ_SUCCESS,
+    DELETE_QUIZ_RESET,
+    DELETE_QUIZ_FAIL,
+    UPDATE_QUIZ_REQUEST,
+    UPDATE_QUIZ_SUCCESS,
+    UPDATE_QUIZ_RESET,
+    UPDATE_QUIZ_FAIL,
     CLEAR_ERRORS
 
 } from '../constants/courseConstants'
@@ -297,6 +329,8 @@ export const newReview = (reviewData) => async (dispatch) => {
             }
         }
 
+        
+
         const { data } = await axios.put(`/api/v1/review`, reviewData, config)
 
         dispatch({
@@ -406,4 +440,207 @@ export const clearErrors = () => async (dispatch) => {
     dispatch({
         type: CLEAR_ERRORS
     })
+}
+
+
+export const newTopic = (topicData) => async (dispatch) => {
+    try {
+
+        dispatch({ type: NEW_TOPIC_REQUEST })
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+       console.log(topicData)
+
+        const { data } = await axios.post(`/api/v1/topic/new`, topicData, config)
+
+        dispatch({
+            type: NEW_TOPIC_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+        dispatch({
+            type: NEW_TOPIC_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const getCourseTopics = (id) => async (dispatch) => {
+    try {
+
+        dispatch({ type: GET_TOPICS_REQUEST })
+
+        const { data } = await axios.get(`/api/v1/topics/${id}`)
+
+        dispatch({
+            type: GET_TOPICS_SUCCESS,
+            payload: data.topics
+        })
+
+    } catch (error) {
+
+        dispatch({
+            type: GET_TOPICS_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+
+
+export const deleteTopic = (id) => async (dispatch) => {
+    try {
+
+        dispatch({ type: DELETE_TOPIC_REQUEST })
+
+        const { data } = await axios.delete(`/api/v1/topic/delete/${id}`)
+
+        dispatch({
+            type: DELETE_TOPIC_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+
+        console.log(error.response);
+
+        dispatch({
+            type: DELETE_TOPIC_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const updateTopic = (id, topicData) => async (dispatch) => {
+    try {
+
+        dispatch({ type: UPDATE_TOPIC_REQUEST })
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        const { data } = await axios.put(`/api/v1/topic/update/${id}`, topicData, config)
+
+        dispatch({
+            type: UPDATE_TOPIC_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+        dispatch({
+            type: UPDATE_TOPIC_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+
+
+export const newQuiz = (quizData) => async (dispatch) => {
+    try {
+
+        dispatch({ type: NEW_QUIZ_REQUEST })
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+       console.log(quizData)
+
+        const { data } = await axios.post(`/api/v1/quiz/new`, quizData, config)
+
+        dispatch({
+            type: NEW_QUIZ_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+        dispatch({
+            type: NEW_QUIZ_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const getTopicQuizs = (id) => async (dispatch) => {
+    try {
+
+        dispatch({ type: GET_QUIZS_REQUEST })
+
+        const { data } = await axios.get(`/api/v1/quizs/${id}`)
+
+        dispatch({
+            type: GET_QUIZS_SUCCESS,
+            payload: data.quiz
+        })
+
+    } catch (error) {
+
+        dispatch({
+            type: GET_QUIZS_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+
+
+export const deleteQuiz = (id) => async (dispatch) => {
+    try {
+
+        dispatch({ type: DELETE_QUIZ_REQUEST })
+
+        const { data } = await axios.delete(`/api/v1/quiz/delete/${id}`)
+
+        dispatch({
+            type: DELETE_QUIZ_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+
+        console.log(error.response);
+
+        dispatch({
+            type: DELETE_QUIZ_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const updateQuiz = (id, quizData) => async (dispatch) => {
+    try {
+
+        dispatch({ type: UPDATE_QUIZ_REQUEST })
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        const { data } = await axios.put(`/api/v1/quiz/update/${id}`, quizData, config)
+
+        dispatch({
+            type: UPDATE_QUIZ_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+        dispatch({
+            type: UPDATE_QUIZ_FAIL,
+            payload: error.response.data.message
+        })
+    }
 }

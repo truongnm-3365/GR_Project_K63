@@ -7,11 +7,11 @@ const Sidebar = () => {
         <div className="sidebar-wrapper">
             <nav id="sidebar">
                 <ul className="list-unstyled components">
-                    {user && user.role === 'admin' &&
+                    {/* {user && user.role === 'admin' &&
                     <li>
                         <Link to="/dashboard"><i className="fa fa-tachometer"></i> Dashboard</Link>
                     </li>
-                    }
+                    } */}
 
                     <li>
                         <a href="#courseSubmenu" data-toggle="collapse" aria-expanded="false" className="dropdown-toggle"><i
@@ -26,7 +26,7 @@ const Sidebar = () => {
                             </li>
                         </ul>
                     </li>
-                    {user && user.role === 'admin' && (<>
+                    {/* {user && user.role === 'admin' && (<>
                     <li>
                         <Link to="/admin/orders"><i className="fa fa-shopping-basket"></i> Orders</Link>
                     </li>
@@ -39,7 +39,7 @@ const Sidebar = () => {
                         <Link to="/admin/reviews"><i className="fa fa-star"></i> Reviews</Link>
                     </li>
                     </>)
-                    }
+                    } */}
 
                 </ul>
             </nav>

@@ -15,7 +15,15 @@ const {
     createCourseLesson,
     getCourseLessons,
     getAdminCourses,
-    adminAcceptCourse
+    adminAcceptCourse,
+    newTopic,
+    getCourseTopic,
+    updateTopic,
+    deleteTopic,
+    newTopicQuiz,
+    getTopicQuizs,
+    updateTopicQuiz,
+    deleteTopicQuiz
 
 } = require('../controllers/courseController')
 
@@ -93,5 +101,14 @@ router.route('/reviews').delete(isAuthenticatedUser, deleteReview)
 router.route('/lesson').put(isAuthenticatedUser, createCourseLesson)
 router.route('/lessons').get(isAuthenticatedUser, getCourseLessons)
 
+router.route('/topic/new').post(isAuthenticatedUser,newTopic)
+router.route('/topics/:courseId').get(getCourseTopic)
+router.route('/topic/update/:id').put(isAuthenticatedUser,updateTopic)
+router.route('/topic/delete/:id').delete(isAuthenticatedUser,deleteTopic)
+
+router.route('/quiz/new').post(isAuthenticatedUser,newTopicQuiz)
+router.route('/quizs/:topicId').get(getTopicQuizs)
+router.route('/quiz/update/:id').put(isAuthenticatedUser,updateTopicQuiz)
+router.route('/quiz/delete/:id').delete(isAuthenticatedUser,deleteTopicQuiz)
 
 module.exports = router;

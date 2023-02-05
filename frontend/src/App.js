@@ -48,6 +48,8 @@ import axios from 'axios'
 // Payment
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
+import NewTopic from './pages/Dashboard/NewTopic'
+import NewQuiz from './pages/Dashboard/NewQuiz'
 
 function App() {
 
@@ -101,11 +103,13 @@ function App() {
           <ProtectedRoute path="/order/:id" component={OrderDetails} exact />
         </div>
 
-        <ProtectedRoute path="/dashboard" isAdmin={true} component={Dashboard} exact />
+        <ProtectedRoute path="/admin/courses" isAdmin={true} component={Dashboard} exact />
         <ProtectedRoute path="/me/courses" isAdmin={false} component={CoursesList} exact />
         <ProtectedRoute path="/me/course" isAdmin={false} component={NewCourse} exact />
         <ProtectedRoute path="/me/course/:id" isAdmin={false} component={UpdateCourse} exact />
         <ProtectedRoute path="/me/course/:id/lessons" isAdmin={false} component={NewLesson} exact />
+        <ProtectedRoute path="/me/course/:id/topics" isAdmin={false} component={NewTopic} exact />
+        <ProtectedRoute path="/me/topic/:id/quizs" isAdmin={false} component={NewQuiz} exact />
         <ProtectedRoute path="/admin/orders" isAdmin={true} component={OrdersList} exact />
         <ProtectedRoute path="/admin/order/:id" isAdmin={true} component={ProcessOrder} exact />
         <ProtectedRoute path="/admin/users" isAdmin={true} component={UsersList} exact />

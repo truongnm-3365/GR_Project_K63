@@ -1,10 +1,12 @@
 const Media = require("../models/media");
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const fs = require('fs');
+const Topic = require("../models/topic");
 
 exports.getAll = async (req, res, next) => {
   
     const media = await Media.find({course: req.params.courseId});
+
     res.status(201).json({
       success: true,
       media
@@ -22,7 +24,8 @@ exports.getLesson = async (req, res, next) => {
 };
 
 exports.create = catchAsyncErrors(async (req, res, next) => {
-  const { name, courseId } = req.body;
+  const { name, courseId, topicId } = req.body;
+  
   let videosPaths = [];
 
   if (Array.isArray(req.files.videos) && req.files.videos.length > 0) {
@@ -30,11 +33,14 @@ exports.create = catchAsyncErrors(async (req, res, next) => {
       videosPaths.push("/" + video.path);
     }
   }
+  const topic = await Topic.findById(topicId)
 
     const createdMedia = await Media.create({
       name,
       videos: videosPaths,
-      course: courseId
+      course: courseId,
+      topicId,
+      topic:topic.name
     });
 
     res.status(201).json({ 

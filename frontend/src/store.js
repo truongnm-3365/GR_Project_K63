@@ -2,7 +2,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension'
 
-import { coursesReducer, newCourseReducer, courseReducer, courseDetailsReducer, newReviewReducer, courseReviewsReducer, reviewReducer, newLessonReducer, courseLessonsReducer, lessonReducer, courseLessonReducer } from './reducers/courseReducers'
+import { coursesReducer, newCourseReducer, courseReducer, courseDetailsReducer, newReviewReducer, courseReviewsReducer, reviewReducer, newLessonReducer, courseLessonsReducer, lessonReducer, courseLessonReducer, courseTopicReducer, courseTopicsReducer, newTopicReducer, newQuizReducer, topicQuizReducer, topicQuizsReducer, quizReducer } from './reducers/courseReducers'
 import { notifiesReducer } from './reducers/notifyReducer';
 import { authReducer, userReducer, forgotPasswordReducer, allUsersReducer, userDetailsReducer } from './reducers/userReducers'
 import { cartReducer } from './reducers/cartReducers'
@@ -16,6 +16,12 @@ const reducer = combineReducers({
     courseReviews: courseReviewsReducer,
     review: reviewReducer,
     courseLessons: courseLessonsReducer,
+    courseTopics: courseTopicsReducer,
+    newTopic: newTopicReducer,
+    topic: courseTopicReducer,
+    newQuiz: newQuizReducer,
+    quiz: topicQuizReducer,
+    topicQuizs:topicQuizsReducer,
     lesson: lessonReducer,
     media: courseLessonReducer,
     auth: authReducer,

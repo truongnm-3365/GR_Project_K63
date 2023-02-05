@@ -1,12 +1,15 @@
 const Course = require('../models/course')
 const Notify = require('../models/notify');
 const Media = require('../models/media')
+const User = require('../models/user')
 const mongoose = require('mongoose')
 const ErrorHandler = require('../utils/errorHandler');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const APIFeatures = require('../utils/apiFeatures')
 const cloudinary = require('cloudinary')
 const fs = require('fs');
+const Topic = require('../models/topic');
+const Quiz = require('../models/quiz');
 
 // Create new course   =>   /api/v1/admin/course/new
 exports.newCourse = catchAsyncErrors(async (req, res, next) => {
@@ -112,12 +115,18 @@ exports.adminAcceptCourse = catchAsyncErrors(async (req, res, next) => {
 // Get single course details   =>   /api/v1/course/:id
 exports.getSingleCourse = catchAsyncErrors(async (req, res, next) => {
 
-    const course = await Course.findById(req.params.id);
+    const courseDetails = await Course.findById(req.params.id);
 
-    if (!course) {
+    if (!courseDetails) {
         return next(new ErrorHandler('Course not found', 404));
     }
 
+    const user = await User.findById(courseDetails.user)
+
+    let course = {
+        details:courseDetails,
+        user
+    }
 
     res.status(200).json({
         success: true,
@@ -190,6 +199,7 @@ exports.deleteCourse = catchAsyncErrors(async (req, res, next) => {
     }
 
     await Media.deleteMany({course: req.params.id})
+    await Topic.deleteMany({course: req.params.id})
 
     // Deleting images associated with the course
     for (let i = 0; i < course.images.length; i++) {
@@ -213,7 +223,7 @@ exports.deleteCourse = catchAsyncErrors(async (req, res, next) => {
 exports.createCourseReview = catchAsyncErrors(async (req, res, next) => {
 
     const { rating, comment, courseId } = req.body;
-
+   
     const review = {
         user: req.user._id,
         name: req.user.name,
@@ -324,4 +334,130 @@ exports.getCourseLessons = catchAsyncErrors(async (req, res, next) => {
         success: true,
         lessons: course.lessons
     })
+})
+
+exports.newTopic = catchAsyncErrors(async (req, res, next) => {
+
+    const {name, courseId} = req.body
+
+
+    const topic = await Topic.create({name,courseId});
+
+    res.status(201).json({
+        success: true,
+        topic
+    })
+})
+
+exports.getCourseTopic = catchAsyncErrors(async (req, res, next) => {
+    const topics = await Topic.find({courseId: req.params.courseId});
+
+    res.status(200).json({
+        success: true,
+        topics
+    })
+
+})
+
+exports.deleteTopic = catchAsyncErrors(async (req, res, next) => {
+    const topic = await Topic.findById(req.params.id);
+  
+    if (!topic) {
+        return next(new ErrorHandler('Topic not found', 404));
+    }
+  
+    await topic.remove();
+    
+  
+    res.status(200).json({
+        success: true,
+        message: 'Topic is deleted.'
+    })
+  });
+
+  exports.updateTopic = catchAsyncErrors(async (req, res, next) => {
+
+    let topic = await Topic.findById(req.params.id);
+
+    if (!topic) {
+        return next(new ErrorHandler('Topic not found', 404));
+    }
+    
+    
+
+    topic = await Topic.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    });
+
+    res.status(200).json({
+        success: true,
+        topic
+    })
+
+})
+
+exports.newTopicQuiz = catchAsyncErrors(async (req, res, next) => {
+
+    const { question, choice, topicId } = req.body;
+   
+
+    const quiz = await Quiz.create( req.body);
+
+    res.status(201).json({
+        success: true,
+        quiz
+    })
+
+})
+
+
+// Get Course Reviews   =>   /api/v1/reviews
+exports.getTopicQuizs = catchAsyncErrors(async (req, res, next) => {
+    const quiz = await Quiz.find({topicId:req.params.topicId});
+
+    res.status(200).json({
+        success: true,
+        quiz
+    })
+})
+
+exports.deleteTopicQuiz = catchAsyncErrors(async (req, res, next) => {
+    const quiz= await Quiz.findById(req.params.id);
+  
+    if (!quiz) {
+        return next(new ErrorHandler('Quiz not found', 404));
+    }
+  
+    await quiz.remove();
+    
+  
+    res.status(200).json({
+        success: true,
+        message: 'Quiz is deleted.'
+    })
+  });
+
+  exports.updateTopicQuiz = catchAsyncErrors(async (req, res, next) => {
+
+    let quiz = await Quiz.findById(req.params.id);
+
+    if (!quiz) {
+        return next(new ErrorHandler('Topic not found', 404));
+    }
+    
+    
+
+    quiz = await Quiz.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    });
+
+    res.status(200).json({
+        success: true,
+        quiz
+    })
+
 })

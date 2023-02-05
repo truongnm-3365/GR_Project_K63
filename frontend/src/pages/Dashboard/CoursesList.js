@@ -74,6 +74,10 @@ const CoursesList = ({ history }) => {
                     sort: 'asc'
                 },
                 {
+                    label: 'Các chủ đề',
+                    field: 'topics',
+                },
+                {
                     label: 'Các bài học',
                     field: 'lessons',
                 },
@@ -92,6 +96,11 @@ const CoursesList = ({ history }) => {
                 price: `$${course.price}`,
                 lessons: <Fragment>
                     <Link to={`/me/course/${course._id}/lessons`} className="btn btn-primary py-1 px-2">
+                        <i className="fa fa-eye"></i>
+                    </Link>
+                </Fragment>,
+                topics: <Fragment>
+                    <Link to={`/me/course/${course._id}/topics`} className="btn btn-primary py-1 px-2">
                         <i className="fa fa-eye"></i>
                     </Link>
                 </Fragment>,

@@ -6,7 +6,7 @@ import Loader from '../../components/layout/Loader'
 import MetaData from "../../components/layout/MetaData";
 import Sidebar from './Sidebar'
 import { useAlert } from 'react-alert'
-import {  newLesson, clearErrors, getCourseLessons, deleteLesson } from '../../actions/courseActions'
+import {  newLesson, clearErrors, getCourseLessons, deleteLesson, getCourseTopics } from '../../actions/courseActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { NEW_LESSON_RESET,DELETE_LESSON_RESET } from '../../constants/courseConstants'
 
@@ -16,9 +16,11 @@ const NewLesson = ({match}) => {
   const { loading, lessons,error } = useSelector(state => state.courseLessons)
   const { error: lessonError, success } = useSelector(state => state.newLesson)
   const { error: deleteError, isDeleted } = useSelector(state => state.lesson)
+  const {  topics } = useSelector(state => state.courseTopics)
   useEffect(() => {
     dispatch(getCourseLessons(match.params.id))
 
+    dispatch(getCourseTopics(match.params.id))
         if (error) {
             alert.error(error);
             dispatch(clearErrors())
@@ -46,6 +48,7 @@ const NewLesson = ({match}) => {
 
 }, [dispatch, alert, error,lessonError,success,deleteError, isDeleted, match.params.id])
 
+console.log(topics);
   const deleteLessonHandler = (id) => {
     dispatch(deleteLesson(id))
   }
@@ -64,22 +67,23 @@ const NewLesson = ({match}) => {
                 className="card"
                 style={{
                   height: "auto",
-                  width: "800px",
+                  width: "auto",
                   margin: "40px",
                   border: "1px solid black",
+                  padding:"10px"
                 }}
               >
                 <div className="card-body">
-                  <UploadForm courseId={match.params.id} newLesson={newLesson}/>
+                  <UploadForm topics={topics} courseId={match.params.id} newLesson={newLesson}/>
                 </div>
               </div>
             </div>
-            <div className="col-md-5">
+            <div className="col-md-7">
               <div
                 className="card"
                 style={{
                   height: "auto",
-                  width: "800px",
+                  width: "auto",
                   margin: "40px",
                   border: "1px solid black",
                 }}

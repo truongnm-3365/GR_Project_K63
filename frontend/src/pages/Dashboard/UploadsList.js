@@ -7,7 +7,8 @@ const UploadsList = ({ medias,deleteLessonHandler }) => {
         <table className="table table-bordered">
           <thead>
             <tr>
-              <th width="200">Tiêu đề</th>
+              <th width="150">Tiêu đề</th>
+              <th width="150">Chủ đề</th>
               <th>Bài giảng</th>
             </tr>
           </thead>
@@ -17,6 +18,7 @@ const UploadsList = ({ medias,deleteLessonHandler }) => {
                 return (
                   <tr>
                     <td>{media.name}</td>
+                    <td>{media.topic}</td>
                     <td>
                       {media.videos.map((video) => {
                         return (

@@ -12,7 +12,17 @@ const MediaSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: 'Course',
       required: true
-    }
+    },
+    topicId: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Topic',
+      required: true
+    },
+    topic: {
+      type: String,
+      required: true,
+    },
+
   },
   {
     timestamps: true,

@@ -24,6 +24,7 @@ const CourseDetails = ({ match }) => {
     const { user } = useSelector(state => state.auth)
     const { error: reviewError, success } = useSelector(state => state.newReview)
 
+   
     useEffect(() => {
         dispatch(getCourseDetails(match.params.id))
 
@@ -38,7 +39,7 @@ const CourseDetails = ({ match }) => {
         }
 
         if (success) {
-            alert.success('Reivew posted successfully')
+            alert.success('Đánh giá được đăng tải thành công')
             dispatch({ type: NEW_REVIEW_RESET })
         }
 
@@ -107,25 +108,30 @@ const CourseDetails = ({ match }) => {
         }
     }
 
-    const reviewHandler = () => {
-        const formData = new FormData();
+    const reviewHandler = (e) => {
+        e.preventDefault();
+        let formData = new FormData();
+        let formdata ={
+            rating,
+            comment,
+            courseId: match.params.id
+        }
+        formData.append('rating', rating);
+        formData.append('comment', comment);
+        formData.append('courseId', match.params.id);
 
-        formData.set('rating', rating);
-        formData.set('comment', comment);
-        formData.set('courseId', match.params.id);
-
-        dispatch(newReview(formData));
+        dispatch(newReview(formdata));
     }
 
     return (
         <Fragment>
-            {loading ? <Loader /> : (
+            {loading ? <Loader /> : course.details && (
                 <Fragment>
-                    <MetaData title={course.name} />
+                    <MetaData title={course.details.name} />
                     <div className="row d-flex justify-content-around">
                         <div className="col-12 col-lg-5 img-fluid" id="course_image">
                             <Carousel pause='hover'>
-                                {course.images && course.images.map(image => (
+                                {course.details.images && course.details.images.map(image => (
                                     <Carousel.Item key={image.public_id}>
                                         <img className="d-block w-100" src={image.url} alt={course.title} />
                                     </Carousel.Item>
@@ -134,58 +140,53 @@ const CourseDetails = ({ match }) => {
                         </div>
 
                         <div className="col-12 col-lg-5 mt-5">
-                            <h3>{course.name}</h3>
-                            <p id="course_id">Khóa học # {course._id}</p>
+                            <h3>{course.details.name}</h3>
+                            <p id="course_id">Khóa học # {course.details._id}</p>
 
                             <hr />
 
                             <div className="rating-outer">
-                                <div className="rating-inner" style={{ width: `${(course.ratings / 5) * 100}%` }}></div>
+                                <div className="rating-inner" style={{ width: `${(course.details.ratings / 5) * 100}%` }}></div>
                             </div>
-                            <span id="no_of_reviews">({course.numOfReviews} Reviews)</span>
+                            <span id="no_of_reviews">({course.details.numOfReviews} Reviews)</span>
 
                             <hr />
 
-                            <p id="course_price">${course.price}</p>
-                            {/* <div className="stockCounter d-inline">
-                                <span className="btn btn-danger minus" onClick={decreaseQty}>-</span>
+                            <p id="course_price">{course.details.price} ĐỒNG</p>
 
-                                <input type="number" className="form-control count d-inline" value={quantity} readOnly />
-
-                                <span className="btn btn-primary plus" onClick={increaseQty}>+</span>
-                            </div> */}
-                            <button type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" disabled={course.stock === 0} >Đăng ký học</button>
-                            <Link to={`/course/${course._id}/lessons`}>
+                            <button type="button" id="cart_btn" className="btn btn-primary d-inline ml-4"  >Đăng ký học</button>
+                            <Link to={`/course/${course.details._id}/lessons`}>
                                 <button type="button" id="cart_btn" className="btn btn-danger d-inline ml-4" >Xem khóa học</button>
                                 
                             </Link>
                             <hr />
 
-                            {/* <p>Status: <span id="stock_status" className={course.stock > 0 ? 'greenColor' : 'redColor'} >{course.stock > 0 ? 'In Stock' : 'Out of Stock'}</span></p> */}
-
+                            <h4 className="mt-2">Mô tả:</h4>
+                            <p>{course.details.description}</p>
                             <hr />
 
-                            <h4 className="mt-2">Mô tả:</h4>
-                            <p>{course.description}</p>
+                            <h4 className="mt-2">Thông tin tác giả:</h4>
+                            <p>Tên: {course.user.name}</p>
+                            <p>Email: {course.user.email}</p>
                             <hr />
                             {/* <p id="course_seller mb-3">Sold by: <strong>{course.seller}</strong></p> */}
 
-                            {/* {user ? <button id="review_btn" type="button" className="btn btn-primary mt-4" data-toggle="modal" data-target="#ratingModal" onClick={setUserRatings}>
+                            {user ? <button id="review_btn" type="button" className="btn btn-primary mt-4" data-toggle="modal" data-target="#ratingModal" onClick={setUserRatings}>
                                 Gửi đánh giá
                             </button>
                                 :
                                 <div className="alert alert-danger mt-5" type='alert'>Đăng nhập để viết đánh giá</div>
-                            } */}
+                            }
 
 
-                            <div className="row mt-2 mb-5">
+                            <div className="row mt-2 ">
                                 <div className="rating w-50">
 
                                     <div className="modal fade" id="ratingModal" tabIndex="-1" role="dialog" aria-labelledby="ratingModalLabel" aria-hidden="true">
                                         <div className="modal-dialog" role="document">
                                             <div className="modal-content">
                                                 <div className="modal-header">
-                                                    <h5 className="modal-title" id="ratingModalLabel">Submit Review</h5>
+                                                    <h5 className="modal-title" id="ratingModalLabel">Đánh giá</h5>
                                                     <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
@@ -209,7 +210,7 @@ const CourseDetails = ({ match }) => {
 
                                                     </textarea>
 
-                                                    <button className="btn my-3 float-right review-btn px-4 text-white" onClick={reviewHandler} data-dismiss="modal" aria-label="Close">Submit</button>
+                                                    <button className="btn my-3 float-right review-btn px-4 text-white" onClick={(e) => reviewHandler(e)} data-dismiss="modal" aria-label="Close">Gửi</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -220,8 +221,8 @@ const CourseDetails = ({ match }) => {
                         </div>
                     </div>
 
-                    {course.reviews && course.reviews.length > 0 && (
-                        <ListReviews reviews={course.reviews} />
+                    {course.details.reviews && course.details.reviews.length > 0 && (
+                        <ListReviews reviews={course.details.reviews} />
                     )}
 
                 </Fragment>
