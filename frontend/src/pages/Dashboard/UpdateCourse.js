@@ -7,16 +7,16 @@ import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateCourse, getCourseDetails, clearErrors } from '../../actions/courseActions'
 import { UPDATE_COURSE_RESET } from '../../constants/courseConstants'
-
+import moment from 'moment'
 const UpdateCourse = ({ match, history }) => {
 
     const [name, setName] = useState('');
     const [price, setPrice] = useState(0);
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
-    const [stock, setStock] = useState(0);
-    const [seller, setSeller] = useState('');
     const [images, setImages] = useState([]);
+    const [startDate,setStartDate] = useState('');
+    const [endDate,setEndDate] = useState('');
 
     const [oldImages, setOldImages] = useState([]);
     const [imagesPreview, setImagesPreview] = useState([])
@@ -34,19 +34,21 @@ const UpdateCourse = ({ match, history }) => {
 
     const courseId = match.params.id;
 
+    console.log(course);
     useEffect(() => {
+        dispatch(getCourseDetails(match.params.id));
+        //  if(course.details){
+        //     setName(course.details.name);
+        //     setPrice(course.details.price);
+        //     setDescription(course.details.description);
+        //     setCategory(course.details.category);
+        //     setOldImages(course.details.images)
+        //     setImages(course.details.images)
+        //     setStartDate(course.details.startDate);
+        //     setEndDate(course.details.endDate);
+        //  }
 
-        if (course && course._id !== courseId) {
-            dispatch(getCourseDetails(courseId));
-        } else {
-            setName(course.name);
-            setPrice(course.price);
-            setDescription(course.description);
-            setCategory(course.category);
-            setSeller(course.seller);
-            setStock(course.stock)
-            setOldImages(course.images)
-        }
+        
 
         if (error) {
             alert.error(error);
@@ -65,43 +67,72 @@ const UpdateCourse = ({ match, history }) => {
             dispatch({ type: UPDATE_COURSE_RESET })
         }
 
-    }, [dispatch, alert, error, isUpdated, history, updateError, course, courseId])
+    }, [dispatch, alert, error, isUpdated, history, updateError,match])
 
+
+    const onChangeStartDate = e => {
+        const newDate = moment(new Date(e.target.value)).format('YYYY-MM-DD');
+        setStartDate(newDate);
+        
+      };
+
+      
+    const onChangeEndDate = e => {
+        const newDate = moment(new Date(e.target.value)).format('YYYY-MM-DD');
+        setEndDate(newDate);
+        
+      };
 
     const submitHandler = (e) => {
         e.preventDefault();
 
         const formData = new FormData();
-        formData.append('name', name);
-        formData.append('price', price);
-        formData.append('description', description);
-        formData.append('category', category);
-        // formData.append('stock', stock);
-        // formData.append('seller', seller);
+        formData.append('name', name? name: course.details.name);
+        formData.append('price',  price ? price: course.details.price);
+        formData.append('description', description ? description : course.details.description);
+        formData.append('category', category ? category : course.details.category);
 
-        for (let key in images) {
-            formData.append("images", images[key]);
+        formData.append('startDate',startDate ? startDate : course.details.startDate);
+        formData.append('endDate',endDate ? endDate : course.details.endDate);
+
+        
+
+        if(images.length > 0){
+            for (let key in images) {
+                formData.append("images", images[key]);
+            }
+            
         }
 
-        const data = {name,price,description,category,images}
-
-        dispatch(updateCourse(course._id, formData))
+        // const data = {
+        //     name: name? name: course.details.name,
+        //     price: price ? price: course.details.price,
+        //     description:  description ? description : course.details.description,
+        //     category: category ? category : course.details.category,
+        //     images:images.length > 0 ? images : course.details.images,
+        //     startDate: startDate ? startDate : course.details.startDate,
+        //     endDate: endDate ? endDate : course.details.endDate
+        // }
+        
+        dispatch(updateCourse(course.details._id, formData))
     }
+
+    //console.log(new Date(course.details.startDate).toJSON().slice(0,10).split('-').reverse().join('/'));
 
     const onChange = e => {
 
         const files = Array.from(e.target.files)
-
+        
         setImagesPreview([]);
         setImages([])
         setOldImages([])
-
+        console.log(e.target.files);
         files.forEach(file => {
             const reader = new FileReader();
 
             reader.onload = () => {
                 if (reader.readyState === 2) {
-                    setImagesPreview(oldArray => [...oldArray, reader.result])
+                    setImagesPreview([reader.result])
                     setImages(e.target.files)
                 }
             }
@@ -121,6 +152,7 @@ const UpdateCourse = ({ match, history }) => {
 
                 <div className="col-12 col-md-10">
                     <Fragment>
+                        {course && course.details &&
                         <div className="wrapper my-5">
                             <form className="shadow-lg" onSubmit={submitHandler} encType='multipart/form-data'>
                                 <h1 className="mb-4">Cập nhật khóa học</h1>
@@ -131,7 +163,7 @@ const UpdateCourse = ({ match, history }) => {
                                         type="text"
                                         id="name_field"
                                         className="form-control"
-                                        value={name}
+                                        value={course.details.name}
                                         onChange={(e) => setName(e.target.value)}
                                     />
                                 </div>
@@ -142,7 +174,7 @@ const UpdateCourse = ({ match, history }) => {
                                         type="text"
                                         id="price_field"
                                         className="form-control"
-                                        value={price}
+                                        value={course.details.price}
                                         onChange={(e) => setPrice(e.target.value)}
                                     />
                                 </div>
@@ -154,12 +186,33 @@ const UpdateCourse = ({ match, history }) => {
 
                                 <div className="form-group">
                                     <label htmlFor="category_field">Danh mục</label>
-                                    <select className="form-control" id="category_field" value={category} onChange={(e) => setCategory(e.target.value)}>
+                                    <select className="form-control" id="category_field" value={course.details.category} onChange={(e) => setCategory(e.target.value)}>
                                         {categories.map(category => (
                                             <option key={category} value={category} >{category}</option>
                                         ))}
 
                                     </select>
+                                </div>
+
+                                <div className='form-group'>
+                                    <label htmlFor='startDate_field'>Ngày bắt đầu</label>
+                                    <input
+                                        type='date'
+                                        id='startDate_field'
+                                        className='form-control'
+                                        defaultValue={new Date(course.details.startDate).toISOString().substr(0, 10)}
+                                        onChange={onChangeStartDate}
+                                    />
+                                </div>
+                                <div className='form-group'>
+                                    <label htmlFor='startDate_field'>Ngày kết thúc</label>
+                                    <input
+                                        type='date'
+                                        id='endDate_field'
+                                        className='form-control'
+                                        defaultValue={new Date(course.details.endDate).toISOString().substr(0, 10)}
+                                        onChange={onChangeEndDate}
+                                    />
                                 </div>
 
                                 <div className='form-group'>
@@ -172,14 +225,14 @@ const UpdateCourse = ({ match, history }) => {
                                             className='custom-file-input'
                                             id='customFile'
                                             onChange={onChange}
-                                            multiple
+                                            accept='.png ,.jpg ,.jpeg'
                                         />
                                         <label className='custom-file-label' htmlFor='customFile'>
                                             Chọn ảnh
                                  </label>
                                     </div>
 
-                                    {oldImages && oldImages.map(img => (
+                                    {course.details.images && course.details.images.map(img => (
                                         <img key={img} src={img.url} alt={img.url} className="mt-3 mr-2" width="55" height="52" />
                                     ))}
 
@@ -201,6 +254,7 @@ const UpdateCourse = ({ match, history }) => {
 
                             </form>
                         </div>
+                        }
                     </Fragment>
                 </div>
             </div>

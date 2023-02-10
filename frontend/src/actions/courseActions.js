@@ -74,6 +74,20 @@ import {
     UPDATE_QUIZ_SUCCESS,
     UPDATE_QUIZ_RESET,
     UPDATE_QUIZ_FAIL,
+
+    NEW_DOCUMENT_REQUEST,
+    NEW_DOCUMENT_SUCCESS,
+    NEW_DOCUMENT_FAIL,
+    GET_DOCUMENTS_REQUEST,
+    GET_DOCUMENTS_SUCCESS,
+    GET_DOCUMENTS_FAIL,
+    GET_DOCUMENT_REQUEST,
+    GET_DOCUMENT_SUCCESS,
+    GET_DOCUMENT_FAIL,
+    DELETE_DOCUMENT_REQUEST,
+    DELETE_DOCUMENT_SUCCESS,
+    DELETE_DOCUMENT_RESET,
+    DELETE_DOCUMENT_FAIL,
     CLEAR_ERRORS
 
 } from '../constants/courseConstants'
@@ -640,6 +654,99 @@ export const updateQuiz = (id, quizData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: UPDATE_QUIZ_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+
+export const newDocument = (docData) => async (dispatch) => {
+    try {
+
+        dispatch({ type: NEW_DOCUMENT_REQUEST })
+
+        const config = {
+            credentials: 'include',
+            headers: {'Content-type': 'multipart/form-data; boundary=XXX' },
+            body: '--XXX\r\nContent-Disposition: form-data; name="file"; filename="filename.csv"\r\nContent-Type: text/csv\r\n\r\nA,B,C\r\n1,1.1,name1\r\n2,2.2,name2\r\n\r\n--XXX--'
+        }
+
+       
+
+        const { data } = await axios.post(`/api/v1/document/create`, docData, config)
+
+        dispatch({
+            type: NEW_DOCUMENT_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+        dispatch({
+            type: NEW_DOCUMENT_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const getCourseDocuments = (id) => async (dispatch) => {
+    try {
+
+        dispatch({ type: GET_DOCUMENTS_REQUEST })
+
+        const { data } = await axios.get(`/api/v1/document/all/${id}`)
+
+        console.log(data.documents);
+        dispatch({
+            type: GET_DOCUMENTS_SUCCESS,
+            payload: data.documents
+        })
+
+    } catch (error) {
+
+        dispatch({
+            type: GET_DOCUMENTS_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const getCourseDocument = (courseId,index) => async (dispatch) => {
+    try {
+
+        dispatch({ type: GET_DOCUMENT_REQUEST })
+
+        const { data } = await axios.get(`/api/v1/document/${courseId}/${index}`)
+
+        dispatch({
+            type: GET_DOCUMENT_SUCCESS,
+            payload: data.document
+        })
+
+    } catch (error) {
+
+        dispatch({
+            type: GET_DOCUMENT_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const deleteDocument = (id) => async (dispatch) => {
+    try {
+
+        dispatch({ type: DELETE_DOCUMENT_REQUEST })
+
+        const { data } = await axios.delete(`/api/v1/document/delete/${id}`)
+
+        dispatch({
+            type: DELETE_DOCUMENT_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+
+        dispatch({
+            type: DELETE_DOCUMENT_FAIL,
             payload: error.response.data.message
         })
     }

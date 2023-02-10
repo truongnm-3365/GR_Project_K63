@@ -50,6 +50,7 @@ import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
 import NewTopic from './pages/Dashboard/NewTopic'
 import NewQuiz from './pages/Dashboard/NewQuiz'
+import NewDocument from './pages/Dashboard/NewDocument'
 
 function App() {
 
@@ -108,6 +109,7 @@ function App() {
         <ProtectedRoute path="/me/course" isAdmin={false} component={NewCourse} exact />
         <ProtectedRoute path="/me/course/:id" isAdmin={false} component={UpdateCourse} exact />
         <ProtectedRoute path="/me/course/:id/lessons" isAdmin={false} component={NewLesson} exact />
+        <ProtectedRoute path="/me/course/:id/documents" isAdmin={false} component={NewDocument} exact />
         <ProtectedRoute path="/me/course/:id/topics" isAdmin={false} component={NewTopic} exact />
         <ProtectedRoute path="/me/topic/:id/quizs" isAdmin={false} component={NewQuiz} exact />
         <ProtectedRoute path="/admin/orders" isAdmin={true} component={OrdersList} exact />

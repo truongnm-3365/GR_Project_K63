@@ -82,6 +82,10 @@ const CoursesList = ({ history }) => {
                     field: 'lessons',
                 },
                 {
+                    label: 'Tài liệu',
+                    field: 'documents',
+                },
+                {
                     label: 'Thao tác',
                     field: 'actions',
                 },
@@ -96,6 +100,11 @@ const CoursesList = ({ history }) => {
                 price: `$${course.price}`,
                 lessons: <Fragment>
                     <Link to={`/me/course/${course._id}/lessons`} className="btn btn-primary py-1 px-2">
+                        <i className="fa fa-eye"></i>
+                    </Link>
+                </Fragment>,
+                documents: <Fragment>
+                    <Link to={`/me/course/${course._id}/documents`} className="btn btn-primary py-1 px-2">
                         <i className="fa fa-eye"></i>
                     </Link>
                 </Fragment>,

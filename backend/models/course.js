@@ -91,6 +91,14 @@ const courseSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     },
+
+    startDate:{
+        type:Date
+    },
+    
+    endDate:{
+        type:Date
+    },
     
     createdAt: {
         type: Date,

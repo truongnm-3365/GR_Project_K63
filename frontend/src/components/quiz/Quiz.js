@@ -36,7 +36,7 @@ function Quiz({quizs}) {
       {quizs.length !== 0 ?
        <div className="quiz col-md-8">
 
-      <h2>Điểm số: {score}</h2>
+      <h2>Số câu đúng: {score}</h2>
 
       {showResults ? (
         /* 4. Final Results */

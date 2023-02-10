@@ -27,9 +27,11 @@ const auth = require('./routes/auth');
 const payment = require('./routes/payment');
 const order = require('./routes/order');
 const mediaRoutes = require("./routes/media");
+const documentRoutes = require("./routes/document");
 const notify = require("./routes/notify");
 
 app.use('/api/v1/media', mediaRoutes);
+app.use('/api/v1/document', documentRoutes);
 app.use("/public", express.static(path.join(__dirname, "/public")));
 
 

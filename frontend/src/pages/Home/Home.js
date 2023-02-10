@@ -89,7 +89,7 @@ const Home = ({ match }) => {
 
                                             <div className="mt-5">
                                                 <h4 className="mb-3">
-                                                    Categories
+                                                    Danh mục
                                                 </h4>
 
                                                 <ul className="pl-0">

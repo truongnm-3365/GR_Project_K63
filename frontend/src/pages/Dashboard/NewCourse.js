@@ -17,9 +17,9 @@ const NewCourse = ({ history }) => {
     const [price, setPrice] = useState(0);
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('Công nghệ thông tin');
-    const [stock, setStock] = useState(0);
-    const [seller, setSeller] = useState('');
     const [images, setImages] = useState([]);
+    const [startDate,setStartDate] = useState('');
+    const [endDate,setEndDate] = useState('');
    
     const [imagesPreview, setImagesPreview] = useState([])
 
@@ -56,6 +56,8 @@ const NewCourse = ({ history }) => {
         formData.append('price', price);
         formData.append('description', description);
         formData.append('category', category);
+        formData.append('startDate',startDate);
+        formData.append('endDate',endDate);
 
         for (let key in images) {
             formData.append("images", images[key]);
@@ -143,27 +145,26 @@ const NewCourse = ({ history }) => {
 
                                     </select>
                                 </div>
-                                {/* <div className="form-group">
-                                    <label htmlFor="stock_field">Stock</label>
+
+                                <div className='form-group'>
+                                    <label htmlFor='startDate_field'>Ngày bắt đầu</label>
                                     <input
-                                        type="number"
-                                        id="stock_field"
-                                        className="form-control"
-                                        value={stock}
-                                        onChange={(e) => setStock(e.target.value)}
+                                        type='date'
+                                        id='startDate_field'
+                                        className='form-control'
+                                        onChange={(e) => setStartDate(e.target.value)}
+                                    />
+                                </div>
+                                <div className='form-group'>
+                                    <label htmlFor='startDate_field'>Ngày kết thúc</label>
+                                    <input
+                                        type='date'
+                                        id='endDate_field'
+                                        className='form-control'
+                                        onChange={(e) => setEndDate(e.target.value)}
                                     />
                                 </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="seller_field">Seller Name</label>
-                                    <input
-                                        type="text"
-                                        id="seller_field"
-                                        className="form-control"
-                                        value={seller}
-                                        onChange={(e) => setSeller(e.target.value)}
-                                    />
-                                </div> */}
 
                                 <div className='form-group'>
                                     <label>Ảnh đại diện</label>

@@ -77,6 +77,21 @@ import {
     UPDATE_QUIZ_RESET,
     UPDATE_QUIZ_FAIL,
 
+    NEW_DOCUMENT_REQUEST,
+    NEW_DOCUMENT_SUCCESS,
+    NEW_DOCUMENT_RESET,
+    NEW_DOCUMENT_FAIL,
+    GET_DOCUMENTS_REQUEST,
+    GET_DOCUMENTS_SUCCESS,
+    GET_DOCUMENTS_FAIL,
+    GET_DOCUMENT_REQUEST,
+    GET_DOCUMENT_SUCCESS,
+    GET_DOCUMENT_FAIL,
+    DELETE_DOCUMENT_REQUEST,
+    DELETE_DOCUMENT_SUCCESS,
+    DELETE_DOCUMENT_RESET,
+    DELETE_DOCUMENT_FAIL,
+
     CLEAR_ERRORS
 
 } from '../constants/courseConstants'
@@ -745,3 +760,145 @@ export const topicQuizReducer = (state = {quiz:{}}, action) => {
     }
 }
 
+export const newDocumentReducer = (state = {}, action) => {
+    switch (action.type) {
+
+        case NEW_DOCUMENT_REQUEST:
+            return {
+                ...state,
+                loading: true
+            }
+
+        case NEW_DOCUMENT_SUCCESS:
+            return {
+                loading: false,
+                success: action.payload
+            }
+
+        case NEW_DOCUMENT_FAIL:
+            return {
+                ...state,
+                error: action.payload
+            }
+
+        case NEW_DOCUMENT_RESET:
+            return {
+                ...state,
+                success: false
+            }
+
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+
+        default:
+            return state
+    }
+}
+
+export const courseDocumentsReducer = (state = {documents:[]}, action) => {
+    switch (action.type) {
+
+        case GET_DOCUMENTS_REQUEST:
+            return {
+                ...state,
+                loading: true
+            }
+
+        case GET_DOCUMENTS_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                documents: action.payload
+            }
+
+        case GET_DOCUMENTS_FAIL:
+            return {
+                ...state,
+                error: action.payload
+            }
+
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+
+        default:
+            return state
+    }
+}
+
+export const courseDocumentReducer = (state = {document:{}}, action) => {
+    switch (action.type) {
+
+        case GET_DOCUMENT_REQUEST:
+            return {
+                ...state,
+                loading: true
+            }
+
+        case GET_DOCUMENT_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                document: action.payload
+            }
+
+        case GET_DOCUMENT_FAIL:
+            return {
+                ...state,
+                error: action.payload
+            }
+
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+
+        default:
+            return state
+    }
+}
+
+export const documentReducer = (state = {}, action) => {
+    switch (action.type) {
+
+        case DELETE_DOCUMENT_REQUEST:
+            return {
+                ...state,
+                loading: true
+            }
+
+        case DELETE_DOCUMENT_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                isDeleted: action.payload
+            }
+
+        case DELETE_DOCUMENT_FAIL:
+            return {
+                ...state,
+                error: action.payload
+            }
+
+        case DELETE_DOCUMENT_RESET:
+            return {
+                ...state,
+                isDeleted: false
+            }
+
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+
+        default:
+            return state
+    }
+}
