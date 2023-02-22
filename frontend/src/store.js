@@ -7,6 +7,8 @@ import { notifiesReducer } from './reducers/notifyReducer';
 import { authReducer, userReducer, forgotPasswordReducer, allUsersReducer, userDetailsReducer } from './reducers/userReducers'
 import { cartReducer } from './reducers/cartReducers'
 import { newOrderReducer, myOrdersReducer, orderDetailsReducer, allOrdersReducer, orderReducer } from './reducers/orderReducers'
+import { newRegisterCourseReducer, RegisterCourseReducer, registerCoursesReducer } from './reducers/registerCourseReducer';
+
 
 const reducer = combineReducers({
     courses: coursesReducer,
@@ -40,7 +42,10 @@ const reducer = combineReducers({
     order: orderReducer,
     newReview: newReviewReducer,
     newLesson: newLessonReducer,
-    notifies: notifiesReducer
+    notifies: notifiesReducer,
+    registerCourse: RegisterCourseReducer,
+    registerCourses: registerCoursesReducer,
+    newRegisterCourse: newRegisterCourseReducer
 })
 
 

@@ -29,7 +29,7 @@ const order = require('./routes/order');
 const mediaRoutes = require("./routes/media");
 const documentRoutes = require("./routes/document");
 const notify = require("./routes/notify");
-
+const registerCourse = require('./routes/registerCourse')
 app.use('/api/v1/media', mediaRoutes);
 app.use('/api/v1/document', documentRoutes);
 app.use("/public", express.static(path.join(__dirname, "/public")));
@@ -40,6 +40,7 @@ app.use('/api/v1', auth)
 app.use('/api/v1', payment)
 app.use('/api/v1', order)
 app.use('/api/v1', notify)
+app.use('/api/v1',registerCourse)
 
 if (process.env.NODE_ENV === 'PRODUCTION') {
     app.use(express.static(path.join(__dirname, '../frontend/build')))

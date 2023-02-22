@@ -10,7 +10,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getCourseDetails, newReview, clearErrors } from '../../actions/courseActions'
 import { addItemToCart } from '../../actions/cartActions'
 import { NEW_REVIEW_RESET } from '../../constants/courseConstants'
-
+import { deleteRegisterCourse, getMeRegisterCourses, newRegisterCourse } from '../../actions/registerCourseAction'
+import { DELETE_REGISTER_COURSE_RESET, NEW_REGISTER_COURSE_RESET } from '../../constants/registerCourseContants'
 const CourseDetails = ({ match }) => {
 
     const [quantity, setQuantity] = useState(1)
@@ -23,11 +24,17 @@ const CourseDetails = ({ match }) => {
     const { loading, error, course } = useSelector(state => state.courseDetails)
     const { user } = useSelector(state => state.auth)
     const { error: reviewError, success } = useSelector(state => state.newReview)
+    const {registerCourses} = useSelector(state => state.registerCourses)
+    const { success: newSuccess} = useSelector(state => state.newRegisterCourse)
 
-   
+    const formatDate = (dateInput) =>{
+        const date = new Date(dateInput)
+        return "ngày " + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + ' tháng ' + ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + ' năm ' +  date.getFullYear()
+    }
+
     useEffect(() => {
         dispatch(getCourseDetails(match.params.id))
-
+        dispatch(getMeRegisterCourses())
         if (error) {
             alert.error(error);
             dispatch(clearErrors())
@@ -43,31 +50,28 @@ const CourseDetails = ({ match }) => {
             dispatch({ type: NEW_REVIEW_RESET })
         }
 
-    }, [dispatch, alert, error, reviewError, match.params.id, success])
+        if (newSuccess) {
+            alert.success('Đăng ký thành công')
+            dispatch({ type: NEW_REGISTER_COURSE_RESET })
+        }
 
-    const addToCart = () => {
-        dispatch(addItemToCart(match.params.id, quantity));
-        alert.success('Item Added to Cart')
+
+    }, [dispatch, alert, error, reviewError, match.params.id,success,newSuccess])
+
+
+
+    const addCourse = () =>{
+        dispatch(newRegisterCourse(match.params.id))
     }
 
-    const increaseQty = () => {
-        const count = document.querySelector('.count')
 
-        if (count.valueAsNumber >= course.stock) return;
-
-        const qty = count.valueAsNumber + 1;
-        setQuantity(qty)
-    }
-
-    const decreaseQty = () => {
-
-        const count = document.querySelector('.count')
-
-        if (count.valueAsNumber <= 1) return;
-
-        const qty = count.valueAsNumber - 1;
-        setQuantity(qty)
-
+    const isRegister = () =>{
+        for(let i =0; i < registerCourses.length; i++){
+            if(registerCourses[i].course === match.params.id){
+                return true
+            }
+        }
+        return false
     }
 
     function setUserRatings() {
@@ -123,6 +127,7 @@ const CourseDetails = ({ match }) => {
         dispatch(newReview(formdata));
     }
 
+
     return (
         <Fragment>
             {loading ? <Loader /> : course.details && (
@@ -153,12 +158,26 @@ const CourseDetails = ({ match }) => {
                             <hr />
 
                             <p id="course_price">{course.details.price} ĐỒNG</p>
-
-                            <button type="button" id="cart_btn" className="btn btn-primary d-inline ml-4"  >Đăng ký học</button>
-                            <Link to={`/course/${course.details._id}/lessons`}>
-                                <button type="button" id="cart_btn" className="btn btn-danger d-inline ml-4" >Xem khóa học</button>
+                            {new Date() > new Date(course.details.startDate) && new Date() < new Date(course.details.endDate) ? 
+                            <>
+                            {
+                                isRegister() ? 
+                                <>
+                                <button type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" >Đã đăng ký</button>
+                                <Link to={`/course/${course.details._id}/lessons`}>
+                                    <button type="button" id="cart_btn" className="btn btn-danger d-inline ml-4" >Xem khóa học</button>
                                 
-                            </Link>
+                                </Link>
+                                </>
+                                :
+                                <button onClick={() => addCourse()} type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" >Đăng ký học</button>}
+
+
+                            </>
+                            :
+                            <div className="alert alert-danger mt-5" type='alert'>Khóa học hiện tại nằm ngoài khoảng thời gian khả dụng</div>
+                            }                           
+
                             <hr />
 
                             <h4 className="mt-2">Mô tả:</h4>
@@ -171,6 +190,9 @@ const CourseDetails = ({ match }) => {
                             <hr />
                             {/* <p id="course_seller mb-3">Sold by: <strong>{course.seller}</strong></p> */}
 
+                             <h4 className='mt-2'>Thời gian</h4>
+                             <p>Ngày bắt đầu: {formatDate(course.details.startDate)}</p> 
+                             <p>Ngày kết thúc: {formatDate(course.details.endDate)}</p>       
                             {user ? <button id="review_btn" type="button" className="btn btn-primary mt-4" data-toggle="modal" data-target="#ratingModal" onClick={setUserRatings}>
                                 Gửi đánh giá
                             </button>

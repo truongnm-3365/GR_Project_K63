@@ -8,6 +8,7 @@ import Home from './pages/Home/Home'
 import CourseDetails from './pages/Course/CourseDetails'
 
 // Cart Imports
+import RegisterCourseList from './pages/RegisterCourse/RegisterCourseList'
 import Cart from './components/cart/Cart'
 import Shipping from './components/cart/Shipping'
 import ConfirmOrder from './components/cart/ConfirmOrder'
@@ -82,7 +83,7 @@ function App() {
           <Route path="/search/:keyword" component={Home} />
           <Route path="/course/:id" component={CourseDetails} exact />
           <Route path="/course/:id/lessons"  component={Lessons} exact/>
-          <Route path="/cart" component={Cart} exact />
+          <Route path="/registerCourse" component={RegisterCourseList} exact />
           <ProtectedRoute path="/shipping" component={Shipping} />
           <ProtectedRoute path="/confirm" component={ConfirmOrder} exact />
           <ProtectedRoute path="/success" component={OrderSuccess} />

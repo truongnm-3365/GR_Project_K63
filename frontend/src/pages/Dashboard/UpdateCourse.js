@@ -126,7 +126,7 @@ const UpdateCourse = ({ match, history }) => {
         setImagesPreview([]);
         setImages([])
         setOldImages([])
-        console.log(e.target.files);
+        
         files.forEach(file => {
             const reader = new FileReader();
 
@@ -200,7 +200,7 @@ const UpdateCourse = ({ match, history }) => {
                                         type='date'
                                         id='startDate_field'
                                         className='form-control'
-                                        defaultValue={new Date(course.details.startDate).toISOString().substr(0, 10)}
+                                        defaultValue={course.details.startDate ? new Date(course.details.startDate).toISOString().substr(0, 10) :""}
                                         onChange={onChangeStartDate}
                                     />
                                 </div>
@@ -210,7 +210,7 @@ const UpdateCourse = ({ match, history }) => {
                                         type='date'
                                         id='endDate_field'
                                         className='form-control'
-                                        defaultValue={new Date(course.details.endDate).toISOString().substr(0, 10)}
+                                        defaultValue={course.details.endDate ? new Date(course.details.endDate).toISOString().substr(0, 10) : ""}
                                         onChange={onChangeEndDate}
                                     />
                                 </div>
