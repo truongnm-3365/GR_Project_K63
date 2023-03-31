@@ -2,14 +2,14 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { MDBDataTable } from 'mdbreact'
 
-import MetaData from '../../components/layout/MetaData'
-import Loader from '../../components/layout/Loader'
-import Sidebar from './Sidebar'
+import MetaData from '../../../components/layout/MetaData'
+import Loader from '../../../components/layout/Loader'
+import Sidebar from '../Sidebar'
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
-import { getMeCourses, getAdminCourses, deleteCourse, clearErrors, acceptCourse } from '../../actions/courseActions'
-import { DELETE_COURSE_RESET,  UPDATE_COURSE_RESET } from '../../constants/courseConstants'
+import { getMeCourses, getAdminCourses, deleteCourse, clearErrors, acceptCourse } from '../../../actions/courseActions'
+import { DELETE_COURSE_RESET,  UPDATE_COURSE_RESET } from '../../../constants/courseConstants'
 
 
 const CoursesList = ({ history }) => {

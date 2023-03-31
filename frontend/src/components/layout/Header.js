@@ -9,7 +9,8 @@ import Search from './Search'
 import NotifyMe from './NotifyMe/NotifyMe'
 import { DELETE_ALL_NOTIFIES_RESET } from '../../constants/notifyContants'
 import '../../App.css'
-
+import { getCategories } from '../../actions/categoryAction'
+import './index.css'
 
 
 
@@ -19,8 +20,8 @@ const Header = () => {
     const dispatch = useDispatch();
 
     const { user, loading } = useSelector(state => state.auth)
+    const { categories } = useSelector(state => state.categories);
     const { notifies, error, isDeleted } = useSelector(state => state.notifies)
-    const { cartItems } = useSelector(state => state.cart)
 
     const logoutHandler = () => {
         dispatch(logout());
@@ -32,6 +33,8 @@ const Header = () => {
     }
 
     useEffect(() => {
+        dispatch(getCategories());
+
         if (error) {
             return alert.error(error)
         }
@@ -56,11 +59,26 @@ const Header = () => {
                             Onraincoosu
                         </Link>
                     </div>
+                    <div className="ml-4 dropdown d-inline dropdown-hover">
+                        <Link to="#!" className="btn dropdown-toggle text-white mr-4" type="button" id="dropDownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span>Thể loại</span>
+                        </Link>
+
+                        <div className="dropdown-menu dropdown-hover" aria-labelledby="dropDownMenuButton">
+                            {categories && categories.map((category) => (
+                                <Link key={category._id} className="dropdown-item" to={`/search?keyword=&&category=${category.name}`} >{category.name}</Link>
+                            ))}
+                                    
+
+                        </div>
+
+
+                    </div>
                 </div>
 
-                {/* <div className="col-12 col-md-6 mt-2 mt-md-0">
+                <div className="col-12 col-md-6 mt-2 mt-md-0">
                     <Route render={({ history }) => <Search history={history} />} />
-                </div> */}
+                </div>
 
                 <div className="col-12 col-md-3 mt-4 mt-md-0 text-center d-flex">
                     {/* <Link to="/cart" style={{ textDecoration: 'none' }} >

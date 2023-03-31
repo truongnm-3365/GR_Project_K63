@@ -26,20 +26,43 @@ const Sidebar = () => {
                             </li>
                         </ul>
                     </li>
-                    {/* {user && user.role === 'admin' && (<>
+                    {user && user.role === 'admin' && (<>
                     <li>
-                        <Link to="/admin/orders"><i className="fa fa-shopping-basket"></i> Orders</Link>
-                    </li>
-                    
-                    <li>
-                        <Link to="/admin/users"><i className="fa fa-users"></i> Users</Link>
+                        <Link to="/admin/users"><i className="fa fa-users"></i>  Người dùng</Link>
                     </li>
 
                     <li>
-                        <Link to="/admin/reviews"><i className="fa fa-star"></i> Reviews</Link>
+                        <Link to="/admin/reviews"><i className="fa fa-star"></i>  Đánh giá</Link>
+                    </li>
+
+                    <li>
+                        <a href="#categorySubmenu" data-toggle="collapse" aria-expanded="false" className="dropdown-toggle">
+                            <i className="fa fa-list"></i> Các thể loại</a>
+                        <ul className="collapse list-unstyled" id="categorySubmenu">
+                            <li>
+                                <Link to="/admin/categories"><i className="fa fa-clipboard"></i> Tất cả</Link>
+                            </li>
+
+                            <li>
+                                <Link to="/admin/category/new"><i className="fa fa-plus"></i> Tạo mới</Link>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#bannerSubmenu" data-toggle="collapse" aria-expanded="false" className="dropdown-toggle">
+                            <i className="fa fa-picture-o"></i> Banner</a>
+                        <ul className="collapse list-unstyled" id="bannerSubmenu">
+                            <li>
+                                <Link to="/admin/banners"><i className="fa fa-clipboard"></i> Tất cả</Link>
+                            </li>
+
+                            <li>
+                                <Link to="/admin/banner/new"><i className="fa fa-plus"></i> Tạo mới</Link>
+                            </li>
+                        </ul>
                     </li>
                     </>)
-                    } */}
+                    }
 
                 </ul>
             </nav>

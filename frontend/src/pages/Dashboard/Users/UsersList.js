@@ -2,14 +2,14 @@ import React, { Fragment, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { MDBDataTable } from 'mdbreact'
 
-import MetaData from '../../components/layout/MetaData'
-import Loader from '../../components/layout/Loader'
-import Sidebar from './Sidebar'
+import MetaData from '../../../components/layout/MetaData'
+import Loader from '../../../components/layout/Loader'
+import Sidebar from '../Sidebar'
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
-import { allUsers, deleteUser, clearErrors } from '../../actions/userActions'
-import { DELETE_USER_RESET } from '../../constants/userConstants'
+import { allUsers, deleteUser, clearErrors } from '../../../actions/userActions'
+import { DELETE_USER_RESET } from '../../../constants/userConstants'
 
 const UsersList = ({ history }) => {
 

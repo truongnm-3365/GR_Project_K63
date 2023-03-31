@@ -37,7 +37,7 @@ const CourseList = ({ history }) => {
     // }
 
     return (
-        <Fragment>
+        <div className='container'>
             <MetaData title={'Your Cart'} />
             {registerCourses && registerCourses.length !== 0 ?  (
                 <Fragment>
@@ -89,7 +89,7 @@ const CourseList = ({ history }) => {
                     </div>
                 </Fragment>
             ): <h2 className="mt-5">Bạn chưa đăng ký khóa học nào</h2> }
-        </Fragment>
+        </div>
     )
 }
 

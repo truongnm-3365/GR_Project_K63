@@ -10,42 +10,70 @@ import Loader from '../../components/layout/Loader'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert';
 import { getCourses } from '../../actions/courseActions'
+import { getCategories } from '../../actions/categoryAction';
+import { useLocation } from 'react-router-dom';
+import { getBanners } from '../../actions/bannerAction';
+import Banner from '../../components/banner/Banner';
 
 const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range)
 
-const Home = ({ match }) => {
+const useQuery = () => {
+    const { search } = useLocation();
+  
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+}
+
+const Home = ({history}) => {
 
     const [currentPage, setCurrentPage] = useState(1)
     const [price, setPrice] = useState([0, 1000])
     const [category, setCategory] = useState('')
     const [rating, setRating] = useState(0)
 
-    const categories = [
-        'Công nghệ thông tin',
-        'Ngoại ngữ'
-    ]
+    const { categories } = useSelector(state => state.categories);
+    const { banners } = useSelector(state => state.banners)
 
+    let query = useQuery();
     const alert = useAlert();
     const dispatch = useDispatch();
 
     const { loading, courses, error, coursesCount, resPerPage, filteredCoursesCount } = useSelector(state => state.courses)
 
-    //console.log(coursesCount)
-    const keyword = match.params.keyword
+    
+    const keyword = query.get("keyword") || ""
+    const categoryQuery = query.get("category") || ""
 
+    
     useEffect(() => {
+        
+        dispatch(getCategories());
+        dispatch(getBanners());
+        
         if (error) {
             return alert.error(error)
         }
 
-        dispatch(getCourses(keyword, currentPage, price, category, rating));
+        if(categoryQuery){
+            dispatch(getCourses(keyword, currentPage, price, categoryQuery, rating));
+        }else{
+            dispatch(getCourses(keyword, currentPage, price, category, rating));
+        }
+        
+        
 
 
-    }, [dispatch, alert, error, keyword, currentPage, price, category, rating])
+    }, [dispatch, alert, error, keyword, currentPage, price, category, rating,categoryQuery])
 
     function setCurrentPageNo(pageNumber) {
         setCurrentPage(pageNumber)
+    }
+
+
+    const handleCategory = (categoryName) =>{
+        setCategory(categoryName)
+        history.push(`/search?keyword=${keyword}&&category=${categoryName}`)
+
     }
 
     let count = coursesCount;
@@ -58,13 +86,14 @@ const Home = ({ match }) => {
             {loading ? <Loader /> : (
                 <Fragment>
                     <MetaData title={'Onraincoosu - Hãy tận hưởng những khóa bổ ích'} />
-
-                    <h1 id="courses_heading">Khóa học mới nhất</h1>
+                    <Banner/>
+                    
 
                     <section id="courses" className="container mt-5">
+                        <h1 id="courses_heading">Khóa học mới nhất</h1>
                         <div className="row">
 
-                            {keyword ? (
+                            {(keyword || categoryQuery) ? (
                                 <Fragment>
                                     <div className="col-6 col-md-3 mt-5 mb-5">
                                         <div className="px-5">
@@ -93,16 +122,27 @@ const Home = ({ match }) => {
                                                 </h4>
 
                                                 <ul className="pl-0">
-                                                    {categories.map(category => (
+                                                    {categories && 
                                                         <li
                                                             style={{
                                                                 cursor: 'pointer',
                                                                 listStyleType: 'none'
                                                             }}
-                                                            key={category}
-                                                            onClick={() => setCategory(category)}
+                                                            onClick={() => handleCategory("")}
                                                         >
-                                                            {category}
+                                                            Tất cả
+                                                        </li>
+                                                    }
+                                                    {categories && categories.map(category => (
+                                                        <li
+                                                            style={{
+                                                                cursor: 'pointer',
+                                                                listStyleType: 'none'
+                                                            }}
+                                                            key={category._id}
+                                                            onClick={() => handleCategory(category.name)}
+                                                        >
+                                                            {category.name}
                                                         </li>
                                                     ))}
                                                 </ul>
@@ -174,6 +214,7 @@ const Home = ({ match }) => {
                             />
                         </div>
                     )}
+                    
 
                 </Fragment>
             )}

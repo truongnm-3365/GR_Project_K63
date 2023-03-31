@@ -1,13 +1,14 @@
 import React, { Fragment, useState, useEffect } from 'react'
 
-import MetaData from '../../components/layout/MetaData'
-import Sidebar from './Sidebar'
+import MetaData from '../../../components/layout/MetaData'
+import Sidebar from '../Sidebar'
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateCourse, getCourseDetails, clearErrors } from '../../actions/courseActions'
-import { UPDATE_COURSE_RESET } from '../../constants/courseConstants'
+import { updateCourse, getCourseDetails, clearErrors } from '../../../actions/courseActions'
+import { UPDATE_COURSE_RESET } from '../../../constants/courseConstants'
 import moment from 'moment'
+import { getCategories } from '../../../actions/categoryAction'
 const UpdateCourse = ({ match, history }) => {
 
     const [name, setName] = useState('');
@@ -21,14 +22,10 @@ const UpdateCourse = ({ match, history }) => {
     const [oldImages, setOldImages] = useState([]);
     const [imagesPreview, setImagesPreview] = useState([])
 
-    const categories = [
-        'Công nghệ thông tin',
-        'Ngoại ngữ'
-    ]
-
     const alert = useAlert();
     const dispatch = useDispatch();
 
+    const { categories } = useSelector(state => state.categories);
     const { error, course } = useSelector(state => state.courseDetails)
     const { loading, error: updateError, isUpdated } = useSelector(state => state.course);
 
@@ -36,18 +33,8 @@ const UpdateCourse = ({ match, history }) => {
 
     console.log(course);
     useEffect(() => {
+        dispatch(getCategories());
         dispatch(getCourseDetails(match.params.id));
-        //  if(course.details){
-        //     setName(course.details.name);
-        //     setPrice(course.details.price);
-        //     setDescription(course.details.description);
-        //     setCategory(course.details.category);
-        //     setOldImages(course.details.images)
-        //     setImages(course.details.images)
-        //     setStartDate(course.details.startDate);
-        //     setEndDate(course.details.endDate);
-        //  }
-
         
 
         if (error) {
@@ -186,9 +173,9 @@ const UpdateCourse = ({ match, history }) => {
 
                                 <div className="form-group">
                                     <label htmlFor="category_field">Danh mục</label>
-                                    <select className="form-control" id="category_field" value={course.details.category} onChange={(e) => setCategory(e.target.value)}>
-                                        {categories.map(category => (
-                                            <option key={category} value={category} >{category}</option>
+                                    <select className="form-control" id="category_field" defaultValue={course.details.category} onChange={(e) => setCategory(e.target.value)}>
+                                        {categories && categories.map(category => (
+                                            <option key={category._id} value={category.name} >{category.name}</option>
                                         ))}
 
                                     </select>

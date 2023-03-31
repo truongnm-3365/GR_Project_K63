@@ -8,7 +8,7 @@ const Search = ({ history }) => {
         e.preventDefault()
 
         if (keyword.trim()) {
-            history.push(`/search/${keyword}`)
+            history.push(`/search?keyword=${keyword}`)
         } else {
             history.push('/')
         }

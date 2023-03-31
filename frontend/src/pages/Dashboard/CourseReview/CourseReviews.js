@@ -1,14 +1,14 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { MDBDataTable } from 'mdbreact'
 
-import MetaData from '../../components/layout/MetaData'
-import Loader from '../../components/layout/Loader'
-import Sidebar from './Sidebar'
+import MetaData from '../../../components/layout/MetaData'
+import Loader from '../../../components/layout/Loader'
+import Sidebar from '../Sidebar'
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
-import { getCourseReviews, deleteReview, clearErrors } from '../../actions/courseActions'
-import { DELETE_REVIEW_RESET } from '../../constants/courseConstants'
+import { getCourseReviews, deleteReview, clearErrors } from '../../../actions/courseActions'
+import { DELETE_REVIEW_RESET } from '../../../constants/courseConstants'
 
 const CourseReviews = () => {
 
@@ -37,7 +37,7 @@ const CourseReviews = () => {
         }
 
         if (isDeleted) {
-            alert.success('Review deleted successfully');
+            alert.success('Xóa bình luận thành công');
             dispatch({ type: DELETE_REVIEW_RESET })
         }
 
@@ -58,27 +58,27 @@ const CourseReviews = () => {
         const data = {
             columns: [
                 {
-                    label: 'Review ID',
+                    label: 'ID',
                     field: 'id',
                     sort: 'asc'
                 },
                 {
-                    label: 'Rating',
+                    label: 'Đánh giá',
                     field: 'rating',
                     sort: 'asc'
                 },
                 {
-                    label: 'Comment',
+                    label: 'Bình luận',
                     field: 'comment',
                     sort: 'asc'
                 },
                 {
-                    label: 'User',
+                    label: 'Người dùng',
                     field: 'user',
                     sort: 'asc'
                 },
                 {
-                    label: 'Actions',
+                    label: 'Thao tác',
                     field: 'actions',
                 },
             ],
@@ -116,7 +116,7 @@ const CourseReviews = () => {
                             <div className="col-5">
                                 <form onSubmit={submitHandler}>
                                     <div className="form-group">
-                                        <label htmlFor="courseId_field">Enter Course ID</label>
+                                        <label htmlFor="courseId_field">Nhập mã khóa học</label>
                                         <input
                                             type="text"
                                             id="courseId_field"
@@ -131,7 +131,7 @@ const CourseReviews = () => {
                                         type="submit"
                                         className="btn btn-primary btn-block py-2"
                                     >
-                                        SEARCH
+                                        TÌM KIẾM
 								    </button>
                                 </ form>
                             </div>
@@ -147,7 +147,7 @@ const CourseReviews = () => {
                                 hover
                             />
                         ) : (
-                                <p className="mt-5 text-center">No Reviews.</p>
+                                <p className="mt-5 text-center">Không có bình luận nào</p>
                             )}
 
 

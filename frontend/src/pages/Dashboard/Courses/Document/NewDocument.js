@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import Loader from '../../components/layout/Loader'
-import MetaData from "../../components/layout/MetaData";
-import Sidebar from './Sidebar'
+import Loader from '../../../../components/layout/Loader'
+import MetaData from "../../../../components/layout/MetaData";
+import Sidebar from '../../Sidebar'
 import { useAlert } from 'react-alert'
-import {  newDocument, clearErrors, getCourseDocuments, deleteDocument, getCourseTopics } from '../../actions/courseActions'
+import {  newDocument, clearErrors, getCourseDocuments, deleteDocument, getCourseTopics } from '../../../../actions/courseActions'
 import { useDispatch, useSelector } from 'react-redux'
-import { NEW_DOCUMENT_RESET,DELETE_DOCUMENT_RESET } from '../../constants/courseConstants'
+import { NEW_DOCUMENT_RESET,DELETE_DOCUMENT_RESET } from '../../../../constants/courseConstants'
 import DocumentForm from "./DocumentForm";
 import DocumentList from "./DocumentList";
 

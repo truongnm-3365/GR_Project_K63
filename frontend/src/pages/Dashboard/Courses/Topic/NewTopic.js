@@ -1,38 +1,37 @@
 import React, { useState, useEffect } from "react";
 
-import Loader from '../../components/layout/Loader'
-import MetaData from "../../components/layout/MetaData";
-import Sidebar from './Sidebar'
+import Loader from '../../../../components/layout/Loader'
+import MetaData from "../../../../components/layout/MetaData";
+import Sidebar from '../../Sidebar'
 import { useAlert } from 'react-alert'
-import {   clearErrors, deleteQuiz, getTopicQuizs, newQuiz } from '../../actions/courseActions'
+import {  newTopic, clearErrors, getCourseTopics, deleteTopic,updateTopic } from '../../../../actions/courseActions'
 import { useDispatch, useSelector } from 'react-redux'
-import { NEW_QUIZ_RESET,DELETE_QUIZ_RESET, UPDATE_QUIZ_RESET } from '../../constants/courseConstants'
-import QuizForm from "./QuizForm";
-import QuizList from "./QuizList";
+import { NEW_TOPIC_RESET,DELETE_TOPIC_RESET, UPDATE_TOPIC_RESET } from '../../../../constants/courseConstants'
+import TopicForm from "./TopicForm";
+import TopicList from "./TopicList";
 
-const NewQuiz = ({match}) => {
+const NewTopic = ({match}) => {
   const alert = useAlert();
   const dispatch = useDispatch();
-  const { loading, quizs,error } = useSelector(state => state.topicQuizs)
-  const { error: quizError, success } = useSelector(state => state.newQuiz)
-  const { error: crudError, isDeleted, isUpdated } = useSelector(state => state.quiz)
-  console.log(quizs)
+  const { loading, topics,error } = useSelector(state => state.courseTopics)
+  const { error: topicError, success } = useSelector(state => state.newTopic)
+  const { error: crudError, isDeleted, isUpdated } = useSelector(state => state.topic)
   useEffect(() => {
-    dispatch(getTopicQuizs(match.params.id))
+    dispatch(getCourseTopics(match.params.id))
 
         if (error) {
             alert.error(error);
             dispatch(clearErrors())
         }
 
-    if (quizError) {
-        alert.error(quizError);
+    if (topicError) {
+        alert.error(topicError);
         dispatch(clearErrors())
     }
     
     if (success) {
-        alert.success('Thành công')
-        dispatch({ type: NEW_QUIZ_RESET })
+        alert.success('Đăng tải thành công')
+        dispatch({ type: NEW_TOPIC_RESET })
     }
 
     if (crudError) {
@@ -42,17 +41,17 @@ const NewQuiz = ({match}) => {
 
     if (isDeleted) {
         alert.success('Xóa thành công');
-        dispatch({ type: DELETE_QUIZ_RESET })
+        dispatch({ type: DELETE_TOPIC_RESET })
     }
     if (isUpdated) {
       alert.success('Cập nhật thành công');
-      dispatch({ type: UPDATE_QUIZ_RESET })
+      dispatch({ type: UPDATE_TOPIC_RESET })
   }
 
-}, [dispatch, alert, error,quizError,success,crudError, isDeleted,isUpdated, match.params.id])
+}, [dispatch, alert, error,topicError,success,crudError, isDeleted,isUpdated, match.params.id])
 
-  const deleteQuizHandler = (id) => {
-    dispatch(deleteQuiz(id))
+  const deleteTopicHandler = (id) => {
+    dispatch(deleteTopic(id))
   }
   return (
     <>
@@ -76,7 +75,7 @@ const NewQuiz = ({match}) => {
                 }}
               >
                 <div className="card-body">
-                  <QuizForm topicId={match.params.id}/>
+                  <TopicForm courseId={match.params.id} newTopic={newTopic}/>
                 </div>
               </div>
             </div>
@@ -93,7 +92,7 @@ const NewQuiz = ({match}) => {
               >
                 {loading ? <Loader /> :
                 <div className="card-body">
-                  <QuizList  quizs={quizs} deleteQuizHandler={deleteQuizHandler} />
+                  <TopicList  topics={topics} deleteTopicHandler={deleteTopicHandler} />
                 </div>
                 }
               </div>
@@ -106,4 +105,4 @@ const NewQuiz = ({match}) => {
   );
 };
 
-export default NewQuiz;
+export default NewTopic;

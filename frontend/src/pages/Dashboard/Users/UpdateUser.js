@@ -1,12 +1,12 @@
 import React, { Fragment, useState, useEffect } from 'react'
 
-import MetaData from '../../components/layout/MetaData'
-import Sidebar from './Sidebar'
+import MetaData from '../../../components/layout/MetaData'
+import Sidebar from '../Sidebar'
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateUser, getUserDetails, clearErrors } from '../../actions/userActions'
-import { UPDATE_USER_RESET } from '../../constants/userConstants'
+import { updateUser, getUserDetails, clearErrors } from '../../../actions/userActions'
+import { UPDATE_USER_RESET } from '../../../constants/userConstants'
 
 const UpdateUser = ({ history, match }) => {
 

@@ -1,18 +1,19 @@
 import React, { Fragment, useState, useEffect } from 'react'
 
-import MetaData from '../../components/layout/MetaData'
-import Sidebar from './Sidebar'
+import MetaData from '../../../components/layout/MetaData'
+import Sidebar from '../Sidebar'
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
-import { newCourse, clearErrors } from '../../actions/courseActions'
-import { NEW_COURSE_RESET } from '../../constants/courseConstants'
+import { newCourse, clearErrors } from '../../../actions/courseActions'
+import { NEW_COURSE_RESET } from '../../../constants/courseConstants'
 
-import NewLesson from './NewLesson'
+import { getCategories } from '../../../actions/categoryAction'
 
 
 const NewCourse = ({ history }) => {
 
+    const { categories } = useSelector(state => state.categories);
     const [name, setName] = useState('');
     const [price, setPrice] = useState(0);
     const [description, setDescription] = useState('');
@@ -23,10 +24,10 @@ const NewCourse = ({ history }) => {
    
     const [imagesPreview, setImagesPreview] = useState([])
 
-    const categories = [
-        'Công nghệ thông tin',
-        'Ngoại ngữ'
-    ]
+    // const categories = [
+    //     'Công nghệ thông tin',
+    //     'Ngoại ngữ'
+    // ]
 
     const alert = useAlert();
     const dispatch = useDispatch();
@@ -34,6 +35,7 @@ const NewCourse = ({ history }) => {
     const { loading, error, success } = useSelector(state => state.newCourse);
 
     useEffect(() => {
+        dispatch(getCategories());
 
         if (error) {
             alert.error(error);
@@ -139,8 +141,8 @@ const NewCourse = ({ history }) => {
                                 <div className="form-group">
                                     <label htmlFor="category_field">Danh mục</label>
                                     <select className="form-control" id="category_field" value={category} onChange={(e) => setCategory(e.target.value)}>
-                                        {categories.map(category => (
-                                            <option key={category} value={category} >{category}</option>
+                                        {categories && categories.map(category => (
+                                            <option key={category._id} value={category.name} >{category.name}</option>
                                         ))}
 
                                     </select>

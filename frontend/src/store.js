@@ -8,6 +8,8 @@ import { authReducer, userReducer, forgotPasswordReducer, allUsersReducer, userD
 import { cartReducer } from './reducers/cartReducers'
 import { newOrderReducer, myOrdersReducer, orderDetailsReducer, allOrdersReducer, orderReducer } from './reducers/orderReducers'
 import { newRegisterCourseReducer, RegisterCourseReducer, registerCoursesReducer } from './reducers/registerCourseReducer';
+import { categoriesReducer, categoryDetailsReducer, categoryReducer, newCategoryReducer } from './reducers/categoryReducer';
+import { bannerDetailsReducer, bannerReducer, bannersReducer, newBannerReducer } from './reducers/bannerReducer';
 
 
 const reducer = combineReducers({
@@ -45,7 +47,15 @@ const reducer = combineReducers({
     notifies: notifiesReducer,
     registerCourse: RegisterCourseReducer,
     registerCourses: registerCoursesReducer,
-    newRegisterCourse: newRegisterCourseReducer
+    newRegisterCourse: newRegisterCourseReducer,
+    categories: categoriesReducer,
+    newCategory: newCategoryReducer,
+    category: categoryReducer,
+    categoryDetails: categoryDetailsReducer,
+    banners: bannersReducer,
+    newBanner: newBannerReducer,
+    banner: bannerReducer,
+    bannerDetails: bannerDetailsReducer,
 })
 
 

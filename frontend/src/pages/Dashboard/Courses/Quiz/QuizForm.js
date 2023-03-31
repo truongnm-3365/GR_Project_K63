@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAlert } from 'react-alert'
 import { useDispatch } from 'react-redux'
 import { Divider, List, Typography } from 'antd';
-import { newQuiz } from "../../actions/courseActions";
+import { newQuiz } from "../../../../actions/courseActions";
 const QuizForm = ({topicId}) => {
   const [question, setQuestion] = useState("");
   const [quantity,setQuantity] = useState([1]);

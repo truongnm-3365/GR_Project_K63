@@ -30,15 +30,15 @@ import NewPassword from './pages/User/NewPassword'
 
 // Admin Imports
 import Dashboard from './pages/Dashboard/Dashboard'
-import CoursesList from './pages/Dashboard/CoursesList'
-import NewCourse from './pages/Dashboard/NewCourse'
-import UpdateCourse from './pages/Dashboard/UpdateCourse'
+import CoursesList from './pages/Dashboard/Courses/CoursesList'
+import NewCourse from './pages/Dashboard/Courses/NewCourse'
+import UpdateCourse from './pages/Dashboard/Courses/UpdateCourse'
 import OrdersList from './pages/Dashboard/OrdersList'
 import ProcessOrder from './pages/Dashboard/ProcessOrder'
-import UsersList from './pages/Dashboard/UsersList'
-import UpdateUser from './pages/Dashboard/UpdateUser'
-import CourseReviews from './pages/Dashboard/CourseReviews'
-import NewLesson from './pages/Dashboard/NewLesson'
+import UsersList from './pages/Dashboard/Users/UsersList'
+import UpdateUser from './pages/Dashboard/Users/UpdateUser'
+import CourseReviews from './pages/Dashboard/CourseReview/CourseReviews'
+import NewLesson from './pages/Dashboard/Courses/Lesson/NewLesson'
 import Lessons from './pages/Course/Lesson'
 import ProtectedRoute from './components/route/ProtectedRoute'
 import { loadUser } from './actions/userActions'
@@ -49,9 +49,15 @@ import axios from 'axios'
 // Payment
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
-import NewTopic from './pages/Dashboard/NewTopic'
-import NewQuiz from './pages/Dashboard/NewQuiz'
-import NewDocument from './pages/Dashboard/NewDocument'
+import NewTopic from './pages/Dashboard/Courses/Topic/NewTopic'
+import NewQuiz from './pages/Dashboard/Courses/Quiz/NewQuiz'
+import NewDocument from './pages/Dashboard/Courses/Document/NewDocument'
+import CategoryList from './pages/Dashboard/Category/CategoryList'
+import NewCategory from './pages/Dashboard/Category/NewCategory'
+import UpdateCategory from './pages/Dashboard/Category/UpdateCategory'
+import BannerList from './pages/Dashboard/Banner/BannerList'
+import NewBanner from './pages/Dashboard/Banner/NewBanner'
+import UpdateBanner from './pages/Dashboard/Banner/UpdateBanner'
 
 function App() {
 
@@ -78,9 +84,9 @@ function App() {
     <Router>
       <div className="App">
         <Header />
-        <div className="container container-fluid">
+        <div className="">
           <Route path="/" component={Home} exact />
-          <Route path="/search/:keyword" component={Home} />
+          <Route path="/search" component={Home} />
           <Route path="/course/:id" component={CourseDetails} exact />
           <Route path="/course/:id/lessons"  component={Lessons} exact/>
           <Route path="/registerCourse" component={RegisterCourseList} exact />
@@ -118,10 +124,16 @@ function App() {
         <ProtectedRoute path="/admin/users" isAdmin={true} component={UsersList} exact />
         <ProtectedRoute path="/admin/user/:id" isAdmin={true} component={UpdateUser} exact />
         <ProtectedRoute path="/admin/reviews" isAdmin={true} component={CourseReviews} exact />
+        <ProtectedRoute path="/admin/categories" isAdmin={false} component={CategoryList} exact />
+        <ProtectedRoute path="/admin/category/new" isAdmin={false} component={NewCategory} exact />
+        <ProtectedRoute path="/admin/category/update/:id" isAdmin={false} component={UpdateCategory} exact />
+        <ProtectedRoute path="/admin/banners" isAdmin={false} component={BannerList} exact />
+        <ProtectedRoute path="/admin/banner/new" isAdmin={false} component={NewBanner} exact />
+        <ProtectedRoute path="/admin/banner/update/:id" isAdmin={false} component={UpdateBanner} exact />
 
-        {!loading && (!isAuthenticated || user.role !== 'admin') && (
-          <Footer />
-        )}
+       
+        <Footer />
+        
       </div>
     </Router>
   );

@@ -1,57 +1,56 @@
 import React, { useState, useEffect } from "react";
-
-import Loader from '../../components/layout/Loader'
-import MetaData from "../../components/layout/MetaData";
-import Sidebar from './Sidebar'
+import axios from "axios";
+import UploadForm from "./UploadForm";
+import UploadsList from "./UploadsList";
+import Loader from '../../../../components/layout/Loader'
+import MetaData from "../../../../components/layout/MetaData";
+import Sidebar from '../../Sidebar'
 import { useAlert } from 'react-alert'
-import {  newTopic, clearErrors, getCourseTopics, deleteTopic,updateTopic } from '../../actions/courseActions'
+import {  newLesson, clearErrors, getCourseLessons, deleteLesson, getCourseTopics } from '../../../../actions/courseActions'
 import { useDispatch, useSelector } from 'react-redux'
-import { NEW_TOPIC_RESET,DELETE_TOPIC_RESET, UPDATE_TOPIC_RESET } from '../../constants/courseConstants'
-import TopicForm from "./TopicForm";
-import TopicList from "./TopicList";
+import { NEW_LESSON_RESET,DELETE_LESSON_RESET } from '../../../../constants/courseConstants'
 
-const NewTopic = ({match}) => {
+const NewLesson = ({match}) => {
   const alert = useAlert();
   const dispatch = useDispatch();
-  const { loading, topics,error } = useSelector(state => state.courseTopics)
-  const { error: topicError, success } = useSelector(state => state.newTopic)
-  const { error: crudError, isDeleted, isUpdated } = useSelector(state => state.topic)
+  const { loading, lessons,error } = useSelector(state => state.courseLessons)
+  const { error: lessonError, success } = useSelector(state => state.newLesson)
+  const { error: deleteError, isDeleted } = useSelector(state => state.lesson)
+  const {  topics } = useSelector(state => state.courseTopics)
   useEffect(() => {
-    dispatch(getCourseTopics(match.params.id))
+    dispatch(getCourseLessons(match.params.id))
 
+    dispatch(getCourseTopics(match.params.id))
         if (error) {
             alert.error(error);
             dispatch(clearErrors())
         }
 
-    if (topicError) {
-        alert.error(topicError);
+    if (lessonError) {
+        alert.error(lessonError);
         dispatch(clearErrors())
     }
     
     if (success) {
         alert.success('Đăng tải thành công')
-        dispatch({ type: NEW_TOPIC_RESET })
+        dispatch({ type: NEW_LESSON_RESET })
     }
 
-    if (crudError) {
-      alert.error(crudError);
+    if (deleteError) {
+      alert.error(deleteError);
       dispatch(clearErrors())
     }
 
     if (isDeleted) {
         alert.success('Xóa thành công');
-        dispatch({ type: DELETE_TOPIC_RESET })
+        dispatch({ type: DELETE_LESSON_RESET })
     }
-    if (isUpdated) {
-      alert.success('Cập nhật thành công');
-      dispatch({ type: UPDATE_TOPIC_RESET })
-  }
 
-}, [dispatch, alert, error,topicError,success,crudError, isDeleted,isUpdated, match.params.id])
+}, [dispatch, alert, error,lessonError,success,deleteError, isDeleted, match.params.id])
 
-  const deleteTopicHandler = (id) => {
-    dispatch(deleteTopic(id))
+console.log(topics);
+  const deleteLessonHandler = (id) => {
+    dispatch(deleteLesson(id))
   }
   return (
     <>
@@ -75,7 +74,7 @@ const NewTopic = ({match}) => {
                 }}
               >
                 <div className="card-body">
-                  <TopicForm courseId={match.params.id} newTopic={newTopic}/>
+                  <UploadForm topics={topics} courseId={match.params.id} newLesson={newLesson}/>
                 </div>
               </div>
             </div>
@@ -87,12 +86,11 @@ const NewTopic = ({match}) => {
                   width: "auto",
                   margin: "40px",
                   border: "1px solid black",
-                  padding:"10px"
                 }}
               >
                 {loading ? <Loader /> :
                 <div className="card-body">
-                  <TopicList  topics={topics} deleteTopicHandler={deleteTopicHandler} />
+                  <UploadsList  medias={lessons} deleteLessonHandler={deleteLessonHandler} />
                 </div>
                 }
               </div>
@@ -105,4 +103,4 @@ const NewTopic = ({match}) => {
   );
 };
 
-export default NewTopic;
+export default NewLesson;
