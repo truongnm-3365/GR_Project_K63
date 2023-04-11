@@ -48,7 +48,6 @@ const NewLesson = ({match}) => {
 
 }, [dispatch, alert, error,lessonError,success,deleteError, isDeleted, match.params.id])
 
-console.log(topics);
   const deleteLessonHandler = (id) => {
     dispatch(deleteLesson(id))
   }

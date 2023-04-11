@@ -104,11 +104,10 @@ function App() {
           <Route path="/password/forgot" component={ForgotPassword} exact />
           <Route path="/password/reset/:token" component={NewPassword} exact />
           <ProtectedRoute path="/me" component={Profile} exact />
+          <ProtectedRoute path="/profile/:id" component={Profile} exact />
           <ProtectedRoute path="/me/update" component={UpdateProfile} exact />
           <ProtectedRoute path="/password/update" component={UpdatePassword} exact />
-
-          <ProtectedRoute path="/orders/me" component={ListOrders} exact />
-          <ProtectedRoute path="/order/:id" component={OrderDetails} exact />
+          
         </div>
 
         <ProtectedRoute path="/admin/courses" isAdmin={true} component={Dashboard} exact />

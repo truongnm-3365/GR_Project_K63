@@ -1,6 +1,7 @@
 import React from "react";
 
 const UploadsList = ({ medias,deleteLessonHandler }) => {
+  
   return (
     <div className="row">
       <div className="col-md-12">

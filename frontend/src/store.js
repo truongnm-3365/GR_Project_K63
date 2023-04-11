@@ -4,7 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 
 import { coursesReducer, newCourseReducer, courseReducer, courseDetailsReducer, newReviewReducer, courseReviewsReducer, reviewReducer, newLessonReducer, courseLessonsReducer, lessonReducer, courseLessonReducer, courseTopicReducer, courseTopicsReducer, newTopicReducer, newQuizReducer, topicQuizReducer, topicQuizsReducer, quizReducer, newDocumentReducer, courseDocumentsReducer, documentReducer } from './reducers/courseReducers'
 import { notifiesReducer } from './reducers/notifyReducer';
-import { authReducer, userReducer, forgotPasswordReducer, allUsersReducer, userDetailsReducer } from './reducers/userReducers'
+import { authReducer, userReducer, forgotPasswordReducer, allUsersReducer, userDetailsReducer, profileReducer } from './reducers/userReducers'
 import { cartReducer } from './reducers/cartReducers'
 import { newOrderReducer, myOrdersReducer, orderDetailsReducer, allOrdersReducer, orderReducer } from './reducers/orderReducers'
 import { newRegisterCourseReducer, RegisterCourseReducer, registerCoursesReducer } from './reducers/registerCourseReducer';
@@ -56,6 +56,7 @@ const reducer = combineReducers({
     newBanner: newBannerReducer,
     banner: bannerReducer,
     bannerDetails: bannerDetailsReducer,
+    profile: profileReducer
 })
 
 

@@ -4,12 +4,15 @@ import { useDispatch } from 'react-redux'
 
 const UploadForm = ({courseId, newLesson,topics }) => {
   const [name, setName] = useState("");
-  const [topicId,setTopicId] = useState(topics[0] ? topics[0]._id : '');
+  const [topicId,setTopicId] = useState(topics[0]?._id);
   const [videos, setVideos] = useState([]);
-  const [videoName, setVideoName] = useState("");
   const alert = useAlert();
   const dispatch = useDispatch();
   
+  useEffect(() =>{
+    setTopicId(topics[0]?._id)
+  },[topics])
+
   const hadleSubmit = (e) => {
     e.preventDefault();
 
@@ -21,9 +24,7 @@ const UploadForm = ({courseId, newLesson,topics }) => {
     formdata.append("name", name);
     formdata.append("courseId",courseId);
     formdata.append("topicId",topicId)
-    console.log(topicId)
     setName("");
-    console.log(videos.length)
     dispatch(newLesson(formdata));
 
   };
@@ -44,7 +45,7 @@ const UploadForm = ({courseId, newLesson,topics }) => {
         </div>
         <div className="form-group">
           <label htmlFor="name">Chủ đề</label>
-          <select className="form-control" value={topicId} onChange={(e) => setTopicId(e.target.value)}>
+          <select className="form-control" defaultValue={topicId} onChange={(e) => setTopicId(e.target.value)}>
             {topics && topics.map(topic => {
               return <option key={topic._id} value={topic._id}>{topic.name}</option>
             })} 

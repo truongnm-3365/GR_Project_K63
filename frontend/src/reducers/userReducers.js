@@ -8,6 +8,9 @@ import {
     LOAD_USER_REQUEST,
     LOAD_USER_SUCCESS,
     LOAD_USER_FAIL,
+    LOAD_PROFILE_REQUEST,
+    LOAD_PROFILE_SUCCESS,
+    LOAD_PROFILE_FAIL,
     UPDATE_PASSWORD_REQUEST,
     UPDATE_PASSWORD_SUCCESS,
     UPDATE_PASSWORD_RESET,
@@ -41,7 +44,7 @@ import {
     CLEAR_ERRORS
 } from '../constants/userConstants'
 
-export const authReducer = (state = { user: {} }, action) => {
+export const authReducer = (state = { user: {}}, action) => {
     switch (action.type) {
 
         case LOGIN_REQUEST:
@@ -90,6 +93,36 @@ export const authReducer = (state = { user: {} }, action) => {
                 loading: false,
                 isAuthenticated: false,
                 user: null,
+                error: action.payload
+            }
+
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+
+        default:
+            return state
+    }
+}
+
+export const profileReducer = (state = {profile :{}}, action) => {
+    switch(action.type){
+        case LOAD_PROFILE_REQUEST:
+            return{
+                loading: true
+            }
+        case LOAD_PROFILE_SUCCESS:
+            return {
+                ...state,
+                loading: false,  
+                profile: action.payload
+            }
+        case LOAD_USER_FAIL:
+            return {
+                loading: false,
+                profile: null,
                 error: action.payload
             }
 

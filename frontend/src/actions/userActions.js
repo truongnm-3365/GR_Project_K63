@@ -9,6 +9,9 @@ import {
     LOAD_USER_REQUEST,
     LOAD_USER_SUCCESS,
     LOAD_USER_FAIL,
+    LOAD_PROFILE_REQUEST,
+    LOAD_PROFILE_SUCCESS,
+    LOAD_PROFILE_FAIL,
     UPDATE_PROFILE_REQUEST,
     UPDATE_PROFILE_SUCCESS,
     UPDATE_PROFILE_FAIL,
@@ -111,10 +114,32 @@ export const loadUser = () => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: LOAD_USER_FAIL,
+        })
+    }
+}
+
+
+export const publicProfile = (id) => async (dispatch) => {
+    try {
+
+        dispatch({ type: LOAD_PROFILE_REQUEST })
+
+        const { data } = await axios.get(`/api/v1/profile/${id}`)
+
+        dispatch({
+            type: LOAD_PROFILE_SUCCESS,
+            payload: data.profile
+        })
+
+    } catch (error) {
+        dispatch({
+            type: LOAD_PROFILE_FAIL,
             payload: "Không tìm thấy người dùng này"
         })
     }
 }
+
+
 
 // Update profile
 export const updateProfile = (userData) => async (dispatch) => {

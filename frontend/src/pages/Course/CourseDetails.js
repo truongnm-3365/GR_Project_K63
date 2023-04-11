@@ -187,6 +187,7 @@ const CourseDetails = ({ match }) => {
                             <h4 className="mt-2">Thông tin tác giả:</h4>
                             <p>Tên: {course.user.name}</p>
                             <p>Email: {course.user.email}</p>
+                            <Link to={`/profile/${course.user._id}`} >Xem thêm thông tin chi tiết</Link>
                             <hr />
                             {/* <p id="course_seller mb-3">Sold by: <strong>{course.seller}</strong></p> */}
 
