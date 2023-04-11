@@ -1,5 +1,6 @@
 import {useEffect, useState, useRef} from "react";
 import Loader from '../../components/layout/Loader'
+import ReactPlayer from 'react-player'
 import { clearErrors, getCourseLessons, getCourseLesson, getCourseTopics, getTopicQuizs, getCourseDetails, getCourseDocuments, newReview } from '../../actions/courseActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { NEW_LESSON_RESET,NEW_REVIEW_RESET } from '../../constants/courseConstants'
@@ -10,6 +11,8 @@ import { useAlert } from 'react-alert'
 import './index.css'
 import Quiz from "../../components/quiz/Quiz";
 import ListReviews from "../../components/review/ListReviews";
+import { NEW_REGISTER_COURSE_RESET } from "../../constants/registerCourseContants";
+import { comleteVideo, completedVideo, getMeRegisterCourses } from "../../actions/registerCourseAction";
 
 const Lessons = ({match}) => {
   const { Panel } = Collapse;
@@ -61,15 +64,19 @@ const Lessons = ({match}) => {
   const openInNewTab = (url) => {
     window.open(url, '_blank', 'noreferrer');
   };
+
+  const { completeVideos } = useSelector(state => state.registerCourses)
+  const { success: complete } = useSelector(state => state.newRegisterCourse)
+  const { isUpdated } = useSelector(state => state.registerCourse)
   
- 
-console.log(documents);
+
 
   useEffect(() => {
     dispatch(getCourseLessons(match.params.id))
     dispatch(getCourseTopics(match.params.id))
     dispatch(getCourseDetails(match.params.id))
     dispatch(getCourseDocuments(match.params.id))
+    dispatch(getMeRegisterCourses())
     
         if (error) {
             alert.error(error);
@@ -92,9 +99,13 @@ console.log(documents);
   if (reviewSuccess) {
       alert.success('Đánh giá được đăng tải thành công')
       dispatch({ type: NEW_REVIEW_RESET })
-  }    
+  } 
+  
+  if (complete || isUpdated) {
+    dispatch({type: NEW_REGISTER_COURSE_RESET})
+  }
    
-}, [dispatch, alert, error,lessonError,success,match.params.id,checked,checkedExercise,reviewSuccess])
+}, [dispatch, alert, error,lessonError,success,match.params.id,checked,checkedExercise,reviewSuccess,complete,isUpdated])
   
 
 function setUserRatings() {
@@ -149,15 +160,84 @@ const reviewHandler = (e) => {
 
   dispatch(newReview(formdata));
 }
+
+const checkCompleteVideo = (mediaId) =>{
+  if(user && completeVideos){
+    for(let i = 0; i < completeVideos.length; i++){
+      if(completeVideos[i].user === user._id && completeVideos[i].media === mediaId){
+        return true
+      }
+    }
+    return false
+  }
+
+}
+
+const checkCompleteTopic = (videoData) =>{
+  for(let i = 0;i < completeVideos.length; i++){
+    if(completeVideos.user === user._id && completeVideos.topic === videoData.topic){
+      return true
+    }
+  }
+  return false
+}
+
+const checkCompletedVideo = (mediaId) =>{
+  if(completeVideos && user){
+    for(let i = 0; i < completeVideos.length; i++){
+      if(completeVideos[i].user === user._id && completeVideos[i].completed && completeVideos[i].media === mediaId){
+        return true
+      }
+    }
+    return false
+  }
+
+}
+
+const checkCompletedTopic = (topicId) =>{
+  if(completeVideos && user){
+    const completedVideos = completeVideos.filter(item => item.topic === topicId && item.user === user._id)
+    if(completedVideos.length === 0){
+      return false;
+    }
+    for(let i = 0; i < completedVideos.length;  i++){
+      if(!completedVideos[i].completed){
+        return false
+      }
+    }
+    return true
+  }
+
+}
+
+
 return (
     <>
         {loading  ? <Loader/> :
-        <>        
+        <div className="container">        
         <div className="row mt-5">
         {exercise === false && lessons.length !== 0 &&
               <div className="col-md-8">
                 <video
-                    
+                    onEnded={() => {
+                      if(lessons[index +1]){
+                        let data={
+                          course: match.params.id,
+                          topic: lessons[index + 1].topicId,
+                          media: lessons[index + 1]._id
+                        }
+                        dispatch(comleteVideo(data))
+                      }
+
+
+                      let tmp={
+                        course: match.params.id,
+                        topic: lessons[index].topicId,
+                        media: lessons[index]._id
+                      }
+                     
+                      dispatch(completedVideo(tmp))
+                    }}
                     controls
                   >
                     <source src={ lessons[index] ? lessons[index].videos : ""} />
@@ -176,29 +256,69 @@ return (
                 <Panel  header={topic.name} key={topic._id}>
                    {lessons &&
                     lessons.map((lesson,index) => {
-                      if(lesson.topicId === topic._id)
-                      return (
-                        <div key={lesson._id} className="season_tab">
-                          {index === 0 ? 
-                            <input  onChange={() => {onChangeChecked(index);setIndexTopic(indexTopic);setExercise(false)}} type="radio" id={`tab-${index+1}`} name={`tab-group-1`} checked={checked[0]}/> 
-                            :<input onChange={() => {onChangeChecked(index);setIndexTopic(indexTopic);setExercise(false)}} type="radio" id={`tab-${index+1}`} name={`tab-group-1`} checked={checked[index]}/>
-                            }
-                        
-                          <label htmlFor={`tab-${index+1}`}>{lesson.name}</label>
+                      if(lesson.topicId === topic._id){
+                        return (
+                          <>
+                            {checkCompleteVideo(lesson._id) ? 
+                            <div key={lesson._id} className="season_tab">
+                            {index === 0 ? 
+                              <input  onChange={() => {onChangeChecked(index);setIndexTopic(indexTopic);setExercise(false)}} type="radio" id={`tab-${index+1}`} name={`tab-group-1`} checked={checked[0]}/> 
+                              :<input onChange={() => {onChangeChecked(index);setIndexTopic(indexTopic);setExercise(false)}} type="radio" id={`tab-${index+1}`} name={`tab-group-1`} checked={checked[index]}/>
+                              }
                           
-
+                            <label className="d-flex justify-content-between" htmlFor={`tab-${index+1}`}>
+                              <span>{lesson.name}</span>
+                              {checkCompletedVideo(lesson._id) ?
+                              <i class="fa fa-check-circle-o" aria-hidden="true"></i> : ""
+                              }
+                            </label>
                             
-                        </div> 
-                      );
-                      
-                    })}  
-                 <div className="season_tab">
+  
+                              
+                            </div>
+                            :
+  
+                            <div key={lesson._id} className="season_tab video-lock">
+                          
+                            <label className="d-flex justify-content-between" htmlFor={`tab-${index+1}`}>
+                              <span>{lesson.name}</span>
+                              <i class="fa fa-lock" aria-hidden="true"></i>
+                            </label>
+                            
+  
+                              
+                            </div>
+                          }
+  
+                          </>
+  
+                        );
+                        
+                      }
+
+                    })}
+                  {
+                  checkCompletedTopic(topic._id) ?  
+                  <div className="season_tab">
                       <input  onChange={() => {setExercise(true) ; dispatch(getTopicQuizs(topic._id)); onChangeCheckedExercise(indexTopic);setIndexTopic(indexTopic)}} type="radio" id={`tabb-${indexTopic}`} name={`tab-group-1`} checked={checkedExercise[indexTopic]}/> 
-                    <label htmlFor={`tabb-${indexTopic}`}>Bài tập</label>
+                    <label className="d-flex justify-content-between" htmlFor={`tabb-${indexTopic}`}>
+                        <span>Bài tập</span>
+                        
+                    </label>
                     
                       
                   </div>
-                
+                  :
+                  <div className="season_tab video-lock"> 
+                    <label className="d-flex justify-content-between" htmlFor={`tabb-${indexTopic}`}>
+                        <span>Bài tập</span>
+                        <i class="fa fa-lock" aria-hidden="true"></i>
+                        
+                    </label>
+                    
+                      
+                  </div>
+                  }
                 </Panel>
               )
             })}
@@ -307,7 +427,7 @@ return (
 
 
     
-    </>
+      </div>
 
          }
     </>

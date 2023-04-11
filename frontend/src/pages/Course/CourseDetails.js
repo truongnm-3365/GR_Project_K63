@@ -24,7 +24,7 @@ const CourseDetails = ({ match }) => {
     const { loading, error, course } = useSelector(state => state.courseDetails)
     const { user } = useSelector(state => state.auth)
     const { error: reviewError, success } = useSelector(state => state.newReview)
-    const {registerCourses} = useSelector(state => state.registerCourses)
+    const { registerCourses } = useSelector(state => state.registerCourses)
     const { success: newSuccess} = useSelector(state => state.newRegisterCourse)
 
     const formatDate = (dateInput) =>{
@@ -131,7 +131,7 @@ const CourseDetails = ({ match }) => {
     return (
         <Fragment>
             {loading ? <Loader /> : course.details && (
-                <Fragment>
+                <div className='container'>
                     <MetaData title={course.details.name} />
                     <div className="row d-flex justify-content-around">
                         <div className="col-12 col-lg-5 img-fluid" id="course_image">
@@ -247,7 +247,7 @@ const CourseDetails = ({ match }) => {
                         <ListReviews reviews={course.details.reviews} />
                     )}
 
-                </Fragment>
+                </div>
             )}
         </Fragment>
     )

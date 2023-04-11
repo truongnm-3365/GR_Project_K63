@@ -322,7 +322,7 @@ export const deleteLesson = (id) => async (dispatch) => {
 
     } catch (error) {
 
-        console.log(error.response);
+
 
         dispatch({
             type: DELETE_LESSON_FAIL,
@@ -440,7 +440,7 @@ export const deleteReview = (id, courseId) => async (dispatch) => {
 
     } catch (error) {
 
-        console.log(error.response);
+    
 
         dispatch({
             type: DELETE_REVIEW_FAIL,
@@ -468,7 +468,7 @@ export const newTopic = (topicData) => async (dispatch) => {
             }
         }
 
-       console.log(topicData)
+
 
         const { data } = await axios.post(`/api/v1/topic/new`, topicData, config)
 
@@ -522,7 +522,6 @@ export const deleteTopic = (id) => async (dispatch) => {
 
     } catch (error) {
 
-        console.log(error.response);
 
         dispatch({
             type: DELETE_TOPIC_FAIL,
@@ -570,7 +569,6 @@ export const newQuiz = (quizData) => async (dispatch) => {
             }
         }
 
-       console.log(quizData)
 
         const { data } = await axios.post(`/api/v1/quiz/new`, quizData, config)
 
@@ -624,7 +622,7 @@ export const deleteQuiz = (id) => async (dispatch) => {
 
     } catch (error) {
 
-        console.log(error.response);
+
 
         dispatch({
             type: DELETE_QUIZ_FAIL,
@@ -695,7 +693,6 @@ export const getCourseDocuments = (id) => async (dispatch) => {
 
         const { data } = await axios.get(`/api/v1/document/all/${id}`)
 
-        console.log(data.documents);
         dispatch({
             type: GET_DOCUMENTS_SUCCESS,
             payload: data.documents

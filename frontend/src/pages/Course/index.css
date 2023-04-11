@@ -9,7 +9,6 @@
    
   }
   .season_tab label {
-      background: #eee;
       padding: 10px;
       border: 1px solid #ccc;
       margin-right: -1px;
@@ -50,8 +49,8 @@
     height: auto;
   }
 
-.quiz {
- 
+.video-lock label {
+ background: #ccc;
 }
 
 

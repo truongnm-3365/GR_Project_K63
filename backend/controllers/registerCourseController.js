@@ -1,5 +1,7 @@
 const Course = require('../models/course')
 const User = require('../models/user')
+const Topic = require('../models/topic');
+const Media = require('../models/media');
 const mongoose = require('mongoose')
 const ErrorHandler = require('../utils/errorHandler');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
@@ -10,7 +12,11 @@ exports.registerCourse = catchAsyncErrors(async(req,res,next)=>{
     req.body.user = req.user.id
     req.body.course = req.params.id
     const course = await Course.findById(req.params.id)
-    //console.log(course);
+    const topic = await Topic.findOne({courseId: req.params.id})
+    const media = await Media.findOne({topicId: topic._id})
+
+    req.body.topic = topic._id
+    req.body.media = media._id
     req.body.name = course.name
     req.body.images = course.images
     const registerCourse = await RegisterCourse.create(req.body)
@@ -20,11 +26,52 @@ exports.registerCourse = catchAsyncErrors(async(req,res,next)=>{
     })
 })
 
+exports.completeVideo = catchAsyncErrors(async(req,res) => {
+    req.body.user = req.user.id
+    // req.body.course = req.params.id
+    // req.body.topic = req.params.topicId
+    // req.body.media = req.params.mediaId
+    let completeVideo = await RegisterCourse.findOne(req.body);
+    if(!completeVideo){
+        completeVideo = await RegisterCourse.create(req.body)
+        res.status(201).json({
+            success: true,
+            completeVideo
+        })
+    }
+})
+
+exports.completedVideo = catchAsyncErrors(async (req, res, next) => {
+
+    req.body.user = req.user.id
+    let completedVideo = await RegisterCourse.findOne(req.body);
+
+    if (!completedVideo) {
+        return next(new ErrorHandler('Video not found', 404));
+    }
+
+    req.body.completed = true
+
+    completedVideo = await RegisterCourse.findByIdAndUpdate(completedVideo._id, req.body, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    });
+
+    res.status(200).json({
+        success: true,
+        completedVideo
+    })
+
+})
+
 exports.getRegisterCourse = catchAsyncErrors(async(req, res, next) =>{
-    const courses = await RegisterCourse.find({user: req.user.id})
+    const coursesTmp = await RegisterCourse.find({user: req.user.id})
+    const courses = coursesTmp.filter(item => item.name !== undefined )
     res.status(201).json({
         success: true,
-        courses
+        courses,
+        videos:coursesTmp
     })
 })
 

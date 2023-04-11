@@ -13,7 +13,6 @@ const registerCourseSchema = new mongoose.Schema({
     },
     name: {
         type: String,
-        required: [true, 'Please enter course name'],
         trim: true,
         maxLength: [100, 'Course name cannot exceed 100 characters']
     },
@@ -21,15 +20,24 @@ const registerCourseSchema = new mongoose.Schema({
         {
             public_id: {
                 type: String,
-                required: true
             },
             url: {
                 type: String,
-                required: true
             },
         }
     ],
-
+    topic: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Topic',
+    },
+    media: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Media',
+    },
+    completed: {
+        type: Boolean,
+        default: false
+    }
 
 })
 

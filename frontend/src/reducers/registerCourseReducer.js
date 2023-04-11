@@ -10,6 +10,10 @@ import {
     DELETE_REGISTER_COURSE_REQUEST,
     DELETE_REGISTER_COURSE_RESET,
     DELETE_REGISTER_COURSE_SUCCESS,
+    UPDATE_REGISTER_COURSE_FAIL,
+    UPDATE_REGISTER_COURSE_REQUEST,
+    UPDATE_REGISTER_COURSE_RESET,
+    UPDATE_REGISTER_COURSE_SUCCESS,
     CLEAR_ERRORS
 } from '../constants/registerCourseContants'
 
@@ -25,6 +29,7 @@ export const registerCoursesReducer = (state = { registerCourses: [] }, action) 
             return {
                 loading: false,
                 registerCourses: action.payload.courses,
+                completeVideos: action.payload.videos
             }
 
 
@@ -88,6 +93,7 @@ export const RegisterCourseReducer = (state = {}, action) => {
     switch (action.type) {
 
         case DELETE_REGISTER_COURSE_REQUEST:
+        case UPDATE_REGISTER_COURSE_REQUEST:
             return {
                 ...state,
                 loading: true
@@ -100,8 +106,16 @@ export const RegisterCourseReducer = (state = {}, action) => {
                 isDeleted: action.payload
             }
 
+        case UPDATE_REGISTER_COURSE_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                isUpdated: action.payload
+            }
+    
 
         case DELETE_REGISTER_COURSE_FAIL:
+        case UPDATE_REGISTER_COURSE_FAIL:
             return {
                 ...state,
                 error: action.payload
@@ -111,6 +125,11 @@ export const RegisterCourseReducer = (state = {}, action) => {
             return {
                 ...state,
                 isDeleted: false
+            }
+        case UPDATE_REGISTER_COURSE_RESET:
+            return {
+                ...state,
+                isUpdated: false
             }
 
         case CLEAR_ERRORS:

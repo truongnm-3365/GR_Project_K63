@@ -10,7 +10,10 @@ import {
     DELETE_REGISTER_COURSE_REQUEST,
     DELETE_REGISTER_COURSE_RESET,
     DELETE_REGISTER_COURSE_SUCCESS,
-    CLEAR_ERRORS
+    CLEAR_ERRORS,
+    UPDATE_REGISTER_COURSE_REQUEST,
+    UPDATE_REGISTER_COURSE_SUCCESS,
+    UPDATE_REGISTER_COURSE_FAIL
 } from '../constants/registerCourseContants'
 
 import axios from 'axios'
@@ -64,6 +67,63 @@ export const newRegisterCourse = (courseId) => async (dispatch) => {
         })
     }
 }
+
+export const comleteVideo = (videoData) => async (dispatch) => {
+    try {
+
+        dispatch({ type: NEW_REGISTER_COURSE_REQUEST })
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        
+
+        const { data } = await axios.post(`/api/v1/completeVideo`,videoData, config)
+
+        dispatch({
+            type: NEW_REGISTER_COURSE_SUCCESS,
+            payload: data
+        })
+
+    } catch (error) {
+        dispatch({
+            type: NEW_REGISTER_COURSE_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+
+export const completedVideo = (videoData) => async (dispatch) => {
+    try {
+
+        dispatch({ type: UPDATE_REGISTER_COURSE_REQUEST })
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        const { data } = await axios.put(`/api/v1/completedVideo`,videoData,config)
+
+        dispatch({
+            type: UPDATE_REGISTER_COURSE_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+
+
+        dispatch({
+            type: UPDATE_REGISTER_COURSE_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
 
 export const deleteRegisterCourse = (id) => async (dispatch) => {
     try {
