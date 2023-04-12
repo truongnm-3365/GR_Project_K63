@@ -10,7 +10,7 @@ const Search = ({ history }) => {
         if (keyword.trim()) {
             history.push(`/search?keyword=${keyword}`)
         } else {
-            history.push('/')
+            history.push('/search')
         }
     }
 

@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom'
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCourseDetails, newReview, clearErrors } from '../../actions/courseActions'
-import { addItemToCart } from '../../actions/cartActions'
 import { NEW_REVIEW_RESET } from '../../constants/courseConstants'
 import { deleteRegisterCourse, getMeRegisterCourses, newRegisterCourse } from '../../actions/registerCourseAction'
 import { DELETE_REGISTER_COURSE_RESET, NEW_REGISTER_COURSE_RESET } from '../../constants/registerCourseContants'
@@ -66,7 +65,7 @@ const CourseDetails = ({ match }) => {
 
 
     const isRegister = () =>{
-        for(let i =0; i < registerCourses.length; i++){
+        for(let i =0; i < registerCourses?.length; i++){
             if(registerCourses[i].course === match.params.id){
                 return true
             }
@@ -169,8 +168,12 @@ const CourseDetails = ({ match }) => {
                                 
                                 </Link>
                                 </>
-                                :
-                                <button onClick={() => addCourse()} type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" >Đăng ký học</button>}
+                                :<>
+                                {user ?
+                                    <button onClick={() => addCourse()} type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" >Đăng ký học</button>
+                                :  <div className="alert alert-danger mt-5" type='alert'>Đăng nhập để đăng ký khóa học</div> }
+                                </>                                
+                               }
 
 
                             </>

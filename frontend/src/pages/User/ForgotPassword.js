@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react'
 
-import MetaData from '../../components/layout/Loader'
+import MetaData from '../../components/layout/MetaData'
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
@@ -32,9 +32,9 @@ const ForgotPassword = () => {
         e.preventDefault();
 
         const formData = new FormData();
-        formData.set('email', email);
+        formData.append('email', email);
 
-        dispatch(forgotPassword(formData))
+        dispatch(forgotPassword({email}))
     }
 
     return (

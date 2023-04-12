@@ -4,9 +4,9 @@ const ErrorHandler = require('../utils/errorHandler');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const sendToken = require('../utils/jwtToken');
 const sendEmail = require('../utils/sendEmail');
+const Course = require('../models/course')
 
 const crypto = require('crypto');
-const cloudinary = require('cloudinary');
 
 // Register a user   => /api/v1/register
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
@@ -78,7 +78,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     await user.save({ validateBeforeSave: false });
 
     // Create reset password url
-    const resetUrl = `${req.protocol}://${req.get('host')}/password/reset/${resetToken}`;
+    const resetUrl = `${req.protocol}://localhost:3000/password/reset/${resetToken}`;
 
     const message = `Your password reset token is as follow:\n\n${resetUrl}\n\nIf you have not requested this email, then ignore it.`
 
@@ -86,13 +86,13 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
 
         await sendEmail({
             email: user.email,
-            subject: 'ShopIT Password Recovery',
+            subject: 'Online Course Password Recovery',
             message
         })
 
         res.status(200).json({
             success: true,
-            message: `Email sent to: ${user.email}`
+            message: `Email đã được gửi tới: ${user.email}`
         })
 
     } catch (error) {
@@ -140,11 +140,27 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 
 // Get currently logged in user details   =>   /api/v1/me
 exports.getUserProfile = catchAsyncErrors(async (req, res, next) => {
-    const user = await User.findById(req.user.id);
+    let user = await User.findById(req.user.id);
+    const courses = await Course.find({user: req.user.id,accepted: true});
+
+    user = {courses,...user._doc}
 
     res.status(200).json({
         success: true,
         user
+    })
+})
+
+
+exports.getPublicUserProfile = catchAsyncErrors(async (req, res, next) => {
+    let user = await User.findById(req.params.id);
+    const courses = await Course.find({user: req.params.id,accepted: true});
+
+    user = {courses,...user._doc}
+
+    res.status(200).json({
+        success: true,
+        profile:user
     })
 })
 

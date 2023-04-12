@@ -5,6 +5,7 @@ import MetaData from '../../components/layout/MetaData'
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { register, clearErrors } from '../../actions/userActions'
+import { Link } from 'react-router-dom'
 
 const Register = ({ history }) => {
 
@@ -157,6 +158,7 @@ const Register = ({ history }) => {
                         >
                             ĐĂNG KÝ
                         </button>
+                        <Link to="/login" className="float-right mt-3">Đã có tài khoản?</Link>
                     </form>
                 </div>
             </div>

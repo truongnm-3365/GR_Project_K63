@@ -43,7 +43,7 @@ const UpdatePassword = ({ history }) => {
         formData.set('oldPassword', oldPassword);
         formData.set('password', password);
 
-        dispatch(updatePassword(formData))
+        dispatch(updatePassword({oldPassword,password}))
     }
 
     return (

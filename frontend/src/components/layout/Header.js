@@ -92,7 +92,9 @@ const Header = () => {
                         <>
                             <span className='ml-3'>
                                 <NotifyMe
-                                    data={notifies.reverse()}
+                                    data={notifies.sort(function(a,b){
+                                        return new Date(b.createdAt) - new Date(a.createdAt);
+                                    })}
                                     storageKey="notific_key"
                                     notific_key="createdAt"
                                     notific_value="content"

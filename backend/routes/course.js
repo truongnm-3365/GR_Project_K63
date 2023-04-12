@@ -12,10 +12,9 @@ const {
     createCourseReview,
     getCourseReviews,
     deleteReview,
-    createCourseLesson,
-    getCourseLessons,
     getAdminCourses,
     adminAcceptCourse,
+    getRegularCourses,
     newTopic,
     getCourseTopic,
     updateTopic,
@@ -93,13 +92,11 @@ router.route('/admin/course/:id')
     .put(isAuthenticatedUser, authorizeRoles('admin'), updateCourse)
     .delete(isAuthenticatedUser, authorizeRoles('admin'), deleteCourse);
 
+router.route('/regularCourses').get(getRegularCourses);
 
 router.route('/review').put(isAuthenticatedUser, createCourseReview)
 router.route('/reviews').get(isAuthenticatedUser, getCourseReviews)
 router.route('/reviews').delete(isAuthenticatedUser, deleteReview)
-
-router.route('/lesson').put(isAuthenticatedUser, createCourseLesson)
-router.route('/lessons').get(isAuthenticatedUser, getCourseLessons)
 
 router.route('/topic/new').post(isAuthenticatedUser,newTopic)
 router.route('/topics/:courseId').get(getCourseTopic)

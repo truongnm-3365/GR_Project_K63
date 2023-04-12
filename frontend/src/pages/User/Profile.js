@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import Loader from '../../components/layout/Loader'
 import MetaData from '../../components/layout/MetaData'
-import Course from '../Course/Course'
 import { clearErrors, publicProfile } from '../../actions/userActions'
 import Pagination from 'react-js-pagination'
+import Course from '../../components/course/Course'
 
 const Profile = ({ match }) => {
 
@@ -82,7 +82,7 @@ const Profile = ({ match }) => {
                     </div>
                     <hr></hr>
                     <section id="courses" className="mt-5">
-                        {userPublic?.courses ? <h2 id="courses_heading">Khóa học đang được hiện thị trên web</h2> : "" }
+                        {userPublic?.courses ?  <h2 id="courses_heading">Khóa học đang được hiện thị trên web</h2> : "" }
                         <div className="row">
 
                             {(

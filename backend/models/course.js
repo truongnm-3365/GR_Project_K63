@@ -36,13 +36,6 @@ const courseSchema = new mongoose.Schema({
     category: {
         type: String,
         required: [true, 'Please select category for this course'],
-        // enum: {
-        //     values: [
-        //         'Công nghệ thông tin',
-        //         'Ngoại ngữ'
-        //     ],
-        //     message: 'Please select correct category for course'
-        // }
     },
     numOfReviews: {
         type: Number,
@@ -67,18 +60,6 @@ const courseSchema = new mongoose.Schema({
                 type: String,
                 required: true
             }
-        }
-    ],
-    lessons: [
-        {
-            title: {
-                type: String,
-                require: true
-            },
-            
-            videos: [{ type: String }],
-            
-
         }
     ],
     user: {

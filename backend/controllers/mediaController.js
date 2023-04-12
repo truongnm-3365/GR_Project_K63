@@ -2,7 +2,7 @@ const Media = require("../models/media");
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const fs = require('fs');
 const Topic = require("../models/topic");
-const RegisterCourse = require("../models/registerCourse")
+const RegisterCourse = require("../models/registerCourse");
 
 
 exports.getAll = async (req, res, next) => {
@@ -11,9 +11,7 @@ exports.getAll = async (req, res, next) => {
     const topics = await Topic.find({courseId: req.params.courseId});
 
     var media = [];
-    
     topics.forEach(item => {
-      
       let medias = mediasTmp.filter(e => e.topicId.toString() === item._id.toString())
       medias.forEach(item => {
         media.push(item);

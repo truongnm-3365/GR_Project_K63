@@ -88,7 +88,10 @@ import {
     DELETE_DOCUMENT_SUCCESS,
     DELETE_DOCUMENT_RESET,
     DELETE_DOCUMENT_FAIL,
-    CLEAR_ERRORS
+    CLEAR_ERRORS,
+    REGULAR_COURSES_REQUEST,
+    REGULAR_COURSES_SUCCESS,
+    REGULAR_COURSES_FAIL
 
 } from '../constants/courseConstants'
 
@@ -377,6 +380,27 @@ export const getAdminCourses = () => async (dispatch) => {
 
         dispatch({
             type: ADMIN_COURSES_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const getRegularCourses = () => async (dispatch) => {
+    try {
+
+        dispatch({ type: REGULAR_COURSES_REQUEST })
+
+        const { data } = await axios.get(`/api/v1/regularCourses`)
+
+        dispatch({
+            type: REGULAR_COURSES_SUCCESS,
+            payload: data.regularCourses
+        })
+
+    } catch (error) {
+
+        dispatch({
+            type: REGULAR_COURSES_FAIL,
             payload: error.response.data.message
         })
     }

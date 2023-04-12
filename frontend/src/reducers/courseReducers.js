@@ -92,7 +92,10 @@ import {
     DELETE_DOCUMENT_RESET,
     DELETE_DOCUMENT_FAIL,
 
-    CLEAR_ERRORS
+    CLEAR_ERRORS,
+    REGULAR_COURSES_REQUEST,
+    REGULAR_COURSES_SUCCESS,
+    REGULAR_COURSES_FAIL
 
 } from '../constants/courseConstants'
 
@@ -138,6 +141,39 @@ export const coursesReducer = (state = { courses: [] }, action) => {
             return state;
     }
 }
+
+export const regularCoursesReducer = (state = { regularCourses: [] }, action) => {
+    switch (action.type) {
+        case REGULAR_COURSES_REQUEST:
+            return {
+                loading: true,
+                regularCourses: []
+            }
+
+        case REGULAR_COURSES_SUCCESS:
+            return {
+                loading: false,
+                regularCourses: action.payload
+            }
+
+        case REGULAR_COURSES_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
+
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+
+        default:
+            return state;
+    }
+}
+
+
 
 export const newCourseReducer = (state = { course: {} }, action) => {
     switch (action.type) {

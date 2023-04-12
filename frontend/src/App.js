@@ -7,19 +7,14 @@ import Footer from './components/layout/Footer'
 import Home from './pages/Home/Home'
 import CourseDetails from './pages/Course/CourseDetails'
 
-// Cart Imports
+
 import RegisterCourseList from './pages/RegisterCourse/RegisterCourseList'
-import Cart from './components/cart/Cart'
 import Shipping from './components/cart/Shipping'
 import ConfirmOrder from './components/cart/ConfirmOrder'
 import Payment from './components/cart/Payment'
 import OrderSuccess from './components/cart/OrderSuccess'
 
-// Order Imports
-import ListOrders from './components/order/ListOrders'
-import OrderDetails from './components/order/OrderDetails'
 
-// Auth or User imports
 import Login from './pages/User/Login'
 import Register from './pages/User/Register'
 import Profile from './pages/User/Profile'
@@ -28,7 +23,6 @@ import UpdatePassword from './pages/User/UpdatePassword'
 import ForgotPassword from './pages/User/ForgotPassword'
 import NewPassword from './pages/User/NewPassword'
 
-// Admin Imports
 import Dashboard from './pages/Dashboard/Dashboard'
 import CoursesList from './pages/Dashboard/Courses/CoursesList'
 import NewCourse from './pages/Dashboard/Courses/NewCourse'
@@ -46,7 +40,6 @@ import { useSelector } from 'react-redux'
 import store from './store'
 import axios from 'axios'
 
-// Payment
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
 import NewTopic from './pages/Dashboard/Courses/Topic/NewTopic'
@@ -58,6 +51,7 @@ import UpdateCategory from './pages/Dashboard/Category/UpdateCategory'
 import BannerList from './pages/Dashboard/Banner/BannerList'
 import NewBanner from './pages/Dashboard/Banner/NewBanner'
 import UpdateBanner from './pages/Dashboard/Banner/UpdateBanner'
+import Search from './pages/Search/Search'
 
 function App() {
 
@@ -66,13 +60,13 @@ function App() {
   useEffect(() => {
     store.dispatch(loadUser())
 
-    async function getStripApiKey() {
-      const { data } = await axios.get('/api/v1/stripeapi');
+    // async function getStripApiKey() {
+    //   const { data } = await axios.get('/api/v1/stripeapi');
 
-      setStripeApiKey(data.stripeApiKey)
-    }
+    //   setStripeApiKey(data.stripeApiKey)
+    // }
 
-    getStripApiKey();
+    // getStripApiKey();
 
   }, [])
 
@@ -86,18 +80,18 @@ function App() {
         <Header />
         <div className="">
           <Route path="/" component={Home} exact />
-          <Route path="/search" component={Home} />
+          <Route path="/search" component={Search} exact />
           <Route path="/course/:id" component={CourseDetails} exact />
           <Route path="/course/:id/lessons"  component={Lessons} exact/>
           <Route path="/registerCourse" component={RegisterCourseList} exact />
           <ProtectedRoute path="/shipping" component={Shipping} />
           <ProtectedRoute path="/confirm" component={ConfirmOrder} exact />
           <ProtectedRoute path="/success" component={OrderSuccess} />
-          {stripeApiKey &&
+          {/* {stripeApiKey &&
             <Elements stripe={loadStripe(stripeApiKey)}>
               <ProtectedRoute path="/payment" component={Payment} />
             </Elements>
-          }
+          } */}
 
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />

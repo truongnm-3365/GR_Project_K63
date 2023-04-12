@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { MDBDataTable } from 'mdbreact'
+import { Button, Table,Tag  } from 'antd';
 
 import MetaData from '../../../components/layout/MetaData'
 import Loader from '../../../components/layout/Loader'
@@ -11,6 +12,40 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getMeCourses, getAdminCourses, deleteCourse, clearErrors, acceptCourse } from '../../../actions/courseActions'
 import { DELETE_COURSE_RESET,  UPDATE_COURSE_RESET } from '../../../constants/courseConstants'
 
+const columns = [
+    {
+        title: 'ID',
+        dataIndex: 'id',
+    },
+    {
+        title: 'Tên',
+        dataIndex: 'name',
+    },
+    {
+        title: 'Giá thành',
+        dataIndex: 'price',
+    },
+    {
+        title: 'Các chủ đề',
+        dataIndex: 'topics',
+    },
+    {
+        title: 'Các bài học',
+        dataIndex: 'lessons',
+    },
+    {
+        title: 'Tài liệu',
+        dataIndex: 'documents',
+    },
+    {
+        title: 'Trạng thái',
+        dataIndex: 'status',
+    },
+    {
+        title: 'Thao tác',
+        dataIndex: 'actions',
+    },
+];
 
 const CoursesList = ({ history }) => {
 
@@ -19,6 +54,98 @@ const CoursesList = ({ history }) => {
     const { user } = useSelector(state => state.auth)
     const { loading, error, courses } = useSelector(state => state.courses);
     const { error: deleteError, isDeleted, isUpdated } = useSelector(state => state.course)
+
+    const tmp = [];
+
+    
+
+    !!courses && courses.forEach(course => {
+        tmp.push({
+            id: course._id,
+            name: course.name,
+            price: `${course.price} Đồng`,
+            lessons: <Fragment>
+                <Link to={`/me/course/${course._id}/lessons`} className="btn btn-success py-1 px-2">
+                    <i className="fa fa-eye"></i>
+                </Link>
+            </Fragment>,
+            documents: <Fragment>
+                <Link to={`/me/course/${course._id}/documents`} className="btn btn-success py-1 px-2">
+                    <i className="fa fa-eye"></i>
+                </Link>
+            </Fragment>,
+            topics: <Fragment>
+                <Link to={`/me/course/${course._id}/topics`} className="btn btn-success py-1 px-2">
+                    <i className="fa fa-eye"></i>
+                </Link>
+            </Fragment>,
+            status: <Fragment>
+                {course.accepted ?  <Tag color={'green'} >Đã phê duyệt </Tag> : <Tag color={'red'} >Chưa phê duyệt </Tag> }
+            </Fragment>,
+            actions: <Fragment>
+                <Link to={`/me/course/${course._id}`} className="btn btn-success py-1 px-2">
+                    <i className="fa fa-pencil"></i>
+                </Link>
+                <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => deleteCourseHandler(course._id)}>
+                    <i className="fa fa-trash"></i>
+                </button>
+                {user.role === 'admin' && course.accepted === false &&
+                    <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => acceptCourseHandler(course._id)}>
+                        Phê duyệt
+                    </button>
+                }
+            </Fragment>
+        })
+    })
+    
+    const [data,setData] = useState(tmp)
+
+    const handleData = (accept) =>{
+        const datatmp = []
+        !!courses && courses.filter(course => course.accepted === accept).forEach(course => {
+            datatmp.push({
+                id: course._id,
+                name: course.name,
+                price: `${course.price} Đồng`,
+                lessons: <Fragment>
+                    <Link to={`/me/course/${course._id}/lessons`} className="btn btn-success py-1 px-2">
+                        <i className="fa fa-eye"></i>
+                    </Link>
+                </Fragment>,
+                documents: <Fragment>
+                    <Link to={`/me/course/${course._id}/documents`} className="btn btn-success py-1 px-2">
+                        <i className="fa fa-eye"></i>
+                    </Link>
+                </Fragment>,
+                topics: <Fragment>
+                    <Link to={`/me/course/${course._id}/topics`} className="btn btn-success py-1 px-2">
+                        <i className="fa fa-eye"></i>
+                    </Link>
+                </Fragment>,
+                status: <Fragment>
+                    {course.accepted ?  <Tag color={'green'} >Đã phê duyệt </Tag> : <Tag color={'red'} >Chưa phê duyệt </Tag> }
+                </Fragment>,
+                actions: <Fragment>
+                    <Link to={`/me/course/${course._id}`} className="btn btn-success py-1 px-2">
+                        <i className="fa fa-pencil"></i>
+                    </Link>
+                    <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => deleteCourseHandler(course._id)}>
+                        <i className="fa fa-trash"></i>
+                    </button>
+                    {user.role === 'admin' && course.accepted === false &&
+                        <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => acceptCourseHandler(course._id)}>
+                            Phê duyệt
+                        </button>
+                    }
+                </Fragment>
+            })
+        })
+        if(datatmp.length === 0) {
+            alert.info('Dữ liệu bạn đang tìm kiếm không tồn tại');
+        }
+
+        setData(datatmp)
+    }
 
     const deleteCourseHandler = (id) => {
         dispatch(deleteCourse(id))
@@ -52,90 +179,11 @@ const CoursesList = ({ history }) => {
             alert.success('Phê duyệt thành công');
             dispatch({ type: UPDATE_COURSE_RESET })
         }
+       
+        setData([]);
 
     }, [dispatch, alert, error, deleteError, isDeleted, isUpdated, history])
 
-    const setCourses = () => {
-        const data = {
-            columns: [
-                {
-                    label: 'ID',
-                    field: 'id',
-                    sort: 'asc'
-                },
-                {
-                    label: 'Tên',
-                    field: 'name',
-                    sort: 'asc'
-                },
-                {
-                    label: 'Giá thành',
-                    field: 'price',
-                    sort: 'asc'
-                },
-                {
-                    label: 'Các chủ đề',
-                    field: 'topics',
-                },
-                {
-                    label: 'Các bài học',
-                    field: 'lessons',
-                },
-                {
-                    label: 'Tài liệu',
-                    field: 'documents',
-                },
-                {
-                    label: 'Thao tác',
-                    field: 'actions',
-                },
-            ],
-            rows: []
-        }
-
-        !!courses && courses.forEach(course => {
-            data.rows.push({
-                id: course._id,
-                name: course.name,
-                price: `$${course.price}`,
-                lessons: <Fragment>
-                    <Link to={`/me/course/${course._id}/lessons`} className="btn btn-primary py-1 px-2">
-                        <i className="fa fa-eye"></i>
-                    </Link>
-                </Fragment>,
-                documents: <Fragment>
-                    <Link to={`/me/course/${course._id}/documents`} className="btn btn-primary py-1 px-2">
-                        <i className="fa fa-eye"></i>
-                    </Link>
-                </Fragment>,
-                topics: <Fragment>
-                    <Link to={`/me/course/${course._id}/topics`} className="btn btn-primary py-1 px-2">
-                        <i className="fa fa-eye"></i>
-                    </Link>
-                </Fragment>,
-                actions: <Fragment>
-                    <Link to={`/me/course/${course._id}`} className="btn btn-primary py-1 px-2">
-                        <i className="fa fa-pencil"></i>
-                    </Link>
-                    <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => deleteCourseHandler(course._id)}>
-                        <i className="fa fa-trash"></i>
-                    </button>
-                    {user.role === 'admin' && course.accepted ===true &&
-                        <button className="btn btn-success py-1 px-2 ml-2">
-                            Đã phê duyệt
-                        </button>
-                    }
-                    {user.role === 'admin' && course.accepted === false &&
-                        <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => acceptCourseHandler(course._id)}>
-                            Phê duyệt
-                        </button>
-                    }
-                </Fragment>
-            })
-        })
-
-        return data;
-    }
 
 
 
@@ -152,13 +200,51 @@ const CoursesList = ({ history }) => {
                         <h1 className="my-5">Tất cả các khóa học của tôi</h1>
 
                         {loading ? <Loader /> : (
-                            <MDBDataTable
-                                data={setCourses()}
-                                className="px-3"
-                                bordered
-                                striped
-                                hover
+                            <div>
+                            <div
+                              style={{
+                                marginBottom: 16,
+                              }}
+                            >
+                             <span
+                                style={{
+                                  marginLeft: 8,
+                                }}
+                              >
+                              </span>
+                              <Button type="primary" style={{ background: "#006241"}} onClick={() => setData(tmp)}>
+                                Tất cả
+                              </Button>
+                              <span
+                                style={{
+                                  marginLeft: 8,
+                                }}
+                              >
+                              </span>
+                              <Button type="primary" style={{ background: "#006241"}} onClick={() => {handleData(true)}} >
+                                Đã phê duyệt
+                              </Button>
+                              <span
+                                style={{
+                                  marginLeft: 8,
+                                }}
+                              >
+                              </span>
+                              <Button type="primary" style={{ background: "#006241"}} onClick={() => {handleData(false)}} >
+                                Đang chờ phê duyệt
+                              </Button>
+                              <span
+                                style={{
+                                  marginLeft: 8,
+                                }}
+                              >
+                              </span>
+                            </div>
+                            <Table columns={columns} dataSource={data.length !== 0 ? data : tmp} 
+                                   pagination={{ defaultPageSize: 4 }}
+
                             />
+                          </div>
                         )}
 
                     </Fragment>

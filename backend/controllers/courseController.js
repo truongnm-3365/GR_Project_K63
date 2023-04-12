@@ -10,6 +10,7 @@ const cloudinary = require('cloudinary')
 const fs = require('fs');
 const Topic = require('../models/topic');
 const Quiz = require('../models/quiz');
+const RegisterCourse = require('../models/registerCourse');
 
 // Create new course   =>   /api/v1/admin/course/new
 exports.newCourse = catchAsyncErrors(async (req, res, next) => {
@@ -52,14 +53,22 @@ exports.getCourses = catchAsyncErrors(async (req, res, next) => {
     let filteredCoursesCount = courses.length;
     apiFeatures.pagination(resPerPage)
     courses = await apiFeatures.query;
+    const registerCourse = await RegisterCourse.find();
 
+    let coursesTmp = courses.map((course) => {
+        let users = registerCourse.filter(item => item.course.toString() === course._id.toString())
+        users = users.map(item => item.user.toString())
+        users = [...new Set(users)]
+        return {...course._doc,users}
+    })
+    
 
     res.status(200).json({
         success: true,
         coursesCount,
         resPerPage,
         filteredCoursesCount,
-        courses
+        courses:coursesTmp
     })
 
 })
@@ -82,6 +91,30 @@ exports.getAdminCourses = catchAsyncErrors(async (req, res, next) => {
     res.status(200).json({
         success: true,
         courses
+    })
+
+})
+
+exports.getRegularCourses = catchAsyncErrors(async (req, res, next) => {
+
+    let courses = await Course.find();
+    const registerCourse = await RegisterCourse.find();
+
+    let coursesTmp = courses.map((course) => {
+        let users = registerCourse.filter(item => item.course.toString() === course._id.toString())
+        users = users.map(item => item.user.toString())
+        users = [...new Set(users)]
+        return {...course._doc,users}
+    })
+    
+
+    let regularCourses = coursesTmp.sort(function(a,b){
+        return b.users?.length - a.users?.length;
+    })
+
+    res.status(200).json({
+        success: true,
+        regularCourses
     })
 
 })
@@ -299,42 +332,6 @@ exports.deleteReview = catchAsyncErrors(async (req, res, next) => {
     })
 })
 
-exports.createCourseLesson = catchAsyncErrors(async (req, res, next) => {
-    const result = await cloudinary.v2.uploader.upload(req.body.video, {
-        folder: 'videos',
-        width: 400,
-        crop: "scale"
-    })
-
-    const { title, courseId } = req.body;
-
-    const lesson = {
-        title,
-        video: {
-            public_id: result.public_id,
-            url: result.secure_url
-        }
-    }
-
-    const course = await Course.findById(courseId);
-    course.lessons.push(lesson);
-
-    await course.save({ validateBeforeSave: false });
-
-    res.status(200).json({
-        success: true
-    })
-
-})
-
-exports.getCourseLessons = catchAsyncErrors(async (req, res, next) => {
-    const course = await Course.findById(req.query.id);
-
-    res.status(200).json({
-        success: true,
-        lessons: course.lessons
-    })
-})
 
 exports.newTopic = catchAsyncErrors(async (req, res, next) => {
 
