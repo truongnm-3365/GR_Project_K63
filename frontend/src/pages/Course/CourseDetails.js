@@ -1,22 +1,23 @@
 import React, { Fragment, useState, useEffect } from 'react'
-import { Carousel } from 'react-bootstrap'
-
 import Loader from '../../components/layout/Loader'
 import MetaData from '../../components/layout/MetaData'
 import ListReviews from '../../components/review/ListReviews'
 import { Link } from 'react-router-dom'
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
-import { getCourseDetails, newReview, clearErrors } from '../../actions/courseActions'
+import { getCourseDetails, newReview, clearErrors, getCourseLessons, getCourseTopics } from '../../actions/courseActions'
 import { NEW_REVIEW_RESET } from '../../constants/courseConstants'
-import { deleteRegisterCourse, getMeRegisterCourses, newRegisterCourse } from '../../actions/registerCourseAction'
-import { DELETE_REGISTER_COURSE_RESET, NEW_REGISTER_COURSE_RESET } from '../../constants/registerCourseContants'
+import { getMeRegisterCourses, newRegisterCourse } from '../../actions/registerCourseAction'
+import { NEW_REGISTER_COURSE_RESET } from '../../constants/registerCourseContants'
+import { Collapse } from 'antd'
+import './index.css'
 const CourseDetails = ({ match }) => {
 
-    const [quantity, setQuantity] = useState(1)
+    const { Panel } = Collapse;
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
 
+    const [indexTopic,setIndexTopic] = useState(0)
     const dispatch = useDispatch();
     const alert = useAlert();
 
@@ -25,6 +26,8 @@ const CourseDetails = ({ match }) => {
     const { error: reviewError, success } = useSelector(state => state.newReview)
     const { registerCourses } = useSelector(state => state.registerCourses)
     const { success: newSuccess} = useSelector(state => state.newRegisterCourse)
+    const { lessons  } = useSelector(state => state.courseLessons)
+    const {  topics } = useSelector(state => state.courseTopics)
 
     const formatDate = (dateInput) =>{
         const date = new Date(dateInput)
@@ -34,6 +37,8 @@ const CourseDetails = ({ match }) => {
     useEffect(() => {
         dispatch(getCourseDetails(match.params.id))
         dispatch(getMeRegisterCourses())
+        dispatch(getCourseLessons(match.params.id))
+        dispatch(getCourseTopics(match.params.id))
         if (error) {
             alert.error(error);
             dispatch(clearErrors())
@@ -134,14 +139,58 @@ const CourseDetails = ({ match }) => {
                     <MetaData title={course.details.name} />
                     <div className="row d-flex justify-content-around">
                         <div className="col-12 col-lg-5 img-fluid" id="course_image">
-                            <Carousel pause='hover'>
-                                {course.details.images && course.details.images.map(image => (
-                                    <Carousel.Item key={image.public_id}>
-                                        <img className="d-block w-100" src={image.url} alt={course.title} />
-                                    </Carousel.Item>
-                                ))}
-                            </Carousel>
-                        </div>
+                            
+                            {course.details.images && course.details.images.map(image => (
+                                <img className="d-block w-100" src={image.url} alt={course.title} />
+                            ))}
+                            <div><h2 className='mt-5'>Danh sách bài học</h2></div>
+                            <div>
+                                <div className="season_tabs">
+                                    {topics[indexTopic] &&
+                                    <Collapse defaultActiveKey={[topics[indexTopic]._id]}>
+                                    {topics && topics.map((topic,indexTopic) => {
+                                    return (
+                                        <Panel  header={topic.name} key={topic._id}>
+                                        {lessons &&
+                                            lessons.map((lesson,index) => {
+                                            if(lesson.topicId === topic._id){
+                                                return (
+                                                <>
+                                                    <div key={lesson._id} className="season_tab">
+                                                
+                                                    <label className="d-flex justify-content-between" htmlFor={`tab-${index+1}`}>
+                                                        <span>{lesson.name}</span>
+                                                    </label>
+                                                    
+                                                    </div>
+                        
+                                                </>
+                        
+                                                );
+                                                
+                                            }
+
+                                            })}
+                                        
+                                            <div className="season_tab"> 
+                                            <label className="d-flex justify-content-between" htmlFor={`tabb-${indexTopic}`}>
+                                                <span>Bài tập</span>
+                                                
+                                            </label>
+                                            
+                                            
+                                        </div>
+                                        </Panel>
+                                    )
+                                    })}
+                                    </Collapse>
+                                    }
+                                </div>
+                            </div>
+
+                            
+                           
+                    </div>
 
                         <div className="col-12 col-lg-5 mt-5">
                             <h3>{course.details.name}</h3>

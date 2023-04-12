@@ -15,7 +15,7 @@
       vertical-align: middle;
       position: relative;
       right: 1px;
-      width: 300px;
+      width: 100%;
       display: table-cell;
   }
   .season_tab [type=radio] {

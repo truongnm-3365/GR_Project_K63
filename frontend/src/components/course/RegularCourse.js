@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const RegularCourse = ({ course, col }) => {
+const RegularCourse = ({ course }) => {
     return (
         <div className={`mx-5 mb-5`}>
             <div className="card p-3 rounded ">

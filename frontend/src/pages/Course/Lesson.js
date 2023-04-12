@@ -1,18 +1,16 @@
-import {useEffect, useState, useRef} from "react";
+import { useEffect, useState } from "react";
 import Loader from '../../components/layout/Loader'
-import ReactPlayer from 'react-player'
 import { clearErrors, getCourseLessons, getCourseLesson, getCourseTopics, getTopicQuizs, getCourseDetails, getCourseDocuments, newReview } from '../../actions/courseActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { NEW_LESSON_RESET,NEW_REVIEW_RESET } from '../../constants/courseConstants'
 import { Collapse } from 'antd';
 import { useAlert } from 'react-alert'
-
-
 import './index.css'
 import Quiz from "../../components/quiz/Quiz";
 import ListReviews from "../../components/review/ListReviews";
 import { NEW_REGISTER_COURSE_RESET } from "../../constants/registerCourseContants";
 import { comleteVideo, completedVideo, getMeRegisterCourses } from "../../actions/registerCourseAction";
+
 
 const Lessons = ({match}) => {
   const { Panel } = Collapse;
@@ -32,7 +30,7 @@ const Lessons = ({match}) => {
   const { course } = useSelector(state => state.courseDetails)
   const {user} = useSelector(state => state.auth)
   const [rating, setRating] = useState(0);
-    const [comment, setComment] = useState('');
+  const [comment, setComment] = useState('');
   const onChangeChecked = (index) =>{
     
     const newCheck = []
@@ -52,7 +50,6 @@ const Lessons = ({match}) => {
     for( let i; i < topics.length; i++){
       newCheck[i] = false;
     } 
-
 
     newCheck[index] = true;
     setCheckedExercise(newCheck)
@@ -173,15 +170,6 @@ const checkCompleteVideo = (mediaId) =>{
 
 }
 
-const checkCompleteTopic = (videoData) =>{
-  for(let i = 0;i < completeVideos.length; i++){
-    if(completeVideos.user === user._id && completeVideos.topic === videoData.topic){
-      return true
-    }
-  }
-  return false
-}
-
 const checkCompletedVideo = (mediaId) =>{
   if(completeVideos && user){
     for(let i = 0; i < completeVideos.length; i++){
@@ -284,9 +272,6 @@ return (
                               <span>{lesson.name}</span>
                               <i class="fa fa-lock" aria-hidden="true"></i>
                             </label>
-                            
-  
-                              
                             </div>
                           }
   

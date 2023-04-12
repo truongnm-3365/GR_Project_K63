@@ -110,7 +110,7 @@ exports.getRegularCourses = catchAsyncErrors(async (req, res, next) => {
 
     let regularCourses = coursesTmp.sort(function(a,b){
         return b.users?.length - a.users?.length;
-    })
+    }).splice(0,10)
 
     res.status(200).json({
         success: true,

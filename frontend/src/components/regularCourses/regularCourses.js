@@ -63,7 +63,7 @@ const RegularCourses = () => {
             itemClass="carousel-item-padding-40-px"
         >
             {regularCourses?.map(course => (
-                <RegularCourse key={course._id} course={course} col={3} />
+                <RegularCourse key={course._id} course={course}/>
             ))}
         </Carousel>
 
