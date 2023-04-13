@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { MDBDataTable } from 'mdbreact'
+import { Table,Button } from 'antd';
 
 import MetaData from '../../../components/layout/MetaData'
 import Loader from '../../../components/layout/Loader'
@@ -12,6 +12,22 @@ import { useDispatch, useSelector } from 'react-redux'
 import { DELETE_BANNER_RESET, UPDATE_BANNER_RESET } from '../../../constants/bannerConstant'
 import { clearErrors, deletebanner, getBanners } from '../../../actions/bannerAction'
 
+
+const columns = [
+    {
+        title: 'ID',
+        dataIndex: 'id',
+    },
+    {
+        title: 'Ảnh',
+        dataIndex: 'image',
+       
+    },
+    {
+        title: 'Thao tác',
+        dataIndex: 'actions',
+    },
+]
 
 const BannerList = ({ history }) => {
 
@@ -51,46 +67,22 @@ const BannerList = ({ history }) => {
 
     }, [dispatch, alert, error, deleteError, isDeleted, isUpdated, history])
 
-    const setCategories = () => {
-        const data = {
-            columns: [
-                {
-                    label: 'ID',
-                    field: 'id',
-                    sort: 'asc'
-                },
-                {
-                    label: 'Ảnh',
-                    field: 'image',
-                    sort: 'asc'
-                },
-                {
-                    label: 'Thao tác',
-                    field: 'actions',
-                },
-            ],
-            rows: []
-        }
+    const data = [];
 
-        !!banners && banners.forEach(banner => {
-            data.rows.push({
-                id: banner._id,
-                image: <img className="mt-3 mr-2" width="400" src={banner.images[0].url}/>,
-                actions: <Fragment>
-                    <Link to={`/admin/banner/update/${banner._id}`} className="btn btn-primary py-1 px-2">
-                        <i className="fa fa-pencil"></i>
-                    </Link>
-                    <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => deleteBannerHandler(banner._id)}>
-                        <i className="fa fa-trash"></i>
-                    </button>
-                </Fragment>
-            })
+    !!banners && banners.forEach(banner => {
+        data.push({
+            id: banner._id,
+            image: <img className="mt-3 mr-2" width="400" src={banner.images[0].url}/>,
+            actions: <Fragment>
+                <Link to={`/admin/banner/update/${banner._id}`} className="btn btn-success py-1 px-2">
+                    <i className="fa fa-pencil"></i>
+                </Link>
+                <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => deleteBannerHandler(banner._id)}>
+                    <i className="fa fa-trash"></i>
+                </button>
+            </Fragment>
         })
-
-        return data;
-    }
-
-
+    })
 
     return (
         <Fragment>
@@ -105,12 +97,9 @@ const BannerList = ({ history }) => {
                         <h1 className="my-5">Tất cả các thể loại</h1>
 
                         {loading ? <Loader /> : (
-                            <MDBDataTable
-                                data={setCategories()}
-                                className="px-3"
-                                bordered
-                                striped
-                                hover
+                            <Table columns={columns} dataSource={data} 
+                                pagination={{ defaultPageSize: 4 }}
+
                             />
                         )}
 

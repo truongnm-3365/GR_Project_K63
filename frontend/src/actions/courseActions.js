@@ -108,6 +108,8 @@ export const getCourses = (keyword = '', currentPage = 1, price, category, ratin
 
         const { data } = await axios.get(link)
 
+        console.log(data);
+
         dispatch({
             type: ALL_COURSES_SUCCESS,
             payload: data

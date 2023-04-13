@@ -4,11 +4,35 @@ import { MDBDataTable } from 'mdbreact'
 import MetaData from '../../../components/layout/MetaData'
 import Loader from '../../../components/layout/Loader'
 import Sidebar from '../Sidebar'
+import { Table,Button } from 'antd';
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCourseReviews, deleteReview, clearErrors } from '../../../actions/courseActions'
 import { DELETE_REVIEW_RESET } from '../../../constants/courseConstants'
+
+const columns = [
+    {
+        title: 'ID',
+        dataIndex: 'id',
+    },
+    {
+        title: 'Đánh giá',
+        dataIndex: 'rating',
+    },
+    {
+        title: 'Bình luận',
+        dataIndex: 'comment',
+    },
+    {
+        title: 'Người dùng',
+        dataIndex: 'user',
+    },
+    {
+        title: 'Thao tác',
+        dataIndex: 'actions',
+    },
+]
 
 const CourseReviews = () => {
 
@@ -54,53 +78,21 @@ const CourseReviews = () => {
         dispatch(getCourseReviews(courseId))
     }
 
-    const setReviews = () => {
-        const data = {
-            columns: [
-                {
-                    label: 'ID',
-                    field: 'id',
-                    sort: 'asc'
-                },
-                {
-                    label: 'Đánh giá',
-                    field: 'rating',
-                    sort: 'asc'
-                },
-                {
-                    label: 'Bình luận',
-                    field: 'comment',
-                    sort: 'asc'
-                },
-                {
-                    label: 'Người dùng',
-                    field: 'user',
-                    sort: 'asc'
-                },
-                {
-                    label: 'Thao tác',
-                    field: 'actions',
-                },
-            ],
-            rows: []
-        }
+    const data = [];
 
-        reviews.forEach(review => {
-            data.rows.push({
-                id: review._id,
-                rating: review.rating,
-                comment: review.comment,
-                user: review.name,
+    !!reviews && reviews.forEach(review => {
+        data.push({
+            id: review._id,
+            rating: review.rating,
+            comment: review.comment,
+            user: review.name,
 
-                actions:
-                    <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => deleteReviewHandler(review._id)}>
-                        <i className="fa fa-trash"></i>
-                    </button>
-            })
+            actions:
+                <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => deleteReviewHandler(review._id)}>
+                    <i className="fa fa-trash"></i>
+                </button>
         })
-
-        return data;
-    }
+    })
 
     return (
         <Fragment>
@@ -112,7 +104,7 @@ const CourseReviews = () => {
 
                 <div className="col-12 col-md-10">
                     <Fragment>
-                        <div className="row justify-content-center mt-5">
+                        <div className="row justify-content-center mt-5 mb-3">
                             <div className="col-5">
                                 <form onSubmit={submitHandler}>
                                     <div className="form-group">
@@ -139,12 +131,9 @@ const CourseReviews = () => {
                         </div>
 
                         {reviews && reviews.length > 0 ? (
-                            <MDBDataTable
-                                data={setReviews()}
-                                className="px-3"
-                                bordered
-                                striped
-                                hover
+                            <Table columns={columns} dataSource={data} 
+                                pagination={{ defaultPageSize: 4 }}
+
                             />
                         ) : (
                                 <p className="mt-5 text-center">Không có bình luận nào</p>

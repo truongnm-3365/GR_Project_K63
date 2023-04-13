@@ -6,19 +6,18 @@ import 'rc-slider/assets/index.css';
 import MetaData from '../../components/layout/MetaData'
 
 import Loader from '../../components/layout/Loader'
-import { Radio, Space } from 'antd';
+import { Radio, Space,InputNumber, Button } from 'antd';
 
 import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert';
 import { getCourses } from '../../actions/courseActions'
 import { getCategories } from '../../actions/categoryAction';
 import { useLocation } from 'react-router-dom';
-import Course from '../../components/course/Course';
+
+
+
 import './Search.css'
 import SearchCourse from '../../components/course/SearchCourse';
-
-const { createSliderWithTooltip } = Slider;
-const Range = createSliderWithTooltip(Slider.Range)
 
 const useQuery = () => {
     const { search } = useLocation();
@@ -30,8 +29,11 @@ const Search = ({history}) => {
 
     const [currentPage, setCurrentPage] = useState(1)
     const [price, setPrice] = useState([0, 1000000])
+    const [minPrice,setMinPrice] = useState(0);
+    const [maxPrice,setMaxPrice] = useState(1000000);
     const [category, setCategory] = useState('')
     const [rating, setRating] = useState(0)
+
 
 
     const { categories } = useSelector(state => state.categories);
@@ -46,7 +48,11 @@ const Search = ({history}) => {
     const keyword = query.get("keyword") || ""
     const categoryQuery = query.get("category") || ""
     const ratingQuery = query.get("rating") || 0
+    const minPriceQuery = query.get("price[gte]") || ""
+    const maxPriceQuery = query.get("price[lte]") || ""
+    const priceQuery = [minPriceQuery,maxPriceQuery].includes("") ? [0,1000000] : [minPriceQuery,maxPriceQuery]
     
+
     useEffect(() => {
         
         dispatch(getCategories());
@@ -56,15 +62,18 @@ const Search = ({history}) => {
         }
 
       
-        dispatch(getCourses(keyword, currentPage, price, categoryQuery, ratingQuery));
+        dispatch(getCourses(keyword, currentPage, priceQuery, categoryQuery, ratingQuery));
+        
         if(categoryQuery){
             setCategory(categoryQuery)
         }
-        
-        
+       
 
 
-    }, [dispatch, alert, error, keyword, currentPage, price, category, rating,categoryQuery,ratingQuery])
+    }, [dispatch, alert, error, keyword, currentPage, price, category, rating,categoryQuery,ratingQuery,minPriceQuery,maxPriceQuery])
+
+    
+
 
     function setCurrentPageNo(pageNumber) {
         setCurrentPage(pageNumber)
@@ -72,18 +81,24 @@ const Search = ({history}) => {
 
     const onChangeCategory = (e) => {
         setCategory(e.target.value)
-        history.push(`/search?keyword=${keyword}&&category=${e.target.value}&&rating=${rating}`)
+        history.push(`/search?keyword=${keyword}&&category=${e.target.value}&&rating=${rating}&&price[lte]=${price[1]}&&price[gte]=${price[0]}`)
     };
   
     const onChangeStar = (e) =>{
         setRating(e.target.value)
-        history.push(`/search?keyword=${keyword}&&category=${category}&&rating=${e.target.value}`)
+        history.push(`/search?keyword=${keyword}&&category=${category}&&rating=${e.target.value}&&price[lte]=${price[1]}&&price[gte]=${price[0]}`)
     }
 
-    let count = coursesCount;
-    if (keyword || categoryQuery || ratingQuery) {
-        count = filteredCoursesCount
+    const handlePrice = () =>{
+        if(minPrice <= maxPrice){
+            setPrice([minPrice,maxPrice])
+            history.push(`/search?keyword=${keyword}&&category=${category}&&rating=${rating}&&price[lte]=${maxPrice}&&price[gte]=${minPrice}`)
+        }
+            
     }
+
+
+
 
     return (
         <Fragment>
@@ -99,22 +114,15 @@ const Search = ({history}) => {
                                 <Fragment>
                                     <div className="col-6 col-md-4 mt-5 mb-5">
                                         <div className="px-5">
-                                            <Range
-                                                marks={{
-                                                    0: `0`,
-                                                    1000000: `1,000,000 Đồng`
-                                                }}
-                                                min={0}
-                                                max={1000000}
-                                                defaultValue={[0, 1000000]}
-                                                tipFormatter={value => `${value}`}
-                                                tipProps={{
-                                                    placement: "top",
-                                                    visible: true
-                                                }}
-                                                value={price}
-                                                onChange={price => setPrice(price)}
-                                            />
+                                            <h4 className="mb-3">
+                                                Giá tiền
+                                            </h4>
+                                            <Space>
+                                                <InputNumber onChange={val => setMinPrice(val)}  defaultValue={minPrice} />-
+                                                <InputNumber onChange={val => setMaxPrice(val)}  defaultValue={maxPrice} />
+                                                <button className='btn btn-success' onClick={handlePrice} >Lọc</button>
+                                            </Space>
+                                            
 
                                             <hr className="my-5" />
 
@@ -182,7 +190,7 @@ const Search = ({history}) => {
                         </div>
                     </section>
 
-                    {resPerPage <= count && (
+                    {resPerPage < filteredCoursesCount && (
                         <div className="d-flex justify-content-center mt-5">
                             <Pagination
                                 activePage={currentPage}

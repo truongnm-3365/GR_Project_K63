@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { MDBDataTable } from 'mdbreact'
-import { Button, Table,Tag  } from 'antd';
+import { Button, Table,Tag, Input  } from 'antd';
 
 import MetaData from '../../../components/layout/MetaData'
 import Loader from '../../../components/layout/Loader'
@@ -47,6 +46,8 @@ const columns = [
     },
 ];
 
+const { Search } = Input;
+
 const CoursesList = ({ history }) => {
 
     const alert = useAlert();
@@ -55,12 +56,23 @@ const CoursesList = ({ history }) => {
     const { loading, error, courses } = useSelector(state => state.courses);
     const { error: deleteError, isDeleted, isUpdated } = useSelector(state => state.course)
 
-    const tmp = [];
+    const [search, setSearch] = useState('');
+    const [status,setStatus] = useState('');
+    const onSearch = (value) => setSearch(value);
 
+    const data = [];
     
 
-    !!courses && courses.forEach(course => {
-        tmp.push({
+    !!courses && courses.filter((item) => {
+        return search === ''
+          ? item
+          : (item.name.toLowerCase().includes(search.toLowerCase()) || item._id.toLowerCase().includes(search.toLowerCase()));
+      }).filter((item) => {
+        return status === ''
+          ? item
+          : (item.accepted === status);
+      }).forEach(course => {
+        data.push({
             id: course._id,
             name: course.name,
             price: `${course.price} Đồng`,
@@ -98,54 +110,6 @@ const CoursesList = ({ history }) => {
         })
     })
     
-    const [data,setData] = useState(tmp)
-
-    const handleData = (accept) =>{
-        const datatmp = []
-        !!courses && courses.filter(course => course.accepted === accept).forEach(course => {
-            datatmp.push({
-                id: course._id,
-                name: course.name,
-                price: `${course.price} Đồng`,
-                lessons: <Fragment>
-                    <Link to={`/me/course/${course._id}/lessons`} className="btn btn-success py-1 px-2">
-                        <i className="fa fa-eye"></i>
-                    </Link>
-                </Fragment>,
-                documents: <Fragment>
-                    <Link to={`/me/course/${course._id}/documents`} className="btn btn-success py-1 px-2">
-                        <i className="fa fa-eye"></i>
-                    </Link>
-                </Fragment>,
-                topics: <Fragment>
-                    <Link to={`/me/course/${course._id}/topics`} className="btn btn-success py-1 px-2">
-                        <i className="fa fa-eye"></i>
-                    </Link>
-                </Fragment>,
-                status: <Fragment>
-                    {course.accepted ?  <Tag color={'green'} >Đã phê duyệt </Tag> : <Tag color={'red'} >Chưa phê duyệt </Tag> }
-                </Fragment>,
-                actions: <Fragment>
-                    <Link to={`/me/course/${course._id}`} className="btn btn-success py-1 px-2">
-                        <i className="fa fa-pencil"></i>
-                    </Link>
-                    <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => deleteCourseHandler(course._id)}>
-                        <i className="fa fa-trash"></i>
-                    </button>
-                    {user.role === 'admin' && course.accepted === false &&
-                        <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => acceptCourseHandler(course._id)}>
-                            Phê duyệt
-                        </button>
-                    }
-                </Fragment>
-            })
-        })
-        if(datatmp.length === 0) {
-            alert.info('Dữ liệu bạn đang tìm kiếm không tồn tại');
-        }
-
-        setData(datatmp)
-    }
 
     const deleteCourseHandler = (id) => {
         dispatch(deleteCourse(id))
@@ -179,8 +143,7 @@ const CoursesList = ({ history }) => {
             alert.success('Phê duyệt thành công');
             dispatch({ type: UPDATE_COURSE_RESET })
         }
-       
-        setData([]);
+    
 
     }, [dispatch, alert, error, deleteError, isDeleted, isUpdated, history])
 
@@ -198,6 +161,18 @@ const CoursesList = ({ history }) => {
                 <div className="col-12 col-md-10">
                     <Fragment>
                         <h1 className="my-5">Tất cả các khóa học của tôi</h1>
+                        <div className='float-right m-2'>
+                            <Search
+                                placeholder="Nhập vào từ khóa tìm kiếm tên"
+                                allowClear
+                                enterButton="Tìm kiếm"
+                                size="large"
+                                onSearch={onSearch}
+                                style={{
+                                    width: 500,
+                                }}
+                            />
+                        </div>
 
                         {loading ? <Loader /> : (
                             <div>
@@ -212,7 +187,7 @@ const CoursesList = ({ history }) => {
                                 }}
                               >
                               </span>
-                              <Button type="primary" style={{ background: "#006241"}} onClick={() => setData(tmp)}>
+                              <Button type="primary" style={{ background: "#006241"}} onClick={() => setStatus('')}>
                                 Tất cả
                               </Button>
                               <span
@@ -221,7 +196,7 @@ const CoursesList = ({ history }) => {
                                 }}
                               >
                               </span>
-                              <Button type="primary" style={{ background: "#006241"}} onClick={() => {handleData(true)}} >
+                              <Button type="primary" style={{ background: "#006241"}} onClick={() => {setStatus(true)}} >
                                 Đã phê duyệt
                               </Button>
                               <span
@@ -230,7 +205,7 @@ const CoursesList = ({ history }) => {
                                 }}
                               >
                               </span>
-                              <Button type="primary" style={{ background: "#006241"}} onClick={() => {handleData(false)}} >
+                              <Button type="primary" style={{ background: "#006241"}} onClick={() => {setStatus(false)}} >
                                 Đang chờ phê duyệt
                               </Button>
                               <span
@@ -240,7 +215,7 @@ const CoursesList = ({ history }) => {
                               >
                               </span>
                             </div>
-                            <Table columns={columns} dataSource={data.length !== 0 ? data : tmp} 
+                            <Table columns={columns} dataSource={data} 
                                    pagination={{ defaultPageSize: 4 }}
 
                             />
