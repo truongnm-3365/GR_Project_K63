@@ -6,6 +6,7 @@ import Popover from "react-bootstrap/Popover";
 import Button from "react-bootstrap/Button";
 
 import moment from "moment";
+import {Link} from "react-router-dom"
 
 import { reactLocalStorage } from "reactjs-localstorage";
 
@@ -46,30 +47,25 @@ const NotifyMe = (props) => {
       data.sort((a, b) => b[key] - a[key]);
     }
 
-    // We read if any last read item id is in the local storage
     let readItemLs = reactLocalStorage.getObject(storageKey);
     let readMsgId = Object.keys(readItemLs).length > 0 ? readItemLs["id"] : "";
 
-    // if the id found, we check what is the index of that message in the array and query it. If not found,
-    // nothing has been read. Hence count should be same as all the message count.
+  
     let readIndex =
       readMsgId === ""
         ? data.length
         : data.findIndex((elem) => elem[key] === readMsgId);
 
-    // if the id is not found, it all flushed out and start again
     if(readIndex === -1){
         readIndex = data.length
     } 
 
     setReadIndex(readIndex);
 
-    // If there are messages and readIndex is pointing to at least one message, we will show the count bubble.
     (data.length && readIndex) > 0 ? setShowCount(true) : setShowCount(false);
     setMessageCount(readIndex);
   }, [data]);
 
-  // Handle the click on the notification bell
   const handleClick = (event) => {
     setShow(!show);
     setTarget(event.target);
@@ -117,6 +113,7 @@ const NotifyMe = (props) => {
 
   // Get the notification message
   const getContent = (message) => {
+    
     if (message.indexOf(multiLineSplitter) >= 0) {
       let splitted = message.split(multiLineSplitter);
       let ret = "<ul>";
@@ -195,22 +192,25 @@ const NotifyMe = (props) => {
                       }
                       key={index}
                     >
-                      <div className="timestamp">
-                        <span style={{paddingLeft: '8px'}}>{getDayDiff(message[key])}</span>
-                        {showDate && (
-                          <span>
-                            {" ("}
-                            {getWhen(message[key])}
-                            {")"}
-                          </span>
-                        )}
-                      </div>
-                      <div
-                        className="content"
-                        dangerouslySetInnerHTML={getContent(
-                          message[notificationMsg]
-                        )}
-                      />
+                      <Link to= {`course/${message['course']}`}>
+                        <div className="timestamp">
+                          <span style={{paddingLeft: '8px'}}>{getDayDiff(message[key])}</span>
+                          {showDate && (
+                            <span>
+                              {" ("}
+                              {getWhen(message[key])}
+                              {")"}
+                            </span>
+                          )}
+                        </div>
+                        <div
+                          className="content"
+                          dangerouslySetInnerHTML={getContent(
+                            message[notificationMsg]
+                          )}
+                        />
+                      </Link>
+
                     </li>
                   ))
                 ) : (

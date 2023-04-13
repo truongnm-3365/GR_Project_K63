@@ -135,7 +135,8 @@ exports.adminAcceptCourse = catchAsyncErrors(async (req, res, next) => {
 
     const notify = await Notify.create({
         user: course.user,
-        content: `Quản trị viên đã phê duyệt khóa học ${course.name} của bạn`
+        content: `Quản trị viên đã phê duyệt khóa học ${course.name} của bạn`,
+        course:course._id
     })
 
     res.status(200).json({

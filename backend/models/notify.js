@@ -10,6 +10,11 @@ const notifySchema = new mongoose.Schema({
         type:String,
         require: true
     },
+
+    course:{
+        type: String,
+        required: true
+    },
     
     createdAt: {
         type: Date,
