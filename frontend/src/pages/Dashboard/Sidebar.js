@@ -12,7 +12,7 @@ const Sidebar = () => {
                         <Link to="/dashboard"><i className="fa fa-tachometer"></i> Dashboard</Link>
                     </li>
                     } */}
-
+                     {user && user.role !== 'admin' ?
                     <li>
                         <a href="#courseSubmenu" data-toggle="collapse" aria-expanded="false" className="dropdown-toggle"><i
                             className="fa fa-graduation-cap"></i> Các khóa học</a>
@@ -26,6 +26,11 @@ const Sidebar = () => {
                             </li>
                         </ul>
                     </li>
+                    :
+                    <li>
+                        <Link to="/me/courses"><i className="fa fa-users"></i> Tất cả các khóa học</Link>
+                    </li>                    
+                    }
                     {user && user.role === 'admin' && (<>
                     <li>
                         <Link to="/admin/users"><i className="fa fa-users"></i>  Người dùng</Link>

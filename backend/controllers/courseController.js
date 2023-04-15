@@ -45,7 +45,7 @@ exports.getCourses = catchAsyncErrors(async (req, res, next) => {
     const resPerPage = 4;
     const coursesCount = await Course.countDocuments({accepted: true});
 
-    const apiFeatures = new APIFeatures(Course.find({accepted: true}), req.query)
+    const apiFeatures = new APIFeatures(Course.find({accepted: true}).sort({ createdAt:-1}), req.query)
         .search()
         .filter()
 

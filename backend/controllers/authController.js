@@ -5,8 +5,9 @@ const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const sendToken = require('../utils/jwtToken');
 const sendEmail = require('../utils/sendEmail');
 const Course = require('../models/course')
-
+const RegisterCourse = require('../models/registerCourse');
 const crypto = require('crypto');
+const mongoose = require("mongoose");
 
 // Register a user   => /api/v1/register
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
@@ -246,6 +247,47 @@ exports.allUsers = catchAsyncErrors(async (req, res, next) => {
         users
     })
 })
+
+exports.allUsersChat = catchAsyncErrors(async (req, res) => {
+    const keyword = req.query.search
+      ? {
+          $or: [
+            { name: { $regex: req.query.search, $options: "i" } },
+            { email: { $regex: req.query.search, $options: "i" } },
+          ],
+        }
+      : {};
+
+    const registerCourses = await RegisterCourse.find();
+ 
+    const courses = await Course.find({user: req.user.id})
+    let myusers = []
+
+    courses.forEach((course) => {
+        let users = registerCourses.filter(item => item.course.toString() === course._id.toString())
+        users = users.map(item => item.user.toString())
+        users = [...new Set(users)]
+        myusers.push(...users)
+    })
+
+    myusers = [...new Set(myusers)]
+    
+    myusers = myusers.map(item => mongoose.Types.ObjectId(item))
+    
+    let myRegister = await RegisterCourse.find({user: req.user.id})
+    myRegister = myRegister.map(item => {
+        return item.course.toString()
+    })
+    myRegister = [...new Set(myRegister)]
+    myRegister = myRegister.map(item => mongoose.Types.ObjectId(item))
+    
+    const myRegisterCourses = await Course.find({_id:{ $in: myRegister}})
+    myRegister = myRegisterCourses.map(item => item.user)
+    myusers.push(...myRegister)
+    
+    const users = await User.find(keyword).find({ _id: { $ne: req.user.id } }).find({_id:{ $in: myusers}});
+    res.send(users);
+  });
 
 
 // Get user details   =>   /api/v1/admin/user/:id

@@ -69,10 +69,7 @@ const Home = () => {
                         <div className="row">
 
                             {
-                                courses.sort(function(a,b){
-                                        return new Date(b.createdAt) - new Date(a.createdAt);
-                                })
-                                .map(course => (
+                                courses.map(course => (
                                         <Course key={course._id} course={course} col={3} />
                                 ))
                             }

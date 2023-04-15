@@ -11,9 +11,10 @@ import { DELETE_ALL_NOTIFIES_RESET } from '../../constants/notifyContants'
 import '../../App.css'
 import { getCategories } from '../../actions/categoryAction'
 import './index.css'
-
-
-
+import { MessageFilled  } from '@ant-design/icons';
+import { ChatState } from "../../Context/ChatProvider";
+import NotificationBadge from "react-notification-badge";
+import { Effect } from "react-notification-badge";
 
 const Header = () => {
     const alert = useAlert();
@@ -22,6 +23,12 @@ const Header = () => {
     const { user, loading } = useSelector(state => state.auth)
     const { categories } = useSelector(state => state.categories);
     const { notifies, error, isDeleted } = useSelector(state => state.notifies)
+    const {
+        notify,
+        setNotify,
+        setSelectedChat
+    } = ChatState();
+    
 
     const logoutHandler = () => {
         dispatch(logout());
@@ -46,7 +53,7 @@ const Header = () => {
             dispatch({ type: DELETE_ALL_NOTIFIES_RESET })
         }
 
-    }, [dispatch, alert, error,user,isDeleted])
+    }, [dispatch, alert, error,user,isDeleted,notify])
 
     return (
         
@@ -105,6 +112,14 @@ const Header = () => {
                                     deleteNotifiesHandler={deleteNotifiesHandler}
                                 />
                             </span>
+                            <Link to='/chats' className='ml-3 d-flex align-items-center' style={{fontSize:'40px'}}>
+
+                                <MessageFilled style={{color:'rgb(148, 224, 162)'}} />
+                                <NotificationBadge
+                                    count={notify.length}
+                                    effect={Effect.SCALE}
+                                />
+                            </Link>
                         <div className="ml-4 dropdown d-inline">
                             <Link to="#!" className="btn dropdown-toggle text-white mr-4" type="button" id="dropDownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 

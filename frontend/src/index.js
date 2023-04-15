@@ -7,6 +7,7 @@ import store from './store'
 
 import { positions, transitions, Provider as AlertProvider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic'
+import ChatProvider from "./Context/ChatProvider";
 
 const options = {
   timeout: 5000,
@@ -15,10 +16,12 @@ const options = {
 }
 
 ReactDOM.render(
-  <Provider store={store} >
-    <AlertProvider template={AlertTemplate} {...options}>
-      <App />
-    </AlertProvider>
-  </Provider>,
+    <Provider store={store} >
+      <AlertProvider template={AlertTemplate} {...options}>
+          <ChatProvider>
+            <App />
+          </ChatProvider>
+      </AlertProvider>
+    </Provider>,
   document.getElementById('root')
 );

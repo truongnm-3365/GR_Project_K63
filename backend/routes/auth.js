@@ -87,6 +87,7 @@ router.route('/me/update').put(isAuthenticatedUser, upload.fields([
 
 
 router.route('/admin/users').get(isAuthenticatedUser, authorizeRoles('admin'), allUsers)
+router.route('/user').get(isAuthenticatedUser, authController.allUsersChat)
 router.route('/admin/user/:id')
     .get(isAuthenticatedUser, authorizeRoles('admin'), getUserDetails)
     .put(isAuthenticatedUser, authorizeRoles('admin'), updateUser)

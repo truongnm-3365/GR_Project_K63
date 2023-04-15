@@ -52,6 +52,8 @@ import BannerList from './pages/Dashboard/Banner/BannerList'
 import NewBanner from './pages/Dashboard/Banner/NewBanner'
 import UpdateBanner from './pages/Dashboard/Banner/UpdateBanner'
 import Search from './pages/Search/Search'
+import Chatpage from "./pages/Chat/Chatpage";
+
 
 function App() {
 
@@ -70,7 +72,6 @@ function App() {
 
   }, [])
 
-  const { user, isAuthenticated, loading } = useSelector(state => state.auth)
 
   
 
@@ -80,6 +81,7 @@ function App() {
         <Header />
         <div className="">
           <Route path="/" component={Home} exact />
+          <Route path="/chats" component={Chatpage} />
           <Route path="/search" component={Search} exact />
           <Route path="/course/:id" component={CourseDetails} exact />
           <Route path="/course/:id/lessons"  component={Lessons} exact/>

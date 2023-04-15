@@ -160,7 +160,7 @@ const CoursesList = ({ history }) => {
 
                 <div className="col-12 col-md-10">
                     <Fragment>
-                        <h1 className="my-5">Tất cả các khóa học của tôi</h1>
+                        <h1 className="my-5">Tất cả các khóa học</h1>
                         <div className='float-right m-2'>
                             <Search
                                 placeholder="Nhập vào từ khóa tìm kiếm tên"

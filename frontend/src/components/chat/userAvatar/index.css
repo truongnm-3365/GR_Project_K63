@@ -1,0 +1,18 @@
+.user-list-item{
+    cursor:pointer;
+    background: #E8E8E8;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    color: black;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5%;
+
+}
+
+.user-list-item:hover{
+    background: "#38B2AC";
+    color: white
+}
+
