@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { Route, Link } from 'react-router-dom'
+import { Route, Link, useHistory, useLocation } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
@@ -15,10 +15,13 @@ import { MessageFilled  } from '@ant-design/icons';
 import { ChatState } from "../../Context/ChatProvider";
 import NotificationBadge from "react-notification-badge";
 import { Effect } from "react-notification-badge";
+import { Button } from 'antd'
 
 const Header = () => {
     const alert = useAlert();
     const dispatch = useDispatch();
+    const history = useHistory();
+    const location = useLocation();
 
     const { user, loading } = useSelector(state => state.auth)
     const { categories } = useSelector(state => state.categories);
@@ -53,7 +56,7 @@ const Header = () => {
             dispatch({ type: DELETE_ALL_NOTIFIES_RESET })
         }
 
-    }, [dispatch, alert, error,user,isDeleted,notify])
+    }, [dispatch, alert, error,user,isDeleted,notify,window.location.pathname])
 
     return (
         
@@ -63,8 +66,11 @@ const Header = () => {
                     <div className="navbar-brand" style={{color: 'white'}}>
                         <Link to="/">
                             <img style={{width: '60px'}} src="/images/logo.png" />
-                            Onraincoosu
+                            {location.pathname === '/' && 'Onraincoosu'}
+                            
+                            
                         </Link>
+                        {location.pathname !== '/' && <Button onClick={history.goBack} style={{color:'white'}} type="text"><i class="fa fa-arrow-left" aria-hidden="true"></i><span className='ml-1'>QUAY LẠI</span></Button>}
                     </div>
                     <div className="ml-4 dropdown d-inline dropdown-hover">
                         <Link to="#!" className="btn dropdown-toggle text-white mr-4" type="button" id="dropDownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
