@@ -53,6 +53,9 @@ import NewBanner from './pages/Dashboard/Banner/NewBanner'
 import UpdateBanner from './pages/Dashboard/Banner/UpdateBanner'
 import Search from './pages/Search/Search'
 import Chatpage from "./pages/Chat/Chatpage";
+import ChatBot from './pages/ChatBot/ChatBot'
+import { Link } from 'react-router-dom/cjs/react-router-dom.min'
+import About from './pages/About/About'
 
 
 function App() {
@@ -82,6 +85,7 @@ function App() {
         <div className="">
           <Route path="/" component={Home} exact />
           <Route path="/chats" component={Chatpage} />
+          <Route path="/chatbot" component={ChatBot} />
           <Route path="/search" component={Search} exact />
           <Route path="/course/:id" component={CourseDetails} exact />
           <Route path="/course/:id/lessons"  component={Lessons} exact/>
@@ -94,7 +98,8 @@ function App() {
               <ProtectedRoute path="/payment" component={Payment} />
             </Elements>
           } */}
-
+          
+          <Route path="/about" component={About}/>
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/password/forgot" component={ForgotPassword} exact />

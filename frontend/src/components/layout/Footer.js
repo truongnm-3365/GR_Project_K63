@@ -24,7 +24,7 @@ const Footer = () => {
                             <div className="single-widget widget-about">
                                 <h5 className="widget-title">Onraincoosu</h5>
                                 <img style={{width: '60px', marginBottom:'20px'}} src="/images/logo.png" alt="Logo trang web"/>
-                                <p>Bạn sẽ có một trải nghiệm học tập vô cùng tuyệt vời và <a href="/about">Đọc thêm...</a></p>
+                                <p>Bạn sẽ có một trải nghiệm học tập vô cùng tuyệt vời và <Link to="/about">Đọc thêm...</Link></p>
                             </div>
                         </div>
 

@@ -621,3 +621,31 @@ ul.CTAs a {
   color: grey;
 }
 
+
+.icon-bar {
+  width: 80px;
+  background-color: #555;
+  position: absolute;
+  z-index: 1;
+  top: 60%;
+  left: 10px;
+  border-radius: 10px;
+}
+
+.icon-bar a {
+  display: block;
+  text-align: center;
+  padding: 11px;
+  transition: all 0.3s ease;
+  color: white;
+  font-size: 36px;
+  border-radius: 10px;
+}
+
+.icon-bar a:hover {
+  background-color: #04AA6D;
+}
+
+.active {
+  background-color: #04AA6D;
+}

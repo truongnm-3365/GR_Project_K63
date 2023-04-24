@@ -10,7 +10,7 @@ const Chatpage = () => {
 
   return (
 
-        <div style={{ width: "100%" }}>
+        <div className="container mt-1" style={{border:'1px solid #ccc'}}>
         {user && <SideDrawer />}
         <div className="d-flex justify-content-between" style={{height:"91.5vh",padding:'10px',width:'100%'}}>
           {user && <MyChats fetchAgain={fetchAgain} />}

@@ -45,7 +45,7 @@ const MyChats = ({ fetchAgain }) => {
       >
         <div
           className="pb-3 px-3 d-flex w-100 justify-content-between align-items-center"
-          style={{fontSize:'30px'}}
+          style={{fontSize:'26px'}}
         >
           Tin nhắn của tôi
         </div>
