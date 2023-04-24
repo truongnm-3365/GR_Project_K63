@@ -61,6 +61,12 @@ const Header = () => {
     return (
         
         <Fragment>
+        <div className="icon-bar">
+          <Link className="" to='/chatbot'>
+            <div style={{fontSize:'14px'}}>Chat Bot</div>
+            <i class="fa fa-android" aria-hidden="true"></i>
+          </Link> 
+        </div>
             <nav className="navbar row">
                 <div className="col-12 col-md-3">
                     <div className="navbar-brand" style={{color: 'white'}}>
@@ -72,7 +78,7 @@ const Header = () => {
                         </Link>
                         {location.pathname !== '/' && <Button onClick={history.goBack} style={{color:'white'}} type="text"><i class="fa fa-arrow-left" aria-hidden="true"></i><span className='ml-1'>QUAY LẠI</span></Button>}
                     </div>
-                    <div className="ml-4 dropdown d-inline dropdown-hover">
+                    <div className="ml-1 dropdown d-inline dropdown-hover">
                         <Link to="#!" className="btn dropdown-toggle text-white mr-4" type="button" id="dropDownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span>Thể loại</span>
                         </Link>

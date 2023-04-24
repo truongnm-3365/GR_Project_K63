@@ -66,13 +66,18 @@ const NewCourse = ({ history }) => {
         }
 
         console.log(images)
-        const data = {name,price,description,category,images}
+        const data = {name,price,description,category,images,endDate,startDate}
 
         //console.log(images)
-    
         
 
-        dispatch(newCourse(formData))
+        if(name && price && description && category && images && endDate && startDate){
+            
+            dispatch(newCourse(formData))
+        }else{
+            alert.error('Thông tin khóa học bị thiếu');
+        }
+            
     }
 
     const onChange = e => {
