@@ -34,7 +34,6 @@ import NewLesson from './pages/Dashboard/Courses/Lesson/NewLesson'
 import Lessons from './pages/Course/Lesson'
 import ProtectedRoute from './components/route/ProtectedRoute'
 import { loadUser } from './actions/userActions'
-import { useSelector } from 'react-redux'
 import store from './store'
 import axios from 'axios'
 
@@ -52,7 +51,6 @@ import UpdateBanner from './pages/Dashboard/Banner/UpdateBanner'
 import Search from './pages/Search/Search'
 import Chatpage from "./pages/Chat/Chatpage";
 import ChatBot from './pages/ChatBot/ChatBot'
-import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 import About from './pages/About/About'
 
 
@@ -73,7 +71,6 @@ function App() {
 
   }, [])
 
-
   
 
   return (
@@ -83,6 +80,7 @@ function App() {
         <div className="">
           <Route path="/" component={Home} exact />
           <Route path="/chats" component={Chatpage} />
+          <Route path="/about" component={About}/>
           <Route path="/chatbot" component={ChatBot} />
           <Route path="/search" component={Search} exact />
           <Route path="/course/:id" component={CourseDetails} exact />
@@ -94,9 +92,8 @@ function App() {
             <Elements stripe={loadStripe(stripeApiKey)}>
               <ProtectedRoute path="/payment/:courseId/:amount" component={Payment} />
             </Elements>
-          }
-          
-          <Route path="/about" component={About}/>
+          } 
+
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/password/forgot" component={ForgotPassword} exact />

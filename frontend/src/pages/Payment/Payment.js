@@ -107,7 +107,7 @@ const Payment = ({ history,match }) => {
 
     return (
         <Fragment>
-            <MetaData title={'Payment'} />
+            <MetaData title={'Thanh toán'} />
 
             <CheckoutSteps payment />
 
@@ -151,7 +151,7 @@ const Payment = ({ history,match }) => {
                             type="submit"
                             className="btn btn-block py-3"
                         >
-                            Pay {` - ${amount}`}
+                            Thanh toán {` - ${amount}`}
                         </button>
 
                     </form>

@@ -1,5 +1,5 @@
 const express = require('express');
-const { newBanner, updateBanner, deleteBanner, getBanners, getBanner } = require('../controllers/BannerController');
+const { newBanner, updateBanner, deleteBanner, getBanners, getBanner } = require('../controllers/bannerController');
 const router = express.Router();
 const { isAuthenticatedUser, authorizeRoles } = require('../middlewares/auth');
 const multer = require("multer");
