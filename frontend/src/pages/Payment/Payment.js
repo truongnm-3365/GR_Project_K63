@@ -1,15 +1,16 @@
 import React, { Fragment, useEffect } from 'react'
 
-import MetaData from '../layout/MetaData'
-import CheckoutSteps from './CheckoutSteps'
+import MetaData from '../../components/layout/MetaData'
+import CheckoutSteps from '../../components/payment/CheckoutSteps'
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
-import { createOrder, clearErrors } from '../../actions/orderActions'
+import { clearErrors } from '../../actions/orderActions'
 
 import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js'
 
 import axios from 'axios'
+import { newRegisterCourse } from '../../actions/registerCourseAction'
 
 const options = {
     style: {
@@ -22,15 +23,16 @@ const options = {
     }
 }
 
-const Payment = ({ history }) => {
+const Payment = ({ history,match }) => {
 
     const alert = useAlert();
     const stripe = useStripe();
     const elements = useElements();
     const dispatch = useDispatch();
+    const courseId = match.params.courseId
+    const amount = match.params.amount
 
     const { user } = useSelector(state => state.auth)
-    const { cartItems, shippingInfo } = useSelector(state => state.cart);
     const { error } = useSelector(state => state.newOrder)
 
     useEffect(() => {
@@ -42,21 +44,9 @@ const Payment = ({ history }) => {
 
     }, [dispatch, alert, error])
 
-    const order = {
-        orderItems: cartItems,
-        shippingInfo
-    }
-
-    const orderInfo = JSON.parse(sessionStorage.getItem('orderInfo'));
-    if (orderInfo) {
-        order.itemsPrice = orderInfo.itemsPrice
-        order.shippingPrice = orderInfo.shippingPrice
-        order.taxPrice = orderInfo.taxPrice
-        order.totalPrice = orderInfo.totalPrice
-    }
 
     const paymentData = {
-        amount: Math.round(orderInfo.totalPrice * 100)
+        amount:amount*100
     }
 
     const submitHandler = async (e) => {
@@ -100,17 +90,11 @@ const Payment = ({ history }) => {
 
                 // The payment is processed or not
                 if (result.paymentIntent.status === 'succeeded') {
-
-                    order.paymentInfo = {
-                        id: result.paymentIntent.id,
-                        status: result.paymentIntent.status
-                    }
-
-                    dispatch(createOrder(order))
-
-                    history.push('/success')
+                    dispatch(newRegisterCourse(courseId))
+                    console.log(courseId);
+                    history.push(`/success/${courseId}`)
                 } else {
-                    alert.error('There is some issue while payment processing')
+                    alert.error('Có một số vấn đề trong khi xử lý thanh toán')
                 }
             }
 
@@ -125,14 +109,14 @@ const Payment = ({ history }) => {
         <Fragment>
             <MetaData title={'Payment'} />
 
-            <CheckoutSteps shipping confirmOrder payment />
+            <CheckoutSteps payment />
 
             <div className="row wrapper">
                 <div className="col-10 col-lg-5">
                     <form className="shadow-lg" onSubmit={submitHandler}>
-                        <h1 className="mb-4">Card Info</h1>
+                        <h1 className="mb-4">Thông tin thẻ</h1>
                         <div className="form-group">
-                            <label htmlFor="card_num_field">Card Number</label>
+                            <label htmlFor="card_num_field">Số thẻ</label>
                             <CardNumberElement
                                 type="text"
                                 id="card_num_field"
@@ -142,7 +126,7 @@ const Payment = ({ history }) => {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="card_exp_field">Card Expiry</label>
+                            <label htmlFor="card_exp_field">Thời hạn thẻ</label>
                             <CardExpiryElement
                                 type="text"
                                 id="card_exp_field"
@@ -152,7 +136,7 @@ const Payment = ({ history }) => {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="card_cvc_field">Card CVC</label>
+                            <label htmlFor="card_cvc_field">CVC</label>
                             <CardCvcElement
                                 type="text"
                                 id="card_cvc_field"
@@ -167,7 +151,7 @@ const Payment = ({ history }) => {
                             type="submit"
                             className="btn btn-block py-3"
                         >
-                            Pay {` - ${orderInfo && orderInfo.totalPrice}`}
+                            Pay {` - ${amount}`}
                         </button>
 
                     </form>

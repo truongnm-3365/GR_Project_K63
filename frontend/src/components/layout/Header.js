@@ -61,12 +61,14 @@ const Header = () => {
     return (
         
         <Fragment>
-        <div className="icon-bar">
-          <Link className="" to='/chatbot'>
-            <div style={{fontSize:'14px'}}>Chat Bot</div>
-            <i class="fa fa-android" aria-hidden="true"></i>
-          </Link> 
-        </div>
+        {user &&
+            <div className="icon-bar">
+            <Link className="" to='/chatbot'>
+                <div style={{fontSize:'14px'}}>Chat Bot</div>
+                <i class="fa fa-android" aria-hidden="true"></i>
+            </Link> 
+            </div>
+        }
             <nav className="navbar row">
                 <div className="col-12 col-md-3">
                     <div className="navbar-brand" style={{color: 'white'}}>

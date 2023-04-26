@@ -9,10 +9,8 @@ import CourseDetails from './pages/Course/CourseDetails'
 
 
 import RegisterCourseList from './pages/RegisterCourse/RegisterCourseList'
-import Shipping from './components/cart/Shipping'
-import ConfirmOrder from './components/cart/ConfirmOrder'
-import Payment from './components/cart/Payment'
-import OrderSuccess from './components/cart/OrderSuccess'
+import Payment from './pages/Payment/Payment'
+import OrderSuccess from './components/payment/OrderSuccess'
 
 
 import Login from './pages/User/Login'
@@ -65,13 +63,13 @@ function App() {
   useEffect(() => {
     store.dispatch(loadUser())
 
-    // async function getStripApiKey() {
-    //   const { data } = await axios.get('/api/v1/stripeapi');
+    async function getStripApiKey() {
+      const { data } = await axios.get('/api/v1/stripeapi');
 
-    //   setStripeApiKey(data.stripeApiKey)
-    // }
+      setStripeApiKey(data.stripeApiKey)
+    }
 
-    // getStripApiKey();
+    getStripApiKey();
 
   }, [])
 
@@ -90,14 +88,13 @@ function App() {
           <Route path="/course/:id" component={CourseDetails} exact />
           <Route path="/course/:id/lessons"  component={Lessons} exact/>
           <Route path="/registerCourse" component={RegisterCourseList} exact />
-          <ProtectedRoute path="/shipping" component={Shipping} />
-          <ProtectedRoute path="/confirm" component={ConfirmOrder} exact />
-          <ProtectedRoute path="/success" component={OrderSuccess} />
-          {/* {stripeApiKey &&
+        
+          <ProtectedRoute path="/success/:courseId" component={OrderSuccess} />
+          {stripeApiKey &&
             <Elements stripe={loadStripe(stripeApiKey)}>
-              <ProtectedRoute path="/payment" component={Payment} />
+              <ProtectedRoute path="/payment/:courseId/:amount" component={Payment} />
             </Elements>
-          } */}
+          }
           
           <Route path="/about" component={About}/>
           <Route path="/login" component={Login} />

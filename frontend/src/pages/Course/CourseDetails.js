@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react'
 import Loader from '../../components/layout/Loader'
 import MetaData from '../../components/layout/MetaData'
 import ListReviews from '../../components/review/ListReviews'
-import { Link } from 'react-router-dom'
+import { Link,useHistory } from 'react-router-dom'
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCourseDetails, newReview, clearErrors, getCourseLessons, getCourseTopics } from '../../actions/courseActions'
@@ -19,6 +19,7 @@ const CourseDetails = ({ match }) => {
 
     const [indexTopic,setIndexTopic] = useState(0)
     const dispatch = useDispatch();
+    const history = useHistory();
     const alert = useAlert();
 
     const { loading, error, course } = useSelector(state => state.courseDetails)
@@ -65,7 +66,8 @@ const CourseDetails = ({ match }) => {
 
 
     const addCourse = () =>{
-        dispatch(newRegisterCourse(match.params.id))
+        history.push(`/payment/${match.params.id}/${course.details.price}`)
+        //dispatch(newRegisterCourse(match.params.id))
     }
 
 
