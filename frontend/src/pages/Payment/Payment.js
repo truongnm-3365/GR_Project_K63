@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect } from 'react'
 
 import MetaData from '../../components/layout/MetaData'
-import CheckoutSteps from '../../components/payment/CheckoutSteps'
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,7 +9,8 @@ import { clearErrors } from '../../actions/orderActions'
 import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js'
 
 import axios from 'axios'
-import { newRegisterCourse } from '../../actions/registerCourseAction'
+import { newRegisterCourse,extendCourse } from '../../actions/registerCourseAction'
+import { useLocation } from 'react-router-dom/cjs/react-router-dom.min'
 
 const options = {
     style: {
@@ -23,10 +23,17 @@ const options = {
     }
 }
 
+const useQuery = () => {
+    const { search } = useLocation();
+  
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+}
+
 const Payment = ({ history,match }) => {
 
     const alert = useAlert();
     const stripe = useStripe();
+    const query = useQuery();
     const elements = useElements();
     const dispatch = useDispatch();
     const courseId = match.params.courseId
@@ -45,8 +52,11 @@ const Payment = ({ history,match }) => {
     }, [dispatch, alert, error])
 
 
+    const createdAt = query.get("createdAt") || ""
+    
+
     const paymentData = {
-        amount:amount*100
+        amount:amount*100 === 0 ? 100 : amount*100
     }
 
     const submitHandler = async (e) => {
@@ -90,8 +100,12 @@ const Payment = ({ history,match }) => {
 
                 // The payment is processed or not
                 if (result.paymentIntent.status === 'succeeded') {
-                    dispatch(newRegisterCourse(courseId))
-                    console.log(courseId);
+                    if(createdAt){
+                        dispatch(extendCourse({createdAt}))
+                    }else{
+                        dispatch(newRegisterCourse(courseId))
+                    }
+                     
                     history.push(`/success/${courseId}`)
                 } else {
                     alert.error('Có một số vấn đề trong khi xử lý thanh toán')
@@ -108,8 +122,6 @@ const Payment = ({ history,match }) => {
     return (
         <Fragment>
             <MetaData title={'Thanh toán'} />
-
-            <CheckoutSteps payment />
 
             <div className="row wrapper">
                 <div className="col-10 col-lg-5">

@@ -37,6 +37,14 @@ const registerCourseSchema = new mongoose.Schema({
     completed: {
         type: Boolean,
         default: false
+    },
+
+    timeLimit:{
+        type: Number
+    },
+
+    createdAt: {
+        type:Date
     }
 
 })

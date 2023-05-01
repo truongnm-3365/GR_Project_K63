@@ -25,8 +25,6 @@ import Dashboard from './pages/Dashboard/Dashboard'
 import CoursesList from './pages/Dashboard/Courses/CoursesList'
 import NewCourse from './pages/Dashboard/Courses/NewCourse'
 import UpdateCourse from './pages/Dashboard/Courses/UpdateCourse'
-import OrdersList from './pages/Dashboard/OrdersList'
-import ProcessOrder from './pages/Dashboard/ProcessOrder'
 import UsersList from './pages/Dashboard/Users/UsersList'
 import UpdateUser from './pages/Dashboard/Users/UpdateUser'
 import CourseReviews from './pages/Dashboard/CourseReview/CourseReviews'
@@ -52,6 +50,9 @@ import Search from './pages/Search/Search'
 import Chatpage from "./pages/Chat/Chatpage";
 import ChatBot from './pages/ChatBot/ChatBot'
 import About from './pages/About/About'
+import FinalTest from './pages/FinalTest/FinalTest'
+import FinalResult from './pages/FinalTest/FinalResult'
+import CompletedCourse from './pages/CompletedCourse/CompletedCourse'
 
 
 function App() {
@@ -85,7 +86,10 @@ function App() {
           <Route path="/search" component={Search} exact />
           <Route path="/course/:id" component={CourseDetails} exact />
           <Route path="/course/:id/lessons"  component={Lessons} exact/>
+          <Route path="/course/:id/finalexam/:examId"  component={FinalTest} exact/>
+          <Route path="/course/:id/finalexam/:examId/result"  component={FinalResult} exact/>
           <Route path="/registerCourse" component={RegisterCourseList} exact />
+          <Route path="/completedCourse" component={CompletedCourse} exact />
         
           <ProtectedRoute path="/success/:courseId" component={OrderSuccess} />
           {stripeApiKey &&
@@ -113,8 +117,6 @@ function App() {
         <ProtectedRoute path="/me/course/:id/documents" isAdmin={false} component={NewDocument} exact />
         <ProtectedRoute path="/me/course/:id/topics" isAdmin={false} component={NewTopic} exact />
         <ProtectedRoute path="/me/topic/:id/quizs" isAdmin={false} component={NewQuiz} exact />
-        <ProtectedRoute path="/admin/orders" isAdmin={true} component={OrdersList} exact />
-        <ProtectedRoute path="/admin/order/:id" isAdmin={true} component={ProcessOrder} exact />
         <ProtectedRoute path="/admin/users" isAdmin={true} component={UsersList} exact />
         <ProtectedRoute path="/admin/user/:id" isAdmin={true} component={UpdateUser} exact />
         <ProtectedRoute path="/admin/reviews" isAdmin={true} component={CourseReviews} exact />

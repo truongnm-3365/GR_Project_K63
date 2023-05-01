@@ -15,7 +15,8 @@ const storage = multer.diskStorage({
       if (!fs.existsSync("public/banners")) {
         fs.mkdirSync("public/banners");
       }
-  
+      
+
       cb(null, "public/banners");
     },
     filename: function (req, file, cb) {

@@ -11,8 +11,21 @@ const topicSchema = new mongoose.Schema({
         required: true
     },
 
-
+    isFinalTest:{
+        type: Boolean,
+        default: false
+    },
     
+    isPassed:{
+        type: Boolean,
+        default: false
+    },
+
+    user:{
+      type: mongoose.Schema.ObjectId,
+      ref: 'User'
+    },
+
     createdAt: {
         type: Date,
         default: Date.now

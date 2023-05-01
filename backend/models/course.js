@@ -81,6 +81,16 @@ const courseSchema = new mongoose.Schema({
         type:Date
     },
     
+
+    timeLimitFinalExam:{
+        type:Number
+    },
+
+    timeLimit:{
+        type:Number,
+        require:true
+    },
+
     createdAt: {
         type: Date,
         default: Date.now

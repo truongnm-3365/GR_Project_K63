@@ -21,6 +21,8 @@ const NewCourse = ({ history }) => {
     const [images, setImages] = useState([]);
     const [startDate,setStartDate] = useState('');
     const [endDate,setEndDate] = useState('');
+    const [timeLimitFinalExam,setTimeLimitFinalExam] = useState(0);
+    const [timeLimit,setTimeLimit] = useState(0);
    
     const [imagesPreview, setImagesPreview] = useState([])
 
@@ -58,9 +60,10 @@ const NewCourse = ({ history }) => {
         formData.append('price', price);
         formData.append('description', description);
         formData.append('category', category);
-        formData.append('startDate',startDate);
-        formData.append('endDate',endDate);
-
+        // formData.append('startDate',startDate);
+        // formData.append('endDate',endDate);
+        formData.append('timeLimitFinalExam',timeLimitFinalExam)
+        formData.append('timeLimit',timeLimit)
         for (let key in images) {
             formData.append("images", images[key]);
         }
@@ -71,7 +74,7 @@ const NewCourse = ({ history }) => {
         //console.log(images)
         
 
-        if(name && price && description && category && images && endDate && startDate){
+        if(name && price && description && category && images &&  timeLimit){
             
             dispatch(newCourse(formData))
         }else{
@@ -130,7 +133,7 @@ const NewCourse = ({ history }) => {
                                 <div className="form-group">
                                     <label htmlFor="price_field">Giá</label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         id="price_field"
                                         className="form-control"
                                         value={price}
@@ -153,7 +156,29 @@ const NewCourse = ({ history }) => {
                                     </select>
                                 </div>
 
-                                <div className='form-group'>
+                                <div className="form-group">
+                                    <label htmlFor="exam_field">Thời gian bài kiểm tra cuối khóa (phút)</label>
+                                    <input
+                                        type="number"
+                                        id="exam_field"
+                                        className="form-control"
+                                        value={timeLimitFinalExam}
+                                        onChange={(e) => setTimeLimitFinalExam(e.target.value)}
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="time_field">Thời hạn khóa học (tháng)</label>
+                                    <input
+                                        type="number"
+                                        id="time_field"
+                                        className="form-control"
+                                        value={timeLimit}
+                                        onChange={(e) => setTimeLimit(e.target.value)}
+                                    />
+                                </div>
+
+                                {/* <div className='form-group'>
                                     <label htmlFor='startDate_field'>Ngày bắt đầu</label>
                                     <input
                                         type='date'
@@ -170,7 +195,7 @@ const NewCourse = ({ history }) => {
                                         className='form-control'
                                         onChange={(e) => setEndDate(e.target.value)}
                                     />
-                                </div>
+                                </div> */}
 
 
                                 <div className='form-group'>

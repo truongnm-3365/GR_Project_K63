@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { NEW_TOPIC_RESET,DELETE_TOPIC_RESET, UPDATE_TOPIC_RESET } from '../../../../constants/courseConstants'
 import TopicForm from "./TopicForm";
 import TopicList from "./TopicList";
+import FinalTestTopicForm from "./FinalTestTopicForm";
 
 const NewTopic = ({match}) => {
   const alert = useAlert();
@@ -16,6 +17,16 @@ const NewTopic = ({match}) => {
   const { loading, topics,error } = useSelector(state => state.courseTopics)
   const { error: topicError, success } = useSelector(state => state.newTopic)
   const { error: crudError, isDeleted, isUpdated } = useSelector(state => state.topic)
+
+  const isHaveFinalTest = () =>{
+
+    for(let i = 0; i< topics.length; i++){
+      if(topics[i].isFinalTest === true){
+        return true
+      }
+    }
+    return false
+  }
   useEffect(() => {
     dispatch(getCourseTopics(match.params.id))
 
@@ -77,6 +88,11 @@ const NewTopic = ({match}) => {
                 <div className="card-body">
                   <TopicForm courseId={match.params.id} newTopic={newTopic}/>
                 </div>
+                {!isHaveFinalTest() &&
+                <div className="card-body">
+                  <FinalTestTopicForm courseId={match.params.id} newTopic={newTopic}/>
+                </div>}
+                
               </div>
             </div>
             <div className="col-md-7">

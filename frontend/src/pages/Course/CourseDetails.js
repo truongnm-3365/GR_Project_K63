@@ -7,7 +7,7 @@ import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCourseDetails, newReview, clearErrors, getCourseLessons, getCourseTopics } from '../../actions/courseActions'
 import { NEW_REVIEW_RESET } from '../../constants/courseConstants'
-import { getMeRegisterCourses, newRegisterCourse } from '../../actions/registerCourseAction'
+import { extendCourse, getMeRegisterCourses, newRegisterCourse } from '../../actions/registerCourseAction'
 import { NEW_REGISTER_COURSE_RESET } from '../../constants/registerCourseContants'
 import { Collapse } from 'antd'
 import './index.css'
@@ -35,9 +35,12 @@ const CourseDetails = ({ match }) => {
         return "ngày " + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + ' tháng ' + ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + ' năm ' +  date.getFullYear()
     }
 
+
     useEffect(() => {
         dispatch(getCourseDetails(match.params.id))
-        dispatch(getMeRegisterCourses())
+        if(user){
+            dispatch(getMeRegisterCourses())
+        }
         dispatch(getCourseLessons(match.params.id))
         dispatch(getCourseTopics(match.params.id))
         if (error) {
@@ -64,20 +67,83 @@ const CourseDetails = ({ match }) => {
     }, [dispatch, alert, error, reviewError, match.params.id,success,newSuccess])
 
 
+    const checkCompletedCourse = () =>{
+        for(let i = 0; i < topics?.length; i++){
+            if(topics[i].isPassed === true && topics[i].user === user?._id){
+                return  true
+            }
+        }
+        return false
+    }
+
+    const userCreatedAt = () =>{
+        if(user){
+            for(let i =0; i < registerCourses?.length; i++){
+                if(registerCourses[i].course === match.params.id){
+                    return registerCourses[i].createdAt
+                }
+            }
+            return ""
+        }
+        return ""
+    }
 
     const addCourse = () =>{
         history.push(`/payment/${match.params.id}/${course.details.price}`)
         //dispatch(newRegisterCourse(match.params.id))
     }
 
+    const extentionCourse = (item) =>{
+        history.push(`/payment/${match.params.id}/${course.details.price}?createdAt=${userCreatedAt()}`)
+        
+    }
+
+
+
 
     const isRegister = () =>{
-        for(let i =0; i < registerCourses?.length; i++){
-            if(registerCourses[i].course === match.params.id){
-                return true
+        if(user){
+            for(let i =0; i < registerCourses?.length; i++){
+                if(registerCourses[i].course === match.params.id){
+                    return true
+                }
             }
+            return false
         }
         return false
+
+    }
+
+
+
+    const expriedDate = () =>{
+        for(let i =0; i < registerCourses?.length; i++){
+            if(registerCourses[i].course === match.params.id){
+                const day = new Date(registerCourses[i].createdAt)
+                day.setDate(day.getDate() + course.details.timeLimit*31)
+                const yyyy = day.getFullYear();
+                let mm = day.getMonth() + 1; // Months start at 0!
+                let dd = day.getDate();
+        
+                if (dd < 10) dd = '0' + dd;
+                if (mm < 10) mm = '0' + mm;
+                const formattedDate = dd + '/' + mm + '/' + yyyy;
+        
+                return formattedDate
+            }
+        }
+    }
+
+    const expriedDay = () =>{
+        for(let i =0; i < registerCourses?.length; i++){
+            if(registerCourses[i].course === match.params.id){
+                const day = new Date(registerCourses[i].createdAt)
+                day.setDate(day.getDate() + course.details.timeLimit*31)
+                console.log(day);
+                console.log(new Date(registerCourses[i].createdAt))
+                return day;
+            }
+        }
     }
 
     function setUserRatings() {
@@ -133,6 +199,7 @@ const CourseDetails = ({ match }) => {
         dispatch(newReview(formdata));
     }
 
+    console.log(course);
 
     return (
         <Fragment>
@@ -195,6 +262,7 @@ const CourseDetails = ({ match }) => {
                     </div>
 
                         <div className="col-12 col-lg-5 mt-5">
+                            {checkCompletedCourse() && <div className="alert alert-success mt-5" type='alert'>Khóa học này đã được hoàn thành</div> }
                             <h3>{course.details.name}</h3>
                             <p id="course_id">Khóa học # {course.details._id}</p>
 
@@ -208,29 +276,34 @@ const CourseDetails = ({ match }) => {
                             <hr />
 
                             <p id="course_price">{course.details.price} ĐỒNG</p>
-                            {new Date() > new Date(course.details.startDate) && new Date() < new Date(course.details.endDate) ? 
-                            <>
+
                             {
                                 isRegister() ? 
                                 <>
-                                <button type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" >Đã đăng ký</button>
-                                <Link to={`/course/${course.details._id}/lessons`}>
-                                    <button type="button" id="cart_btn" className="btn btn-danger d-inline ml-4" >Xem khóa học</button>
-                                
-                                </Link>
+                                    {new Date() < expriedDay() ? 
+            
+                                    <>
+                                        <button type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" >Đã đăng ký</button>
+                                        <Link to={`/course/${course.details._id}/lessons`}>
+                                            <button type="button" id="cart_btn" className="btn btn-danger d-inline ml-4" >Xem khóa học</button>
+                                        
+                                        </Link>
+                                    </> 
+                                    :<div>
+                                        <div className="alert alert-danger mt-5" type='alert'>Khóa học đã hết hạn</div>
+                                        <button onClick={() => extentionCourse()} type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" >Gia hạn khóa học</button>
+                                    </div>
+
+                                    }
                                 </>
                                 :<>
                                 {user ?
                                     <button onClick={() => addCourse()} type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" >Đăng ký học</button>
                                 :  <div className="alert alert-danger mt-5" type='alert'>Đăng nhập để đăng ký khóa học</div> }
                                 </>                                
-                               }
+                            }
 
-
-                            </>
-                            :
-                            <div className="alert alert-danger mt-5" type='alert'>Khóa học hiện tại nằm ngoài khoảng thời gian khả dụng</div>
-                            }                           
+                        
 
                             <hr />
 
@@ -245,13 +318,21 @@ const CourseDetails = ({ match }) => {
                             <hr />
                             {/* <p id="course_seller mb-3">Sold by: <strong>{course.seller}</strong></p> */}
 
-                             <h4 className='mt-2'>Thời gian</h4>
-                             <p>Ngày bắt đầu: {formatDate(course.details.startDate)}</p> 
-                             <p>Ngày kết thúc: {formatDate(course.details.endDate)}</p>       
-                            {user ? <button id="review_btn" type="button" className="btn btn-primary mt-4" data-toggle="modal" data-target="#ratingModal" onClick={setUserRatings}>
-                                Gửi đánh giá
-                            </button>
-                                :
+                            {isRegister() && <h4 className='mt-2'>Thời gian</h4>}
+                             {/* <p>Ngày bắt đầu: {formatDate(course.details.startDate)}</p> 
+                             <p>Ngày kết thúc: {formatDate(course.details.endDate)}</p>        */}
+                             { isRegister() && <p>Ngày hết hạn: {expriedDate()}</p>}
+                            {user ? 
+                            ( 
+                                checkCompletedCourse() ? 
+                                <button id="review_btn" type="button" className="btn btn-primary mt-4" data-toggle="modal" data-target="#ratingModal" onClick={setUserRatings}>
+                                    Gửi đánh giá
+                                </button> 
+                                : 
+                                <div className="alert alert-info mt-5" type='alert'>Hoàn thành xong khóa học để đánh giá</div>
+                            )
+                            
+                            :
                                 <div className="alert alert-danger mt-5" type='alert'>Đăng nhập để viết đánh giá</div>
                             }
 

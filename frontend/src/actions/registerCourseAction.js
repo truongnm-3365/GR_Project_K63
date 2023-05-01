@@ -124,6 +124,33 @@ export const completedVideo = (videoData) => async (dispatch) => {
     }
 }
 
+export const extendCourse = (course) => async (dispatch) => {
+    try {
+
+        dispatch({ type: UPDATE_REGISTER_COURSE_REQUEST })
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        const { data } = await axios.put(`/api/v1/courseExtend`,course,config)
+
+        dispatch({
+            type: UPDATE_REGISTER_COURSE_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+
+
+        dispatch({
+            type: UPDATE_REGISTER_COURSE_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
 
 export const deleteRegisterCourse = (id) => async (dispatch) => {
     try {

@@ -18,6 +18,8 @@ const UpdateCourse = ({ match, history }) => {
     const [images, setImages] = useState([]);
     const [startDate,setStartDate] = useState('');
     const [endDate,setEndDate] = useState('');
+    const [timeLimitFinalExam,setTimeLimitFinalExam] = useState(0);
+    const [timeLimit,setTimeLimit] = useState(0);
 
     const [oldImages, setOldImages] = useState([]);
     const [imagesPreview, setImagesPreview] = useState([])
@@ -79,8 +81,10 @@ const UpdateCourse = ({ match, history }) => {
         formData.append('description', description ? description : course.details.description);
         formData.append('category', category ? category : course.details.category);
 
-        formData.append('startDate',startDate ? startDate : course.details.startDate);
-        formData.append('endDate',endDate ? endDate : course.details.endDate);
+        // formData.append('startDate',startDate ? startDate : course.details.startDate);
+        // formData.append('endDate',endDate ? endDate : course.details.endDate);
+        formData.append('timeLimitFinalExam',timeLimitFinalExam ? timeLimitFinalExam : course.details.timeLimitFinalExam);
+        formData.append('timeLimit',timeLimit ? timeLimit : course.details.timeLimit);
 
         
 
@@ -150,7 +154,7 @@ const UpdateCourse = ({ match, history }) => {
                                         type="text"
                                         id="name_field"
                                         className="form-control"
-                                        value={course.details.name}
+                                        defaultValue={course.details.name}
                                         onChange={(e) => setName(e.target.value)}
                                     />
                                 </div>
@@ -158,10 +162,10 @@ const UpdateCourse = ({ match, history }) => {
                                 <div className="form-group">
                                     <label htmlFor="price_field">Giá</label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         id="price_field"
                                         className="form-control"
-                                        value={course.details.price}
+                                        defaultValue={course.details.price}
                                         onChange={(e) => setPrice(e.target.value)}
                                     />
                                 </div>
@@ -181,7 +185,30 @@ const UpdateCourse = ({ match, history }) => {
                                     </select>
                                 </div>
 
-                                <div className='form-group'>
+                                <div className="form-group">
+                                    <label htmlFor="exam_field">Thời gian bài kiểm tra cuối khóa (phút)</label>
+                                    <input
+                                        type="number"
+                                        id="exam_field"
+                                        className="form-control"
+                                        defaultValue={course.details.timeLimitFinalExam}
+                                        onChange={(e) => setTimeLimitFinalExam(e.target.value)}
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="time_field">Thời hạn khóa học (tháng)</label>
+                                    <input
+                                        step="any"
+                                        type="number"
+                                        id="time_field"
+                                        className="form-control"
+                                        defaultValue={course.details.timeLimit}
+                                        onChange={(e) => setTimeLimit(e.target.value)}
+                                    />
+                                </div>
+
+                                {/* <div className='form-group'>
                                     <label htmlFor='startDate_field'>Ngày bắt đầu</label>
                                     <input
                                         type='date'
@@ -200,7 +227,7 @@ const UpdateCourse = ({ match, history }) => {
                                         defaultValue={course.details.endDate ? new Date(course.details.endDate).toISOString().substr(0, 10) : ""}
                                         onChange={onChangeEndDate}
                                     />
-                                </div>
+                                </div> */}
 
                                 <div className='form-group'>
                                     <label>Ảnh</label>

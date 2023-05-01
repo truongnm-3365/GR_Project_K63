@@ -12,7 +12,7 @@ const OrderSuccess = ({match}) => {
                 <div className="col-6 mt-5 text-center">
                     <img className="my-5 img-fluid d-block mx-auto" src="/images/order_success.png" alt="Order Success" width="200" height="200" />
 
-                    <h2>Đăng ký khóa học thành công.</h2>
+                    <h2>Thanh toán thành công.</h2>
 
                     <Link to={`/course/${match.params.courseId}`}>Quay lại khóa học</Link>
                 </div>

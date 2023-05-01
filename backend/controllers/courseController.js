@@ -42,7 +42,7 @@ exports.newCourse = catchAsyncErrors(async (req, res, next) => {
 // Get all courses   =>   /api/v1/courses?keyword=apple
 exports.getCourses = catchAsyncErrors(async (req, res, next) => {
 
-    const resPerPage = 4;
+    const resPerPage = 8;
     const coursesCount = await Course.countDocuments({accepted: true});
 
     const apiFeatures = new APIFeatures(Course.find({accepted: true}).sort({ createdAt:-1}), req.query)
@@ -54,13 +54,17 @@ exports.getCourses = catchAsyncErrors(async (req, res, next) => {
     apiFeatures.pagination(resPerPage)
     courses = await apiFeatures.query;
     const registerCourse = await RegisterCourse.find();
+    
 
     let coursesTmp = courses.map((course) => {
         let users = registerCourse.filter(item => item.course.toString() === course._id.toString())
         users = users.map(item => item.user.toString())
         users = [...new Set(users)]
+        
         return {...course._doc,users}
     })
+
+   
     
 
     res.status(200).json({
@@ -73,10 +77,10 @@ exports.getCourses = catchAsyncErrors(async (req, res, next) => {
 
 })
 
-// Get all courses (Admin)  =>   /api/v1/admin/courses
+
 exports.getMeCourses = catchAsyncErrors(async (req, res, next) => {
     const courses = await Course.find({user: req.params.userId});
-
+   
     res.status(200).json({
         success: true,
         courses
@@ -104,6 +108,7 @@ exports.getRegularCourses = catchAsyncErrors(async (req, res, next) => {
         let users = registerCourse.filter(item => item.course.toString() === course._id.toString())
         users = users.map(item => item.user.toString())
         users = [...new Set(users)]
+        
         return {...course._doc,users}
     })
     
@@ -156,6 +161,7 @@ exports.getSingleCourse = catchAsyncErrors(async (req, res, next) => {
     }
 
     const user = await User.findById(courseDetails.user)
+
 
     let course = {
         details:courseDetails,
@@ -336,10 +342,7 @@ exports.deleteReview = catchAsyncErrors(async (req, res, next) => {
 
 exports.newTopic = catchAsyncErrors(async (req, res, next) => {
 
-    const {name, courseId} = req.body
-
-
-    const topic = await Topic.create({name,courseId});
+    const topic = await Topic.create(req.body);
 
     res.status(201).json({
         success: true,
@@ -350,9 +353,16 @@ exports.newTopic = catchAsyncErrors(async (req, res, next) => {
 exports.getCourseTopic = catchAsyncErrors(async (req, res, next) => {
     const topics = await Topic.find({courseId: req.params.courseId});
 
+    let topicsTmp = topics.filter(item => item.isFinalTest === false)
+
+    let topicFinalTest = topics.filter(item => item.isFinalTest === true)
+
+    topicsTmp = topicsTmp.concat(topicFinalTest)
+
+
     res.status(200).json({
         success: true,
-        topics
+        topics:topicsTmp
     })
 
 })
@@ -373,7 +383,7 @@ exports.deleteTopic = catchAsyncErrors(async (req, res, next) => {
     })
   });
 
-  exports.updateTopic = catchAsyncErrors(async (req, res, next) => {
+exports.updateTopic = catchAsyncErrors(async (req, res, next) => {
 
     let topic = await Topic.findById(req.params.id);
 

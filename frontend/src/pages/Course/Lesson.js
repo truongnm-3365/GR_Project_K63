@@ -11,10 +11,13 @@ import ListReviews from "../../components/review/ListReviews";
 import { NEW_REGISTER_COURSE_RESET } from "../../constants/registerCourseContants";
 import { comleteVideo, completedVideo, getMeRegisterCourses } from "../../actions/registerCourseAction";
 
+import { useHistory } from "react-router-dom";
+
 
 const Lessons = ({match}) => {
   const { Panel } = Collapse;
   const dispatch = useDispatch();
+  const history = useHistory();
   const alert = useAlert()
   const { loading, lessons,error } = useSelector(state => state.courseLessons)
   const { error: lessonError, success } = useSelector(state => state.newLesson)
@@ -64,7 +67,7 @@ const Lessons = ({match}) => {
 
   const { completeVideos } = useSelector(state => state.registerCourses)
   const { success: complete } = useSelector(state => state.newRegisterCourse)
-  const { isUpdated } = useSelector(state => state.registerCourse)
+  const { loading:videoLoading, isUpdated } = useSelector(state => state.registerCourse)
   
 
 
@@ -98,11 +101,11 @@ const Lessons = ({match}) => {
       dispatch({ type: NEW_REVIEW_RESET })
   } 
   
-  if (complete || isUpdated) {
+  if (complete || isUpdated ) {
     dispatch({type: NEW_REGISTER_COURSE_RESET})
   }
    
-}, [dispatch, alert, error,lessonError,success,match.params.id,checked,checkedExercise,reviewSuccess,complete,isUpdated])
+}, [dispatch, alert, error,lessonError,success,match.params.id,checked,checkedExercise,reviewSuccess,complete,isUpdated,videoLoading])
   
 
 function setUserRatings() {
@@ -182,11 +185,32 @@ const checkCompletedVideo = (mediaId) =>{
 
 }
 
+
+
 const checkCompletedTopic = (topicId) =>{
+
   if(completeVideos && user){
     const completedVideos = completeVideos.filter(item => item.topic === topicId && item.user === user._id)
     if(completedVideos.length === 0){
       return false;
+    }
+    console.log(completeVideos);
+    for(let i = 0; i < completedVideos.length;  i++){
+      if(!completedVideos[i].completed){
+        return false
+      }
+    }
+    return true
+  }
+
+}
+
+const checkCompletedAllVideo = () =>{
+
+  if(completeVideos && user){
+    const completedVideos = completeVideos.filter(item => item.user === user._id)
+    if(completedVideos.length === 0){
+      return true;
     }
     for(let i = 0; i < completedVideos.length;  i++){
       if(!completedVideos[i].completed){
@@ -198,14 +222,28 @@ const checkCompletedTopic = (topicId) =>{
 
 }
 
+const checkCompletedCourse = () =>{
+  for(let i = 0; i < topics?.length; i++){
+      if(topics[i].isPassed === true && topics[i].user === user._id){
+          return  true
+      }
+  }
+  return false
+}
+
+
+
+
+
 
 return (
     <>
         {loading  ? <Loader/> :
         <div className="container">        
         <div className="row mt-5">
-        {exercise === false && lessons.length !== 0 &&
+        {exercise === false  && lessons.length !== 0 &&
               <div className="col-md-8">
+                
                 <video
                     onEnded={() => {
                       if(lessons[index +1]){
@@ -215,6 +253,8 @@ return (
                           media: lessons[index + 1]._id
                         }
                         dispatch(comleteVideo(data))
+                      }else{
+                        
                       }
 
 
@@ -230,11 +270,13 @@ return (
                   >
                     <source src={ lessons[index] ? lessons[index].videos : ""} />
                 </video>
+                <h3 className="mt-2">{lessons[index].name}</h3>
             
               </div>
             } 
 
             {exercise ? <Quiz quizs={quizs}/> : ''}
+
       <div className="col-md-4">
           <div className="season_tabs">
             {topics[indexTopic] &&
@@ -283,13 +325,25 @@ return (
 
                     })}
                   {
-                  checkCompletedTopic(topic._id) ?  
+                  checkCompletedTopic(topic._id) || checkCompletedAllVideo() ?  
                   <div className="season_tab">
-                      <input  onChange={() => {setExercise(true) ; dispatch(getTopicQuizs(topic._id)); onChangeCheckedExercise(indexTopic);setIndexTopic(indexTopic)}} type="radio" id={`tabb-${indexTopic}`} name={`tab-group-1`} checked={checkedExercise[indexTopic]}/> 
+                    {topic.isFinalTest ?
+                    <> 
+                      <label className="d-flex justify-content-between" htmlFor={`tabb-${indexTopic}`}>
+                        <span onClick={() => history.push(`/course/${match.params.id}/finalexam/${topic._id}`)}>Bài kiểm tra cuối khóa</span>
+                        
+                      </label>
+                    </>
+                    :
+                    <>
+                    <input  onChange={() => {setExercise(true) ; dispatch(getTopicQuizs(topic._id)); onChangeCheckedExercise(indexTopic);setIndexTopic(indexTopic)}} type="radio" id={`tabb-${indexTopic}`} name={`tab-group-1`} checked={checkedExercise[indexTopic]}/>
                     <label className="d-flex justify-content-between" htmlFor={`tabb-${indexTopic}`}>
                         <span>Bài tập</span>
                         
                     </label>
+                    </>
+                    }
+
                     
                       
                   </div>
@@ -358,11 +412,11 @@ return (
           }
           </div>
           <div className="mt-5">
-            {user ? <button id="review_btn" type="button" className="btn btn-primary mb-2" data-toggle="modal" data-target="#ratingModal" onClick={setUserRatings}>
+            {user && checkCompletedCourse() ? <button id="review_btn" type="button" className="btn btn-primary mb-2" data-toggle="modal" data-target="#ratingModal" onClick={setUserRatings}>
             Gửi đánh giá
             </button>
                                 :
-            <div className="alert alert-danger mt-5" type='alert'>Đăng nhập để viết đánh giá</div>
+            <div className="alert alert-info mt-5" type='alert'>Hoàn thành khóa học để viết đánh giá</div>
             }
             <div className="row mt-2" style={{height:'0px'}}>
               <div className="rating w-50">
