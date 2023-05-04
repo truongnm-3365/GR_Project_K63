@@ -34,6 +34,8 @@ const category = require("./routes/category")
 const banner = require("./routes/banner")
 const chatRoutes = require("./routes/chat")
 const messageRoutes = require("./routes/message")
+const questionRoutes = require("./routes/questions");
+const answerRoutes = require("./routes/answers");
 
 app.use('/api/v1/media', mediaRoutes);
 app.use('/api/v1/document', documentRoutes);
@@ -50,6 +52,8 @@ app.use('/api/v1',category)
 app.use('/api/v1',banner)
 app.use("/api/v1/chat", chatRoutes);
 app.use("/api/v1/message", messageRoutes);
+app.use("/api/v1/questions", questionRoutes);
+app.use("/api/v1/answer", answerRoutes);
 
 if (process.env.NODE_ENV === 'PRODUCTION') {
     app.use(express.static(path.join(__dirname, '../frontend/build')))

@@ -10,6 +10,7 @@ import { newOrderReducer, myOrdersReducer, orderDetailsReducer, allOrdersReducer
 import { newRegisterCourseReducer, RegisterCourseReducer, registerCoursesReducer } from './reducers/registerCourseReducer';
 import { categoriesReducer, categoryDetailsReducer, categoryReducer, newCategoryReducer } from './reducers/categoryReducer';
 import { bannerDetailsReducer, bannerReducer, bannersReducer, newBannerReducer } from './reducers/bannerReducer';
+import questionsReducer from './reducers/questionReducer';
 
 
 const reducer = combineReducers({
@@ -57,7 +58,8 @@ const reducer = combineReducers({
     newBanner: newBannerReducer,
     banner: bannerReducer,
     bannerDetails: bannerDetailsReducer,
-    profile: profileReducer
+    profile: profileReducer,
+    questionsReducer: questionsReducer
 })
 
 

@@ -67,6 +67,10 @@ const Header = () => {
                 <div style={{fontSize:'14px'}}>Chat Bot</div>
                 <i class="fa fa-android" aria-hidden="true"></i>
             </Link> 
+            <Link className="" to='/forum'>
+                <div style={{fontSize:'14px'}}>Diễn đàn hỏi đáp</div>
+                <i class="fa fa-question" aria-hidden="true"></i>
+            </Link> 
             </div>
         }
             <nav className="navbar row">

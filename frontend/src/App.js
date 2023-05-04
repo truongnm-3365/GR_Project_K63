@@ -53,6 +53,11 @@ import About from './pages/About/About'
 import FinalTest from './pages/FinalTest/FinalTest'
 import FinalResult from './pages/FinalTest/FinalResult'
 import CompletedCourse from './pages/CompletedCourse/CompletedCourse'
+import { fetchAllQuestions } from './actions/questionAction'
+import { useDispatch } from 'react-redux'
+import Forum from './pages/Forum/Forum'
+import AskQuestion from './pages/AskQuestion/AskQuestion'
+import DisplayQuestion from './pages/Questions/DisplayQuestion'
 
 
 function App() {
@@ -85,11 +90,11 @@ function App() {
           <Route path="/chatbot" component={ChatBot} />
           <Route path="/search" component={Search} exact />
           <Route path="/course/:id" component={CourseDetails} exact />
-          <Route path="/course/:id/lessons"  component={Lessons} exact/>
-          <Route path="/course/:id/finalexam/:examId"  component={FinalTest} exact/>
-          <Route path="/course/:id/finalexam/:examId/result"  component={FinalResult} exact/>
-          <Route path="/registerCourse" component={RegisterCourseList} exact />
-          <Route path="/completedCourse" component={CompletedCourse} exact />
+          <ProtectedRoute path="/course/:id/lessons"  component={Lessons} exact/>
+          <ProtectedRoute path="/course/:id/finalexam/:examId"  component={FinalTest} exact/>
+          <ProtectedRoute path="/course/:id/finalexam/:examId/result"  component={FinalResult} exact/>
+          <ProtectedRoute path="/registerCourse" component={RegisterCourseList} exact />
+          <ProtectedRoute path="/completedCourse" component={CompletedCourse} exact />
         
           <ProtectedRoute path="/success/:courseId" component={OrderSuccess} />
           {stripeApiKey &&
@@ -126,6 +131,10 @@ function App() {
         <ProtectedRoute path="/admin/banners" isAdmin={false} component={BannerList} exact />
         <ProtectedRoute path="/admin/banner/new" isAdmin={false} component={NewBanner} exact />
         <ProtectedRoute path="/admin/banner/update/:id" isAdmin={false} component={UpdateBanner} exact />
+
+        <Route path="/forum" component={Forum} exact/>
+        <Route path="/forum/ask" component={AskQuestion} exact />
+        <Route path="/forum/questions/:id" component={DisplayQuestion} exact/>
 
        
         <Footer />

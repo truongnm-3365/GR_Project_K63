@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import MetaData from '../../components/layout/MetaData'
@@ -9,8 +9,12 @@ import { addItemToCart, removeItemFromCart } from '../../actions/cartActions'
 import { getMeRegisterCourses,newRegisterCourse,deleteRegisterCourse } from '../../actions/registerCourseAction'
 import { useEffect } from 'react'
 import { DELETE_REGISTER_COURSE_RESET } from '../../constants/registerCourseContants'
-import { Tag } from 'antd'
+import { Pagination, Tag } from 'antd'
 const CourseList = ({ history }) => {
+
+    const [currentPage, setCurrentPage ] = useState(1);
+
+    const pageSize = 10
 
     const dispatch = useDispatch();
 
@@ -62,7 +66,7 @@ const CourseList = ({ history }) => {
                     <div className="row d-flex justify-content-between">
                         <div className="col-12 col-lg-12">
 
-                            {registerCourses && registerCourses.map(item => (
+                            {registerCourses && registerCourses.filter((item,index) => index >= (currentPage - 1)*pageSize & index <= (currentPage*pageSize - 1) ).map(item => (
                                 <Fragment>
                                     <hr />
 
@@ -104,8 +108,15 @@ const CourseList = ({ history }) => {
                                     <hr />
                                 </Fragment>
                             ))}
-
+                            <Pagination
+                                style={{float:'right',marginTop:'10px'}} 
+                                onChange={(page) => setCurrentPage(page)} 
+                                defaultCurrent={1} 
+                                total={registerCourses.length} 
+                                pageSize={pageSize} 
+                            />
                         </div>
+
 {/* 
                         <div className="col-12 col-lg-3 my-4">
                             <div id="order_summary">
