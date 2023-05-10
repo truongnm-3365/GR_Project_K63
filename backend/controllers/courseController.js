@@ -11,6 +11,7 @@ const fs = require('fs');
 const Topic = require('../models/topic');
 const Quiz = require('../models/quiz');
 const RegisterCourse = require('../models/registerCourse');
+const Note = require('../models/note');
 
 // Create new course   =>   /api/v1/admin/course/new
 exports.newCourse = catchAsyncErrors(async (req, res, next) => {
@@ -466,6 +467,68 @@ exports.deleteTopicQuiz = catchAsyncErrors(async (req, res, next) => {
     res.status(200).json({
         success: true,
         quiz
+    })
+
+})
+
+
+exports.newNote = catchAsyncErrors(async (req, res, next) => {
+    req.body.user = req.user._id
+
+    const note = await Note.create(req.body);
+
+    res.status(201).json({
+        success: true,
+        note
+    })
+})
+
+exports.getNotes = catchAsyncErrors(async (req, res, next) => {
+
+    const notes = await Note.find({course: req.params.courseId, user: req.user._id}).populate("media", "_id topic name topicId");
+
+    res.status(200).json({
+        success: true,
+        notes
+    })
+
+})
+
+exports.deleteNote = catchAsyncErrors(async (req, res, next) => {
+    const note = await Note.findById(req.params.id);
+  
+    if (!note) {
+        return next(new ErrorHandler('Note not found', 404));
+    }
+  
+    await note.remove();
+    
+  
+    res.status(200).json({
+        success: true,
+        message: 'Note is deleted.'
+    })
+  });
+
+exports.updateNote = catchAsyncErrors(async (req, res, next) => {
+
+    let note = await Note.findById(req.params.id);
+
+    if (!note) {
+        return next(new ErrorHandler('Topic not found', 404));
+    }
+    
+    
+
+    note = await Note.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    });
+
+    res.status(200).json({
+        success: true,
+        note
     })
 
 })

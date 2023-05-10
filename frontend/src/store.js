@@ -2,7 +2,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension'
 
-import { coursesReducer, newCourseReducer, courseReducer, courseDetailsReducer, newReviewReducer, courseReviewsReducer, reviewReducer, newLessonReducer, courseLessonsReducer, lessonReducer, courseLessonReducer, courseTopicReducer, courseTopicsReducer, newTopicReducer, newQuizReducer, topicQuizReducer, topicQuizsReducer, quizReducer, newDocumentReducer, courseDocumentsReducer, documentReducer, regularCoursesReducer } from './reducers/courseReducers'
+import { coursesReducer, newCourseReducer, courseReducer, courseDetailsReducer, newReviewReducer, courseReviewsReducer, reviewReducer, newLessonReducer, courseLessonsReducer, lessonReducer, courseLessonReducer, courseTopicReducer, courseTopicsReducer, newTopicReducer, newQuizReducer, topicQuizReducer, topicQuizsReducer, quizReducer, newDocumentReducer, courseDocumentsReducer, documentReducer, regularCoursesReducer, newNoteReducer, noteReducer, notesReducer } from './reducers/courseReducers'
 import { notifiesReducer } from './reducers/notifyReducer';
 import { authReducer, userReducer, forgotPasswordReducer, allUsersReducer, userDetailsReducer, profileReducer } from './reducers/userReducers'
 import { cartReducer } from './reducers/cartReducers'
@@ -59,7 +59,10 @@ const reducer = combineReducers({
     banner: bannerReducer,
     bannerDetails: bannerDetailsReducer,
     profile: profileReducer,
-    questionsReducer: questionsReducer
+    questionsReducer: questionsReducer,
+    newNote: newNoteReducer,
+    note: noteReducer,
+    notes:notesReducer,
 })
 
 

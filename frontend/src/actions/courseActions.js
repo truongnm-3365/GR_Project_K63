@@ -91,7 +91,19 @@ import {
     CLEAR_ERRORS,
     REGULAR_COURSES_REQUEST,
     REGULAR_COURSES_SUCCESS,
-    REGULAR_COURSES_FAIL
+    REGULAR_COURSES_FAIL,
+    NEW_NOTE_REQUEST,
+    NEW_NOTE_SUCCESS,
+    NEW_NOTE_FAIL,
+    GET_NOTES_REQUEST,
+    GET_NOTES_SUCCESS,
+    GET_NOTES_FAIL,
+    DELETE_NOTE_REQUEST,
+    DELETE_NOTE_SUCCESS,
+    DELETE_NOTE_FAIL,
+    UPDATE_NOTE_REQUEST,
+    UPDATE_NOTE_SUCCESS,
+    UPDATE_NOTE_FAIL
 
 } from '../constants/courseConstants'
 
@@ -770,6 +782,107 @@ export const deleteDocument = (id) => async (dispatch) => {
 
         dispatch({
             type: DELETE_DOCUMENT_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+
+export const newNote = (noteData) => async (dispatch) => {
+    try {
+
+        dispatch({ type: NEW_NOTE_REQUEST })
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+
+
+        const { data } = await axios.post(`/api/v1/note/new`, noteData, config)
+
+        dispatch({
+            type: NEW_NOTE_SUCCESS,
+            payload: data
+        })
+
+    } catch (error) {
+        dispatch({
+            type: NEW_NOTE_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const getNotes = (id) => async (dispatch) => {
+    try {
+
+        dispatch({ type: GET_NOTES_REQUEST })
+
+        const { data } = await axios.get(`/api/v1/notes/${id}`)
+
+        dispatch({
+            type: GET_NOTES_SUCCESS,
+            payload: data.notes
+        })
+
+    } catch (error) {
+
+        dispatch({
+            type: GET_NOTES_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+
+
+export const deleteNote = (id) => async (dispatch) => {
+    try {
+
+        dispatch({ type: DELETE_NOTE_REQUEST })
+
+        const { data } = await axios.delete(`/api/v1/note/delete/${id}`)
+
+        dispatch({
+            type: DELETE_NOTE_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+
+
+
+        dispatch({
+            type: DELETE_NOTE_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const updateNote = (id, noteData) => async (dispatch) => {
+    try {
+
+        dispatch({ type: UPDATE_NOTE_REQUEST })
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        const { data } = await axios.put(`/api/v1/note/update/${id}`, noteData, config)
+
+        dispatch({
+            type: UPDATE_NOTE_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+        dispatch({
+            type: UPDATE_NOTE_FAIL,
             payload: error.response.data.message
         })
     }

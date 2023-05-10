@@ -95,7 +95,22 @@ import {
     CLEAR_ERRORS,
     REGULAR_COURSES_REQUEST,
     REGULAR_COURSES_SUCCESS,
-    REGULAR_COURSES_FAIL
+    REGULAR_COURSES_FAIL,
+    NEW_NOTE_REQUEST,
+    NEW_NOTE_SUCCESS,
+    NEW_NOTE_FAIL,
+    NEW_NOTE_RESET,
+    GET_NOTES_REQUEST,
+    GET_NOTES_SUCCESS,
+    GET_NOTES_FAIL,
+    UPDATE_NOTE_REQUEST,
+    DELETE_NOTE_REQUEST,
+    DELETE_NOTE_SUCCESS,
+    UPDATE_NOTE_SUCCESS,
+    UPDATE_NOTE_FAIL,
+    DELETE_NOTE_FAIL,
+    DELETE_NOTE_RESET,
+    UPDATE_NOTE_RESET
 
 } from '../constants/courseConstants'
 
@@ -928,6 +943,129 @@ export const documentReducer = (state = {}, action) => {
                 isDeleted: false
             }
 
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+
+        default:
+            return state
+    }
+}
+
+
+export const newNoteReducer = (state = {}, action) => {
+    switch (action.type) {
+
+        case NEW_NOTE_REQUEST:
+            return {
+                ...state,
+                loading: true
+            }
+
+        case NEW_NOTE_SUCCESS:
+            return {
+                loading: false,
+                success: action.payload.success,
+                note: action.payload.note
+            }
+
+        case NEW_NOTE_FAIL:
+            return {
+                ...state,
+                error: action.payload
+            }
+
+        case NEW_NOTE_RESET:
+            return {
+                ...state,
+                success: false
+            }
+
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+
+        default:
+            return state
+    }
+}
+
+export const notesReducer = (state = {notes:[]}, action) => {
+    switch (action.type) {
+
+        case GET_NOTES_REQUEST:
+            return {
+                ...state,
+                loading: true
+            }
+
+        case GET_NOTES_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                notes: action.payload
+            }
+
+        case GET_NOTES_FAIL:
+            return {
+                ...state,
+                error: action.payload
+            }
+
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+
+        default:
+            return state
+    }
+}
+
+export const noteReducer = (state = {note:{}}, action) => {
+    switch (action.type) {
+
+        case UPDATE_NOTE_REQUEST:
+        case DELETE_NOTE_REQUEST:
+                return {
+                    ...state,
+                    loading: true
+                }
+    
+        case DELETE_NOTE_SUCCESS:
+                return {
+                    ...state,
+                    loading: false,
+                    isDeleted: action.payload
+                }
+        case UPDATE_NOTE_SUCCESS:
+                return {
+                        ...state,
+                        loading: false,
+                        isUpdated: action.payload
+            }
+        case UPDATE_NOTE_FAIL:
+        case DELETE_NOTE_FAIL:
+                return {
+                    ...state,
+                    error: action.payload
+                }
+    
+        case DELETE_NOTE_RESET:
+                return {
+                    ...state,
+                    isDeleted: false
+                }
+        case UPDATE_NOTE_RESET:
+                    return {
+                        ...state,
+                        isDeleted: false
+                }
         case CLEAR_ERRORS:
             return {
                 ...state,

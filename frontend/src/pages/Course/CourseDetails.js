@@ -5,7 +5,7 @@ import ListReviews from '../../components/review/ListReviews'
 import { Link,useHistory } from 'react-router-dom'
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
-import { getCourseDetails, newReview, clearErrors, getCourseLessons, getCourseTopics } from '../../actions/courseActions'
+import { getCourseDetails, newReview, clearErrors, getCourseLessons, getCourseTopics} from '../../actions/courseActions'
 import { NEW_REVIEW_RESET } from '../../constants/courseConstants'
 import { extendCourse, getMeRegisterCourses, newRegisterCourse } from '../../actions/registerCourseAction'
 import { NEW_REGISTER_COURSE_RESET } from '../../constants/registerCourseContants'
@@ -29,11 +29,7 @@ const CourseDetails = ({ match }) => {
     const { success: newSuccess} = useSelector(state => state.newRegisterCourse)
     const { lessons  } = useSelector(state => state.courseLessons)
     const {  topics } = useSelector(state => state.courseTopics)
-
-    const formatDate = (dateInput) =>{
-        const date = new Date(dateInput)
-        return "ngày " + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + ' tháng ' + ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + ' năm ' +  date.getFullYear()
-    }
+    
 
 
     useEffect(() => {
@@ -43,6 +39,7 @@ const CourseDetails = ({ match }) => {
         }
         dispatch(getCourseLessons(match.params.id))
         dispatch(getCourseTopics(match.params.id))
+        
         if (error) {
             alert.error(error);
             dispatch(clearErrors())

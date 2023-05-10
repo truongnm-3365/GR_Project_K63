@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import Loader from '../../components/layout/Loader'
-import { clearErrors, getCourseLessons, getCourseLesson, getCourseTopics, getTopicQuizs, getCourseDetails, getCourseDocuments, newReview } from '../../actions/courseActions'
+import { clearErrors, getCourseLessons, getCourseLesson, getCourseTopics, getTopicQuizs, getCourseDetails, getCourseDocuments, newReview, getNotes, newNote, deleteNote } from '../../actions/courseActions'
 import { useDispatch, useSelector } from 'react-redux'
-import { NEW_LESSON_RESET,NEW_REVIEW_RESET } from '../../constants/courseConstants'
-import { Collapse } from 'antd';
+import { NEW_LESSON_RESET,NEW_NOTE_RESET,NEW_REVIEW_RESET } from '../../constants/courseConstants'
+import { Button, Collapse, Form, Modal } from 'antd';
 import { useAlert } from 'react-alert'
 import './index.css'
 import Quiz from "../../components/quiz/Quiz";
@@ -12,9 +12,13 @@ import { NEW_REGISTER_COURSE_RESET } from "../../constants/registerCourseContant
 import { comleteVideo, completedVideo, getMeRegisterCourses } from "../../actions/registerCourseAction";
 
 import { useHistory } from "react-router-dom";
+import TextArea from "antd/es/input/TextArea";
+import { Space, Typography } from 'antd';
+const { Text, Link } = Typography;
 
 
 const Lessons = ({match}) => {
+  const vid = document.getElementById("video");
   const { Panel } = Collapse;
   const dispatch = useDispatch();
   const history = useHistory();
@@ -34,14 +38,103 @@ const Lessons = ({match}) => {
   const {user} = useSelector(state => state.auth)
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
+  const [videoTime, setVideoTime] = useState(0);
+  const [isModalNoteOpen, setIsModalNoteOpen] = useState(false);
+  const [isNoteListOpen, setIsNoteListOpen] = useState(false);
+  const [note, setNote] = useState("");
+  const { notes, loading:notesLoading } = useSelector(state => state.notes);
+
+  function secondsToHms(d) {
+    d = Number(d);
+    var h = Math.floor(d / 3600);
+    var m = Math.floor(d % 3600 / 60);
+    var s = Math.floor(d % 3600 % 60);
+  
+    var hDisplay = h > 0 ? (h > 9 ? h : "0"+ h ) + ":"  : "";
+    var mDisplay = m > 0 ? (m > 9 ? m : "0"+ m ) + ":" : "00:";
+    var sDisplay = (s > 9 ? s : "0"+ s ) ;
+    return hDisplay + mDisplay + sDisplay; 
+  }
+  
+  
+
+  const showModalNote = () => {
+    setIsModalNoteOpen(true);
+    vid.pause();
+  };
+  const handleOk = () => {
+
+
+    if(!note){
+      alert.error("Không được để trống ghi chú")
+    }else{
+      setIsModalNoteOpen(false);
+      let data ={
+        body: note,
+        time: vid.currentTime,
+        course: match.params.id,
+        media: lessons[index]._id
+      }
+      dispatch(newNote(data))
+      setNote("");
+    }
+
+    
+  };
+
+  const handleCancel = () => {
+    setIsModalNoteOpen(false);
+  };
+
+  const showNoteList = () => {
+    dispatch(getNotes(match.params.id))
+    setIsNoteListOpen(true);
+  };
+  const handleListOk = () => {
+    setIsNoteListOpen(false);
+
+  };
+  const handleListCancel = () => {
+    setIsNoteListOpen(false);
+  };
+  
+  const handleVideoTiem = (note) => { 
+    
+    setExercise(false);
+    
+    for( let i = 0; i < topics.length; i++){
+      if(topics[i]._id === note.media.topicId){
+        setIndexTopic(i);
+        break;
+      }
+    }
+
+
+    for( let i = 0; i < lessons.length; i++){
+      
+      if(lessons[i]._id === note.media._id){
+        
+        setVideoTime(note.time);
+        setIndex(i);
+        onChangeChecked(i)
+        setIsNoteListOpen(false)
+        
+        break;
+      }
+    }
+    
+  } 
+
+
+
+
   const onChangeChecked = (index) =>{
     
     const newCheck = []
-    for( let i; i < lessons.length + 1; i++){
+    for( let i=0; i < lessons.length + 1; i++){
       newCheck[i] = false;
     }
     newCheck[index] = true;
-    console.log(newCheck)
     setChecked(newCheck)
     setCheckedExercise([false])
     setIndex(index);
@@ -50,14 +143,14 @@ const Lessons = ({match}) => {
 
   const onChangeCheckedExercise = (index) =>{
     const newCheck = []
-    for( let i; i < topics.length; i++){
+    for( let i=0; i < topics.length; i++){
       newCheck[i] = false;
     } 
 
     newCheck[index] = true;
     setCheckedExercise(newCheck)
     setChecked([false])
-    console.log(newCheck,index)
+  
   }
 
 
@@ -78,10 +171,11 @@ const Lessons = ({match}) => {
     dispatch(getCourseDocuments(match.params.id))
     dispatch(getMeRegisterCourses())
     
-        if (error) {
-            alert.error(error);
-            dispatch(clearErrors())
-        }
+
+    if (error) {
+      alert.error(error);
+      dispatch(clearErrors())
+    }
     if (lessonError) {
         alert.error(lessonError);
         dispatch(clearErrors())
@@ -91,6 +185,8 @@ const Lessons = ({match}) => {
         alert.success('Đăng tải thành công')
         dispatch({ type: NEW_LESSON_RESET })
     }
+
+
     if (reviewError) {
       alert.error(reviewError);
       dispatch(clearErrors())
@@ -104,9 +200,16 @@ const Lessons = ({match}) => {
   if (complete || isUpdated ) {
     dispatch({type: NEW_REGISTER_COURSE_RESET})
   }
-   
+
+  // if(vid ){
+  //   vid.currentTime = videoTime
+  //   console.log(vid.currentTime);
+  // }
+    
+
 }, [dispatch, alert, error,lessonError,success,match.params.id,checked,checkedExercise,reviewSuccess,complete,isUpdated,videoLoading])
   
+
 
 function setUserRatings() {
   const stars = document.querySelectorAll('.star');
@@ -194,7 +297,7 @@ const checkCompletedTopic = (topicId) =>{
     if(completedVideos.length === 0){
       return false;
     }
-    console.log(completeVideos);
+    
     for(let i = 0; i < completedVideos.length;  i++){
       if(!completedVideos[i].completed){
         return false
@@ -208,10 +311,11 @@ const checkCompletedTopic = (topicId) =>{
 const checkCompletedAllVideo = () =>{
 
   if(completeVideos && user){
-    const completedVideos = completeVideos.filter(item => item.user === user._id)
+    const completedVideos = completeVideos.filter(item => item.user === user._id && item.course === match.params.id)
     if(completedVideos.length === 0){
       return true;
     }
+
     for(let i = 0; i < completedVideos.length;  i++){
       if(!completedVideos[i].completed){
         return false
@@ -233,18 +337,48 @@ const checkCompletedCourse = () =>{
 
 
 
-
-
-
 return (
     <>
         {loading  ? <Loader/> :
-        <div className="container">        
-        <div className="row mt-5">
+        <div className="container">
+
+        <div className="mt-3">
+          <Button onClick={showModalNote}>Thêm ghi chú </Button>
+          <Modal title={"Thêm ghi chú tại: " + secondsToHms(vid?.currentTime)} open={isModalNoteOpen} width={1000} onOk={handleOk} onCancel={handleCancel} cancelText={"Hủy bỏ"}>
+            
+            <TextArea onChange={(e) => setNote(e.target.value)} rows={4} />
+  
+          </Modal>
+
+          {vid &&<Button onClick={showNoteList}>Danh sách ghi chú </Button>}
+          <Modal title={"Danh sách ghi chú"} open={isNoteListOpen} onOk={handleListOk} onCancel={handleListCancel} cancelText={"Hủy bỏ"} width={1000}>
+              {!notesLoading ? notes.map(item => {
+                return <div key={item._id} className="mb-3">
+                    <Button danger onClick={() => handleVideoTiem(item) }>{secondsToHms(item.time)}</Button>
+                    <Button onClick={() => handleVideoTiem(item)} type="link"> <Text type="danger">{item.media.name} </Text> <Text strong>.{item.media.topic}</Text></Button>
+                    <Button className="float-right" onClick={() => {dispatch(deleteNote(item._id));handleListCancel();showNoteList()}} >Xóa</Button>
+                    <div> <Text>{item.body}</Text></div>
+                </div>
+              })
+              : 
+              <Loader/>
+              }
+
+             
+          </Modal>
+        </div>
+                  
+        <div className="row mt-2">
         {exercise === false  && lessons.length !== 0 &&
               <div className="col-md-8">
-                
+                <span style={{display:'none'}}>
+                { 
+                  !!vid ? vid.currentTime = videoTime : ""
+                }
+                </span>
+
                 <video
+                    id="video"
                     onEnded={() => {
                       if(lessons[index +1]){
                         let data={
@@ -267,8 +401,9 @@ return (
                       dispatch(completedVideo(tmp))
                     }}
                     controls
+                    
                   >
-                    <source src={ lessons[index] ? lessons[index].videos : ""} />
+                    <source type="video/mp4" src={ lessons[index] ? lessons[index].videos : ""} />
                 </video>
                 <h3 className="mt-2">{lessons[index].name}</h3>
             
@@ -292,8 +427,8 @@ return (
                             {checkCompleteVideo(lesson._id) ? 
                             <div key={lesson._id} className="season_tab">
                             {index === 0 ? 
-                              <input  onChange={() => {onChangeChecked(index);setIndexTopic(indexTopic);setExercise(false)}} type="radio" id={`tab-${index+1}`} name={`tab-group-1`} checked={checked[0]}/> 
-                              :<input onChange={() => {onChangeChecked(index);setIndexTopic(indexTopic);setExercise(false)}} type="radio" id={`tab-${index+1}`} name={`tab-group-1`} checked={checked[index]}/>
+                              <input  onChange={() => {onChangeChecked(index);setIndexTopic(indexTopic);setExercise(false);setVideoTime(0)}} type="radio" id={`tab-${index+1}`} name={`tab-group-1`} checked={checked[0]}/> 
+                              :<input onChange={() => {onChangeChecked(index);setIndexTopic(indexTopic);setExercise(false);setVideoTime(0)}} type="radio" id={`tab-${index+1}`} name={`tab-group-1`} checked={checked[index]}/>
                               }
                           
                             <label className="d-flex justify-content-between" htmlFor={`tab-${index+1}`}>
@@ -387,7 +522,7 @@ return (
                     <>
                         {document.docs.map((doc) => {
                           return (
-                            <>
+                            <span key={doc._id}>
                               <button
                                 style={{width:'100px',height:'100px',marginRight:'10px',background:'white'}}
                                 role="link"
@@ -397,7 +532,7 @@ return (
                                 <div>{document.name}</div>
                               </button>
   
-                            </>
+                            </span>
 
                           );
                         })}

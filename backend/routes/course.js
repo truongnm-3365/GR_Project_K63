@@ -22,7 +22,11 @@ const {
     newTopicQuiz,
     getTopicQuizs,
     updateTopicQuiz,
-    deleteTopicQuiz
+    deleteTopicQuiz,
+    getNotes,
+    newNote,
+    updateNote,
+    deleteNote
 
 } = require('../controllers/courseController')
 
@@ -107,5 +111,11 @@ router.route('/quiz/new').post(isAuthenticatedUser,newTopicQuiz)
 router.route('/quizs/:topicId').get(getTopicQuizs)
 router.route('/quiz/update/:id').put(isAuthenticatedUser,updateTopicQuiz)
 router.route('/quiz/delete/:id').delete(isAuthenticatedUser,deleteTopicQuiz)
+
+
+router.route('/note/new').post(isAuthenticatedUser,newNote)
+router.route('/notes/:courseId').get(isAuthenticatedUser,getNotes)
+router.route('/note/update/:id').put(isAuthenticatedUser,updateNote)
+router.route('/note/delete/:id').delete(isAuthenticatedUser,deleteNote)
 
 module.exports = router;

@@ -8,6 +8,7 @@ import store from './store'
 import { positions, transitions, Provider as AlertProvider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic'
 import ChatProvider from "./Context/ChatProvider";
+import { ConfigProvider } from 'antd';
 
 const options = {
   timeout: 5000,
@@ -18,9 +19,18 @@ const options = {
 ReactDOM.render(
     <Provider store={store} >
       <AlertProvider template={AlertTemplate} {...options}>
-          <ChatProvider>
-            <App />
-          </ChatProvider>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: '#006241',
+          },
+        }}
+      >
+        <ChatProvider>
+          <App />
+        </ChatProvider>
+     </ConfigProvider>
+
       </AlertProvider>
     </Provider>,
   document.getElementById('root')
