@@ -43,6 +43,7 @@ const storage = multer.diskStorage({
     },
   });
   
+  
   const upload = multer({
     storage: storage,
     fileFilter: function (req, file, cb) {
@@ -76,6 +77,7 @@ router.route('/password/reset/:token').put(resetPassword)
 router.route('/logout').get(logout);
 
 router.route('/me').get(isAuthenticatedUser, getUserProfile)
+
 router.route('/profile/:id').get(getPublicUserProfile)
 router.route('/password/update').put(isAuthenticatedUser, updatePassword)
 router.route('/me/update').put(isAuthenticatedUser, upload.fields([

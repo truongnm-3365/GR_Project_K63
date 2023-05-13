@@ -45,7 +45,7 @@ router.get("/:courseId/:index", documentController.getDocument);
 //post create new document
 router.post(
   "/create",
-  isAuthenticatedUser,
+  isAuthenticatedUser, authorizeRoles('creator'),
   upload.fields([
     {
       name: "documents",

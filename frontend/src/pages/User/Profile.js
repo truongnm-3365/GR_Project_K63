@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../../components/layout/Loader'
 import MetaData from '../../components/layout/MetaData'
 import { clearErrors, publicProfile } from '../../actions/userActions'
-import Pagination from 'react-js-pagination'
+import { Pagination } from 'antd'
+
 import Course from '../../components/course/Course'
 
 const Profile = ({ match }) => {
@@ -13,29 +14,56 @@ const Profile = ({ match }) => {
     const { user, loading, error } = useSelector(state => state.auth)
 
     const { profile } = useSelector(state => state.profile)
+
+    const [text,setText] = useState("")
+    const [keyword,setKeyword] = useState("")
+
+    const onSearch = (e) =>{
+        e.preventDefault();
+        setKeyword(text)
+        setText("")
+    }
     
+    const [currentPage, setCurrentPage ] = useState(1);
+
+    const pageSize = 4
 
     const dispatch = useDispatch();
 
     let userId = match.params.id
 
-    let userPublic
-
     useEffect(() => {
-        if(userId)
+
+        if(userId){
             dispatch(publicProfile(match.params.id))
+        }else{
+            dispatch(publicProfile(user._id))
+        }
+        
+        
         if (error) {
             alert.error(error);
             dispatch(clearErrors());
         }            
        
-    },[dispatch,userId])
+    },[dispatch,userId,keyword])
 
     
-    if(userId){
-        userPublic = profile
-    }else{
-        userPublic = user
+
+
+    
+
+    const Search = (courses) =>{
+        
+        return courses?.filter((item) => {
+            return keyword === ''
+                  ? item
+                  : item.name.toLowerCase().includes(keyword.toLowerCase()) 
+                    || item.description.toLowerCase().includes(keyword.toLowerCase()) 
+                    || item.category.toLowerCase().includes(keyword.toLowerCase()) ;
+        })
+        
+
     }
 
 
@@ -49,7 +77,7 @@ const Profile = ({ match }) => {
                     <div className="row justify-content-around mt-5 user-info">
                         <div className="col-12 col-md-3">
                             <figure className='avatar avatar-profile'>
-                                <img className="rounded-circle img-fluid" src={userPublic?.avatar?.url} alt={userPublic?.name} />
+                                <img className="rounded-circle img-fluid" src={process.env.REACT_APP_API_URL + profile?.avatar?.url} alt={profile?.name} />
                             </figure>
                             {(user?._id === profile?._id || !userId) &&
                             <Link to="/me/update" id="edit_profile" className="btn btn-primary btn-block my-5">
@@ -59,19 +87,17 @@ const Profile = ({ match }) => {
 
                         <div className="col-12 col-md-5">
                             <h4>Tên</h4>
-                            <p>{userPublic?.name}</p>
+                            <p>{profile?.name}</p>
 
                             <h4>Email</h4>
-                            <p>{userPublic?.email}</p>
+                            <p>{profile?.email}</p>
 
                             <h4>Ngày tham gia</h4>
-                            <p>{String(userPublic?.createdAt).substring(0, 10)}</p>
+                            <p>{String(profile?.createdAt).substring(0, 10)}</p>
 
-                            {/* {userPublic?.role !== 'admin' && (
-                                <Link to="/orders/me" className="btn btn-danger btn-block mt-5">
-                                    My Orders
-                                </Link>
-                            )} */}
+                            <h4>Vài trò</h4>
+                            <p>{profile?.role?.toUpperCase()}</p>
+
 
                             {(user?._id === profile?._id || !userId) &&
                             <Link to="/password/update" className="btn btn-primary btn-block mt-3">
@@ -81,15 +107,41 @@ const Profile = ({ match }) => {
                         
                     </div>
                     <hr></hr>
+                   
+                    {Search(profile?.courses)?.length !== 0 &&  <h2 id="courses_heading" >Khóa học đang được hiện thị trên web</h2>  }
+
+                    {Search(profile?.courses)?.length !== 0 &&
+                    <form onSubmit={onSearch} className="form-inline float-right" style={{marginBottom:'-6px'}}>
+                        <div className="form-group mx-sm-3 mb-2">
+                            <label for="inputText" className="sr-only">Tìm kiếm</label>
+                            <input onChange={e => setText(e.target.value)} type="text" className="form-control" id="inputText" placeholder="Tìm kiếm"/>
+                        </div>
+                        <button type="submit" className="btn btn-success mb-2">Tìm kiếm</button>
+                    </form>
+                    }
+
                     <section id="courses" className="mt-5">
-                        {userPublic?.courses ?  <h2 id="courses_heading">Khóa học đang được hiện thị trên web</h2> : "" }
                         <div className="row">
 
+
                             {(
-                                    userPublic?.courses?.map(course => (
+                                    Search(profile?.courses?.filter((item,index) => index >= (currentPage - 1)*pageSize & index <= (currentPage*pageSize - 1) ))?.map(course => (
                                         <Course key={course._id} course={course} col={3} />
                                     ))
                             )}
+                            {Search(profile?.courses)?.length !== 0 &&
+                            <div className='w-100'>
+                                <Pagination
+                                    style={{float:'right',marginTop:'10px'}} 
+                                    onChange={(page) => setCurrentPage(page)} 
+                                    
+                                    total={Search(profile?.courses)?.length} 
+                                    pageSize={pageSize} 
+                                />
+
+                            </div>
+                            }
+
 
                         </div>
                     </section>

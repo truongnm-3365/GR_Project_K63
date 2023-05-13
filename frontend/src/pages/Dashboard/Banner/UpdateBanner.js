@@ -118,11 +118,11 @@ const UpdateBanner = ({ match, history }) => {
                                     </div>
 
                                     {banner.images && banner.images.map(img => (
-                                        <img key={img} src={img.url} alt={img.url} className="mt-3 mr-2" width="600" />
+                                        <img key={img} src={process.env.REACT_APP_API_URL + img.url} alt={img} className="mt-3 mr-2" width="600" />
                                     ))}
 
                                     {imagesPreview.map(img => (
-                                        <img src={img} key={img} alt="Images Preview" className="mt-3 mr-2" width="600" />
+                                        <img src={process.env.REACT_APP_API_URL + img} key={img} alt="Images Preview" className="mt-3 mr-2" width="600" />
                                     ))}
 
                                 </div>

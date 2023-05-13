@@ -3,7 +3,7 @@ import Loader from '../../components/layout/Loader'
 import { clearErrors, getCourseLessons, getCourseLesson, getCourseTopics, getTopicQuizs, getCourseDetails, getCourseDocuments, newReview, getNotes, newNote, deleteNote } from '../../actions/courseActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { NEW_LESSON_RESET,NEW_NOTE_RESET,NEW_REVIEW_RESET } from '../../constants/courseConstants'
-import { Button, Collapse, Form, Modal } from 'antd';
+import { Button, Collapse, Form, Modal, Progress, Space, Typography } from 'antd';
 import { useAlert } from 'react-alert'
 import './index.css'
 import Quiz from "../../components/quiz/Quiz";
@@ -13,8 +13,8 @@ import { comleteVideo, completedVideo, getMeRegisterCourses } from "../../action
 
 import { useHistory } from "react-router-dom";
 import TextArea from "antd/es/input/TextArea";
-import { Space, Typography } from 'antd';
-const { Text, Link } = Typography;
+
+const { Text } = Typography;
 
 
 const Lessons = ({match}) => {
@@ -335,6 +335,17 @@ const checkCompletedCourse = () =>{
   return false
 }
 
+const completedPercent = () =>{
+  let completed = 0;
+  if(completeVideos && user){
+    for(let i = 0; i < completeVideos.length; i++){
+      if(completeVideos[i].user === user._id && completeVideos[i].completed){
+        completed = completed + 1;
+      }
+    }
+    return ((completed/lessons.length)*0.9*100).toFixed(2)
+  }
+}
 
 
 return (
@@ -403,7 +414,7 @@ return (
                     controls
                     
                   >
-                    <source type="video/mp4" src={ lessons[index] ? lessons[index].videos : ""} />
+                    <source type="video/mp4" src={ lessons[index] ? process.env.REACT_APP_API_URL + lessons[index].videos : ""} />
                 </video>
                 <h3 className="mt-2">{lessons[index].name}</h3>
             
@@ -413,6 +424,11 @@ return (
             {exercise ? <Quiz quizs={quizs}/> : ''}
 
       <div className="col-md-4">
+          <Space size={30}>
+            <h5>Mức độ hoàn thành</h5>
+            <Progress type="circle" percent={ checkCompletedCourse() ? 100 : completedPercent()} size={20}  strokeColor={{'0%': '#006241','100%': '#87d068',}}/>
+          </Space>
+      
           <div className="season_tabs">
             {topics[indexTopic] &&
             <Collapse defaultActiveKey={[topics[indexTopic]._id]}>

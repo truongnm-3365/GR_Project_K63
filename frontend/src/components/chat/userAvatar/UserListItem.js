@@ -12,7 +12,7 @@ const UserListItem = ({ handleFunction, user }) => {
         style={{marginRight:'2rem'}}
         size={'large'}
         name={user.name}
-        src={user.avatar.url}
+        src={process.env.REACT_APP_API_URL + user.avatar.url}
       />
       <Space direction='vertical'>
         <span style={{fontSize:'16px'}}>{user.name}</span>

@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../../src/axios/axios'
 
 import {
     CREATE_ORDER_REQUEST,

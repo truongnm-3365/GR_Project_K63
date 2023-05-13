@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../../src/axios/axios'
 import { 
     ALL_CATEGORIES_FAIL, 
     ALL_CATEGORIES_REQUEST, 

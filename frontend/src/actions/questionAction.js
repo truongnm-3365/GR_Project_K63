@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../../src/axios/axios'
 import { FETCH_ALL_QUESTIONS, POST_ANSWER, POST_QUESTION } from '../constants/questionContant';
 
 const postQuestion = (questionData) => axios.post("/api/v1/questions/Ask", questionData);

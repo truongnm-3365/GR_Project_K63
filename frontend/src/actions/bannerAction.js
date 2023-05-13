@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../../src/axios/axios'
 import { 
     ALL_BANNERS_FAIL, 
     ALL_BANNERS_REQUEST, 
@@ -17,6 +17,7 @@ import {
     BANNER_DETAILS_SUCCESS,
     BANNER_DETAILS_FAIL,
 } from '../constants/bannerConstant';
+
 
 export const getBanners = () => async (dispatch) => {
     try {

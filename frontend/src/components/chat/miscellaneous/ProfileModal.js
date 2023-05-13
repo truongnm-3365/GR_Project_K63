@@ -24,7 +24,7 @@ const ProfileModal = ({ user, children }) => {
           <div className="d-flex flex-column justify-content-between align-items-center">
             <Image
               style={{width:'150px'}}
-              src={user.avatar?.url}
+              src={process.env.REACT_APP_API_URL + user.avatar?.url}
               alt={user.name}
             />
             <span

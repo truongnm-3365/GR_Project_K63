@@ -24,6 +24,9 @@ const Header = () => {
     const location = useLocation();
 
     const { user, loading } = useSelector(state => state.auth)
+    
+
+
     const { categories } = useSelector(state => state.categories);
     const { notifies, error, isDeleted } = useSelector(state => state.notifies)
     const {
@@ -32,6 +35,13 @@ const Header = () => {
         setSelectedChat
     } = ChatState();
     
+    const isObjectEmpty = (objectName) => {
+        if(objectName)
+            return Object.keys(objectName).length === 0
+        else{
+            return true
+        }
+    }
 
     const logoutHandler = () => {
         dispatch(logout());
@@ -48,8 +58,10 @@ const Header = () => {
         if (error) {
             return alert.error(error)
         }
-        if(user)
-            dispatch(getMeNotifies(user._id))
+        if(!isObjectEmpty(user)){
+            dispatch(getMeNotifies(user?._id))
+        }
+            
             
         if (isDeleted) {
                 
@@ -61,7 +73,7 @@ const Header = () => {
     return (
         
         <Fragment>
-        {user &&
+        {!isObjectEmpty(user) &&
             <div className="icon-bar">
             <Link className="" to='/chatbot'>
                 <div style={{fontSize:'14px'}}>Chat Bot</div>
@@ -107,7 +119,7 @@ const Header = () => {
 
                 <div className="col-12 col-md-3 mt-4 mt-md-0 text-center d-flex">
                     
-                    {user ? (
+                    {!isObjectEmpty(user) ? (
                         <>
                             <span className='ml-3'>
                                 <NotifyMe
@@ -138,7 +150,7 @@ const Header = () => {
 
                                 <figure className="avatar avatar-nav">
                                     <img
-                                        src={user.avatar && user.avatar.url}
+                                        src={user?.avatar && process.env.REACT_APP_API_URL + user.avatar.url}
                                         alt={user && user.name}
                                         className="rounded-circle"
                                     />
@@ -151,12 +163,11 @@ const Header = () => {
                                 {user && user.role === 'admin' && (
                                     <Link className="dropdown-item" to="/me/courses">Dashboard</Link>
                                 )}
-                                {user && user.role === 'user' && (
+                                {user && user.role === 'creator' && (
                                     <Link className="dropdown-item" to="/me/courses">Khóa học của tôi</Link>
                                 )}
                                 {/* <Link className="dropdown-item" to="/orders/me">Orders</Link> */}
                                 <Link className="dropdown-item" to="/registerCourse" >Khóa học đã đăng ký</Link>
-                                <Link className="dropdown-item" to="/completedCourse" >Khóa học đã hoàn thành</Link>
                                 <Link className="dropdown-item" to="/me">Thông tin cá nhân</Link>
                                 <Link className="dropdown-item text-danger" to="/" onClick={logoutHandler}>
                                     Đăng xuất

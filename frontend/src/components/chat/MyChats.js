@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../axios/axios";
 import { useEffect, useState } from "react";
 import { getSender } from "../../config/ChatLogics";
 import ChatLoading from "./ChatLoading";

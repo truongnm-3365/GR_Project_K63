@@ -33,7 +33,7 @@ import Lessons from './pages/Course/Lesson'
 import ProtectedRoute from './components/route/ProtectedRoute'
 import { loadUser } from './actions/userActions'
 import store from './store'
-import axios from 'axios'
+import axios from '../src/axios/axios'
 
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
@@ -52,9 +52,7 @@ import ChatBot from './pages/ChatBot/ChatBot'
 import About from './pages/About/About'
 import FinalTest from './pages/FinalTest/FinalTest'
 import FinalResult from './pages/FinalTest/FinalResult'
-import CompletedCourse from './pages/CompletedCourse/CompletedCourse'
-import { fetchAllQuestions } from './actions/questionAction'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Forum from './pages/Forum/Forum'
 import AskQuestion from './pages/AskQuestion/AskQuestion'
 import DisplayQuestion from './pages/Questions/DisplayQuestion'
@@ -62,18 +60,26 @@ import DisplayQuestion from './pages/Questions/DisplayQuestion'
 
 function App() {
 
+  const dispatch = useDispatch()
   const [stripeApiKey, setStripeApiKey] = useState('');
 
+
+
   useEffect(() => {
-    store.dispatch(loadUser())
 
-    async function getStripApiKey() {
-      const { data } = await axios.get('/api/v1/stripeapi');
+    if(localStorage.getItem("token")){
+      dispatch(loadUser())
+      async function getStripApiKey() {
+        const { data } = await axios.get('/api/v1/stripeapi');
+  
+        setStripeApiKey(data.stripeApiKey)
+      }
+  
+      getStripApiKey();  
 
-      setStripeApiKey(data.stripeApiKey)
     }
+  
 
-    getStripApiKey();
 
   }, [])
 
@@ -94,12 +100,11 @@ function App() {
           <ProtectedRoute path="/course/:id/finalexam/:examId"  component={FinalTest} exact/>
           <ProtectedRoute path="/course/:id/finalexam/:examId/result"  component={FinalResult} exact/>
           <ProtectedRoute path="/registerCourse" component={RegisterCourseList} exact />
-          <ProtectedRoute path="/completedCourse" component={CompletedCourse} exact />
         
-          <ProtectedRoute path="/success/:courseId" component={OrderSuccess} />
+          <ProtectedRoute path="/success/:courseId" component={OrderSuccess} exact/>
           {stripeApiKey &&
             <Elements stripe={loadStripe(stripeApiKey)}>
-              <ProtectedRoute path="/payment/:courseId/:amount" component={Payment} />
+              <ProtectedRoute path="/payment/:courseId/:amount" component={Payment} exact/>
             </Elements>
           } 
 

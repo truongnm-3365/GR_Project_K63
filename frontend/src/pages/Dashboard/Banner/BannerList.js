@@ -72,7 +72,7 @@ const BannerList = ({ history }) => {
     !!banners && banners.forEach(banner => {
         data.push({
             id: banner._id,
-            image: <img className="mt-3 mr-2" width="400" src={banner.images[0].url}/>,
+            image: <img className="mt-3 mr-2" width="400" src={process.env.REACT_APP_API_URL + banner.images[0].url}/>,
             actions: <Fragment>
                 <Link to={`/admin/banner/update/${banner._id}`} className="btn btn-success py-1 px-2">
                     <i className="fa fa-pencil"></i>

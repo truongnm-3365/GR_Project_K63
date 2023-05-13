@@ -216,6 +216,8 @@ const NewCourse = ({ history }) => {
                                      </label>
                                     </div>
 
+                                    {console.log(imagesPreview)}    
+
                                     {imagesPreview.map(img => (
                                         <img src={img} key={img} alt="Images Preview" className="mt-3 mr-2" width="55" height="52" />
                                     ))}

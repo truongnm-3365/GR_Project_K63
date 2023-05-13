@@ -66,13 +66,13 @@ const storage = multer.diskStorage({
   });
 
 router.route('/courses').get(getCourses);
-router.route('/me/courses/:userId').get(isAuthenticatedUser,getMeCourses);
-router.route('/admin/courses').get(isAuthenticatedUser, authorizeRoles('admin'),getAdminCourses);
+router.route('/me/courses/:userId').get(isAuthenticatedUser, getMeCourses);
+router.route('/admin/courses').get(isAuthenticatedUser,authorizeRoles('admin'),getAdminCourses);
 router.route('/course/:id').get(getSingleCourse);
 
 //router.route('/course/new').post(isAuthenticatedUser,newCourse);
 
-router.post('/course/new',isAuthenticatedUser,
+router.post('/course/new',isAuthenticatedUser, authorizeRoles('creator'),
 upload.fields([
     {
       name: "images",
@@ -81,7 +81,7 @@ upload.fields([
   ]),newCourse)
 
 router.route('/course/:id')
-    .put(isAuthenticatedUser, upload.fields([
+    .put(isAuthenticatedUser, authorizeRoles('creator'), upload.fields([
       {
         name: "images",
         maxCount: 1000,
@@ -102,15 +102,15 @@ router.route('/review').put(isAuthenticatedUser, createCourseReview)
 router.route('/reviews').get(isAuthenticatedUser, getCourseReviews)
 router.route('/reviews').delete(isAuthenticatedUser, deleteReview)
 
-router.route('/topic/new').post(isAuthenticatedUser,newTopic)
+router.route('/topic/new').post(isAuthenticatedUser, authorizeRoles('creator'),newTopic)
 router.route('/topics/:courseId').get(getCourseTopic)
-router.route('/topic/update/:id').put(isAuthenticatedUser,updateTopic)
-router.route('/topic/delete/:id').delete(isAuthenticatedUser,deleteTopic)
+router.route('/topic/update/:id').put(isAuthenticatedUser, authorizeRoles('creator'),updateTopic)
+router.route('/topic/delete/:id').delete(isAuthenticatedUser, authorizeRoles('creator'),deleteTopic)
 
-router.route('/quiz/new').post(isAuthenticatedUser,newTopicQuiz)
+router.route('/quiz/new').post(isAuthenticatedUser, authorizeRoles('creator'),newTopicQuiz)
 router.route('/quizs/:topicId').get(getTopicQuizs)
-router.route('/quiz/update/:id').put(isAuthenticatedUser,updateTopicQuiz)
-router.route('/quiz/delete/:id').delete(isAuthenticatedUser,deleteTopicQuiz)
+router.route('/quiz/update/:id').put(isAuthenticatedUser, authorizeRoles('creator'),updateTopicQuiz)
+router.route('/quiz/delete/:id').delete(isAuthenticatedUser, authorizeRoles('creator'),deleteTopicQuiz)
 
 
 router.route('/note/new').post(isAuthenticatedUser,newNote)

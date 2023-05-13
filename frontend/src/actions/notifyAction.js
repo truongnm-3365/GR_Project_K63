@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../../src/axios/axios'
 import {
     GET_NOTIFIES_REQUEST,
     GET_NOTIFIES_SUCCESS,

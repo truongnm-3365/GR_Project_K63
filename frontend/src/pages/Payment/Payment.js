@@ -8,7 +8,7 @@ import { clearErrors } from '../../actions/orderActions'
 
 import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js'
 
-import axios from 'axios'
+import axios from '../../axios/axios'
 import { newRegisterCourse,extendCourse } from '../../actions/registerCourseAction'
 import { useLocation } from 'react-router-dom/cjs/react-router-dom.min'
 

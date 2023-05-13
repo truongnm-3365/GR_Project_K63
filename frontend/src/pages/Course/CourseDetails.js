@@ -24,6 +24,7 @@ const CourseDetails = ({ match }) => {
 
     const { loading, error, course } = useSelector(state => state.courseDetails)
     const { user } = useSelector(state => state.auth)
+    
     const { error: reviewError, success } = useSelector(state => state.newReview)
     const { registerCourses } = useSelector(state => state.registerCourses)
     const { success: newSuccess} = useSelector(state => state.newRegisterCourse)
@@ -34,7 +35,7 @@ const CourseDetails = ({ match }) => {
 
     useEffect(() => {
         dispatch(getCourseDetails(match.params.id))
-        if(user){
+        if(localStorage.getItem('token')){
             dispatch(getMeRegisterCourses())
         }
         dispatch(getCourseLessons(match.params.id))
@@ -207,7 +208,7 @@ const CourseDetails = ({ match }) => {
                         <div className="col-12 col-lg-5 img-fluid" id="course_image">
                             
                             {course.details.images && course.details.images.map(image => (
-                                <img className="d-block w-100" src={image.url} alt={course.title} />
+                                <img className="d-block w-100" src={process.env.REACT_APP_API_URL + image.url} alt={course.title} />
                             ))}
                             <div><h2 className='mt-5'>Danh sách bài học</h2></div>
                             <div>
@@ -268,7 +269,7 @@ const CourseDetails = ({ match }) => {
                             <div className="rating-outer">
                                 <div className="rating-inner" style={{ width: `${(course.details.ratings / 5) * 100}%` }}></div>
                             </div>
-                            <span id="no_of_reviews">({course.details.numOfReviews} Reviews)</span>
+                            <span id="no_of_reviews">({course.details.numOfReviews} Đánh giá)</span>
 
                             <hr />
 
@@ -294,7 +295,7 @@ const CourseDetails = ({ match }) => {
                                     }
                                 </>
                                 :<>
-                                {user ?
+                                {localStorage.getItem('token') ?
                                     <button onClick={() => addCourse()} type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" >Đăng ký học</button>
                                 :  <div className="alert alert-danger mt-5" type='alert'>Đăng nhập để đăng ký khóa học</div> }
                                 </>                                
@@ -319,7 +320,7 @@ const CourseDetails = ({ match }) => {
                              {/* <p>Ngày bắt đầu: {formatDate(course.details.startDate)}</p> 
                              <p>Ngày kết thúc: {formatDate(course.details.endDate)}</p>        */}
                              { isRegister() && <p>Ngày hết hạn: {expriedDate()}</p>}
-                            {user ? 
+                            {localStorage.getItem('token') ? 
                             ( 
                                 checkCompletedCourse() ? 
                                 <button id="review_btn" type="button" className="btn btn-primary mt-4" data-toggle="modal" data-target="#ratingModal" onClick={setUserRatings}>

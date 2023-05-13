@@ -10,15 +10,17 @@ import { UPDATE_USER_RESET } from '../../../constants/userConstants'
 
 const UpdateUser = ({ history, match }) => {
 
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [role, setRole] = useState('')
+
 
     const alert = useAlert();
     const dispatch = useDispatch();
 
     const { error, isUpdated } = useSelector(state => state.user);
     const { user } = useSelector(state => state.userDetails)
+
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [role, setRole] = useState('')
 
     const userId = match.params.id;
 
@@ -53,12 +55,14 @@ const UpdateUser = ({ history, match }) => {
     const submitHandler = (e) => {
         e.preventDefault();
 
-        const formData = new FormData();
-        formData.set('name', name);
-        formData.set('email', email);
-        formData.set('role', role);
+        // const formData = new FormData();
+        // formData.set('name', name);
+        // formData.set('email', email);
+        // formData.set('role', role);
 
-        dispatch(updateUser(user._id, formData))
+        const data = {name,role,email}
+
+        dispatch(updateUser(user._id, data))
     }
 
 
@@ -83,7 +87,8 @@ const UpdateUser = ({ history, match }) => {
                                         id="name_field"
                                         className="form-control"
                                         name='name'
-                                        value={name}
+                                        defaultValue={name}
+                                        
                                         onChange={(e) => setName(e.target.value)}
                                     />
                                 </div>
@@ -95,7 +100,7 @@ const UpdateUser = ({ history, match }) => {
                                         id="email_field"
                                         className="form-control"
                                         name='email'
-                                        value={email}
+                                        defaultValue={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                     />
                                 </div>
@@ -111,6 +116,7 @@ const UpdateUser = ({ history, match }) => {
                                         onChange={(e) => setRole(e.target.value)}
                                     >
                                         <option value="user">user</option>
+                                        <option value="creator">creator</option>
                                         <option value="admin">admin</option>
                                     </select>
                                 </div>

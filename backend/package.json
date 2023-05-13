@@ -7,7 +7,6 @@
     "start": "SET node backend/server.js",
     "dev": "SET NODE_ENV=DEVELOPMENT& nodemon backend/server",
     "prod": "SET NODE_ENV=PRODUCTION& nodemon backend/server"
-    
   },
   "author": "Ghulam Abbas",
   "license": "ISC",
@@ -24,9 +23,9 @@
     "mongoose": "^5.10.16",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.4.16",
+    "socket.io": "^4.1.2",
     "stripe": "^8.128.0",
-    "validator": "^13.1.17",
-    "socket.io": "^4.1.2"
+    "validator": "^13.1.17"
   },
   "devDependencies": {
     "nodemon": "^2.0.6"

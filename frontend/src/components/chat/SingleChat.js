@@ -2,7 +2,7 @@ import "./styles.css";
 
 import { getSender, getSenderFull } from "../../config/ChatLogics";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../axios/axios";
 
 import ProfileModal from "./miscellaneous/ProfileModal";
 import ScrollableChat from "./ScrollableChat";

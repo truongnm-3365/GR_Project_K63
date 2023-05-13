@@ -119,7 +119,7 @@ export const profileReducer = (state = {profile :{}}, action) => {
                 loading: false,  
                 profile: action.payload
             }
-        case LOAD_USER_FAIL:
+        case LOAD_PROFILE_FAIL:
             return {
                 loading: false,
                 profile: null,

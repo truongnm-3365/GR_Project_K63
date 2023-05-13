@@ -1,6 +1,6 @@
 import { Drawer, Button, Input, Tooltip, Spin, notification  } from 'antd';
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../../axios/axios";
 import ChatLoading from "../ChatLoading";
 import { getSender } from "../../../config/ChatLogics";
 import UserListItem from "../userAvatar/UserListItem";

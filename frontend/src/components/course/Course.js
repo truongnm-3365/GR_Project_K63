@@ -7,7 +7,7 @@ const Course = ({ course, col }) => {
             <div className="card p-3 rounded ">
                 <img
                     className="card-img-top mx-auto"
-                    src={course.images[0].url}
+                    src={process.env.REACT_APP_API_URL + course.images[0].url}
                 />
                 <div className="card-body d-flex flex-column">
                     <h5 className="card-title">

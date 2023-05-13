@@ -141,14 +141,11 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 
 // Get currently logged in user details   =>   /api/v1/me
 exports.getUserProfile = catchAsyncErrors(async (req, res, next) => {
-    let user = await User.findById(req.user.id);
-    const courses = await Course.find({user: req.user.id,accepted: true});
 
-    user = {courses,...user._doc}
 
     res.status(200).json({
         success: true,
-        user
+        user:req.user
     })
 })
 
@@ -284,7 +281,12 @@ exports.allUsersChat = catchAsyncErrors(async (req, res) => {
     const myRegisterCourses = await Course.find({_id:{ $in: myRegister}})
     myRegister = myRegisterCourses.map(item => item.user)
     myusers.push(...myRegister)
+
+    let admin = await User.find({role:'admin'});
+    admin = admin.map(item => item._id);
     
+    myusers.push(...admin)
+
     const users = await User.find(keyword).find({ _id: { $ne: req.user.id } }).find({_id:{ $in: myusers}});
     res.send(users);
   });

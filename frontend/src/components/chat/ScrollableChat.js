@@ -24,7 +24,7 @@ const ScrollableChat = ({ messages }) => {
                   style={{marginRight:'4px',marginTop:'7px',cursor:'pointer'}}
                   
                   alt={m.sender.name}
-                  src={ m.sender.avatar?.url }
+                  src={process.env.REACT_APP_API_URL +  m.sender.avatar?.url }
                 />
               </Tooltip>
             )}

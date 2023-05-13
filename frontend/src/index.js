@@ -9,12 +9,18 @@ import { positions, transitions, Provider as AlertProvider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic'
 import ChatProvider from "./Context/ChatProvider";
 import { ConfigProvider } from 'antd';
+import setAuthToken from './axios/setAuthToken';
 
 const options = {
   timeout: 5000,
   position: positions.BOTTOM_CENTER,
   transition: transitions.SCALE
 }
+
+if(localStorage.getItem("token")){
+  setAuthToken(localStorage.getItem("token"));
+}
+
 
 ReactDOM.render(
     <Provider store={store} >

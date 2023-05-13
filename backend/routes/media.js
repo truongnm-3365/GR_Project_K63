@@ -46,6 +46,7 @@ router.get("/:courseId/:index", mediaController.getLesson);
 router.post(
   "/create",
   isAuthenticatedUser,
+  authorizeRoles('creator'),
   upload.fields([
     {
       name: "videos",

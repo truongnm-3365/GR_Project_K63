@@ -110,7 +110,13 @@ import {
     UPDATE_NOTE_FAIL,
     DELETE_NOTE_FAIL,
     DELETE_NOTE_RESET,
-    UPDATE_NOTE_RESET
+    UPDATE_NOTE_RESET,
+    MY_COURSES_REQUEST,
+    CREATOR_COURSES_REQUEST,
+    MY_COURSES_SUCCESS,
+    CREATOR_COURSES_SUCCESS,
+    MY_COURSES_FAIL,
+    CREATOR_COURSES_FAIL
 
 } from '../constants/courseConstants'
 
@@ -119,6 +125,8 @@ export const coursesReducer = (state = { courses: [] }, action) => {
     switch (action.type) {
         case ALL_COURSES_REQUEST:
         case ADMIN_COURSES_REQUEST:
+        case MY_COURSES_REQUEST:
+        case CREATOR_COURSES_REQUEST:
             return {
                 loading: true,
                 courses: []
@@ -139,7 +147,21 @@ export const coursesReducer = (state = { courses: [] }, action) => {
                 courses: action.payload
             }
 
+        case MY_COURSES_SUCCESS:
+            return {
+                loading: false,
+                courses: action.payload
+            }
+
+        case CREATOR_COURSES_SUCCESS:
+            return {
+                loading: false,
+                courses: action.payload
+            }
+
         case ALL_COURSES_FAIL:
+        case MY_COURSES_FAIL:
+        case CREATOR_COURSES_FAIL:
         case ADMIN_COURSES_FAIL:
             return {
                 loading: false,

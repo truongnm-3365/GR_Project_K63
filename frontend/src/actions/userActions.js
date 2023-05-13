@@ -1,4 +1,5 @@
-import axios from 'axios'
+import axios from '../../src/axios/axios'
+import setAuthToken from '../axios/setAuthToken'
 import {
     LOGIN_REQUEST,
     LOGIN_SUCCESS,
@@ -55,6 +56,8 @@ export const login = (email, password) => async (dispatch) => {
 
         const { data } = await axios.post('/api/v1/login', { email, password }, config)
 
+        localStorage.setItem('token',data.token)
+        setAuthToken(data.token)
         
         dispatch({
             type: LOGIN_SUCCESS,
@@ -85,6 +88,10 @@ export const register = (userData) => async (dispatch) => {
 
         const { data } = await axios.post('/api/v1/register', userData, config)
 
+
+        localStorage.setItem('token',data.token)
+        setAuthToken(data.token)
+
         dispatch({
             type: REGISTER_USER_SUCCESS,
             payload: data.user
@@ -100,16 +107,24 @@ export const register = (userData) => async (dispatch) => {
 
 // Load user
 export const loadUser = () => async (dispatch) => {
+
     try {
 
         dispatch({ type: LOAD_USER_REQUEST })
 
         const { data } = await axios.get('/api/v1/me')
 
-        dispatch({
-            type: LOAD_USER_SUCCESS,
-            payload: data.user
-        })
+        if(data.success){
+            dispatch({
+                type: LOAD_USER_SUCCESS,
+                payload: data.user
+            })
+        }else{
+            dispatch({
+                type: LOAD_USER_FAIL,
+            })            
+        }
+
 
     } catch (error) {
         dispatch({
@@ -254,6 +269,8 @@ export const logout = () => async (dispatch) => {
     try {
 
         await axios.get('/api/v1/logout')
+
+        localStorage.removeItem('token')
 
         dispatch({
             type: LOGOUT_SUCCESS,

@@ -16,7 +16,7 @@ import {
     UPDATE_REGISTER_COURSE_FAIL
 } from '../constants/registerCourseContants'
 
-import axios from 'axios'
+import axios from '../../src/axios/axios'
 
 export const getMeRegisterCourses = () => async (dispatch) => {
     try {

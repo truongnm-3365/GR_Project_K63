@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../../src/axios/axios'
 
 import {
     ALL_COURSES_REQUEST,
@@ -103,7 +103,13 @@ import {
     DELETE_NOTE_FAIL,
     UPDATE_NOTE_REQUEST,
     UPDATE_NOTE_SUCCESS,
-    UPDATE_NOTE_FAIL
+    UPDATE_NOTE_FAIL,
+    MY_COURSES_REQUEST,
+    MY_COURSES_SUCCESS,
+    MY_COURSES_FAIL,
+    CREATOR_COURSES_REQUEST,
+    CREATOR_COURSES_SUCCESS,
+    CREATOR_COURSES_FAIL
 
 } from '../constants/courseConstants'
 
@@ -423,19 +429,19 @@ export const getRegularCourses = () => async (dispatch) => {
 export const getMeCourses = (userId) => async (dispatch) => {
     try {
 
-        dispatch({ type: ADMIN_COURSES_REQUEST })
+        dispatch({ type: CREATOR_COURSES_REQUEST })
 
         const { data } = await axios.get(`/api/v1/me/courses/${userId}`)
 
         dispatch({
-            type: ADMIN_COURSES_SUCCESS,
+            type: CREATOR_COURSES_SUCCESS,
             payload: data.courses
         })
 
     } catch (error) {
 
         dispatch({
-            type: ADMIN_COURSES_FAIL,
+            type: CREATOR_COURSES_FAIL,
             payload: error.response.data.message
         })
     }

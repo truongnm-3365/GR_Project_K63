@@ -119,7 +119,7 @@ const CoursesList = ({ history }) => {
         dispatch(acceptCourse(id,courses))
     }
     useEffect(() => {
-        if(user.role === 'user')
+        if(user.role === 'creator')
             dispatch(getMeCourses(user._id));
         else
             dispatch(getAdminCourses());

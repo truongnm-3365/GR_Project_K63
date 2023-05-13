@@ -25,7 +25,7 @@ const UpdateProfile = ({ history }) => {
         if (user) {
             setName(user.name);
             setEmail(user.email);
-            setAvatarPreview(user.avatar.url)
+            setAvatarPreview(process.env.REACT_APP_API_URL +user.avatar.url)
         }
 
         if (error) {
@@ -56,6 +56,7 @@ const UpdateProfile = ({ history }) => {
         for (let key in avatar) {
             formData.append('avatar', avatar[key]);
         }
+
 
         dispatch(updateProfile(formData))
     }

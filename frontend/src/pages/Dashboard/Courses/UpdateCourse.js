@@ -247,11 +247,11 @@ const UpdateCourse = ({ match, history }) => {
                                     </div>
 
                                     {course.details.images && course.details.images.map(img => (
-                                        <img key={img} src={img.url} alt={img.url} className="mt-3 mr-2" width="55" height="52" />
+                                        <img key={img} src={process.env.REACT_APP_API_URL + img.url} alt={img.url} className="mt-3 mr-2" width="55" height="52" />
                                     ))}
 
                                     {imagesPreview.map(img => (
-                                        <img src={img} key={img} alt="Images Preview" className="mt-3 mr-2" width="55" height="52" />
+                                        <img src={img} key={process.env.REACT_APP_API_URL + img} alt="Images Preview" className="mt-3 mr-2" width="55" height="52" />
                                     ))}
 
                                 </div>

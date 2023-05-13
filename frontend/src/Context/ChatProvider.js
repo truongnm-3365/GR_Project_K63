@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import store from '../store'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "../actions/userActions";
 
 const ChatContext = createContext();
@@ -12,13 +12,16 @@ const ChatProvider = ({ children }) => {
   
   const [chats, setChats] = useState();
 
+  const dispatch = useDispatch()
   const { user, isAuthenticated, loading } = useSelector(state => state.auth)
 
   useEffect(() => {
-   
-    store.dispatch(loadUser())
+   if(localStorage.getItem('token')){
+    dispatch(loadUser())
+   }
     
-  }, [store.dispatch]);
+    
+  }, [dispatch]);
 
   return (
     <ChatContext.Provider

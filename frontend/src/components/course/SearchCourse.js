@@ -10,7 +10,7 @@ const SearchCourse = ({ course, col }) => {
                 <div className='d-flex'>
                     <img
                         className="card-img-top mx-3 "
-                        src={course.images[0].url}
+                        src={process.env.REACT_APP_API_URL + course.images[0].url}
                     />
                     <div className="d-flex flex-column">
                         <h5 className="card-title font-weight-bold">

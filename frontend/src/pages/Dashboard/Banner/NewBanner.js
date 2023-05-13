@@ -108,7 +108,7 @@ const NewBanner = ({ history }) => {
                                     </div>
 
                                     {imagesPreview.map(img => (
-                                        <img src={img} key={img} alt="Images Preview" className="mt-3 mr-2" width="600" />
+                                        <img src={process.env.REACT_APP_API_URL + img} key={img} alt="Images Preview" className="mt-3 mr-2" width="600" />
                                     ))}
 
                                 </div>
