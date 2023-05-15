@@ -7,10 +7,10 @@ import {
   isSameSenderMargin,
   isSameUser,
 } from "../../config/ChatLogics";
-import { ChatState } from "../../Context/ChatProvider";
+import { useSelector } from "react-redux";
 
 const ScrollableChat = ({ messages }) => {
-  const { user } = ChatState();
+  const { user } = useSelector(state => state.auth)
 
   return (
     <ScrollableFeed>

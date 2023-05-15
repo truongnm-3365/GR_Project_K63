@@ -1,7 +1,7 @@
 import React from "react";
 
 import "../../App.css";
-import ForumMainbar from "../../components/ForumMainbar/ForumMainbar";
+import ForumMainbar from "../../components/forumMainbar/ForumMainbar";
 
 const Forum = ({ slideIn }) => {
   return (

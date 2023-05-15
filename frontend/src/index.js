@@ -7,7 +7,6 @@ import store from './store'
 
 import { positions, transitions, Provider as AlertProvider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic'
-import ChatProvider from "./Context/ChatProvider";
 import { ConfigProvider } from 'antd';
 import setAuthToken from './axios/setAuthToken';
 
@@ -32,9 +31,7 @@ ReactDOM.render(
           },
         }}
       >
-        <ChatProvider>
-          <App />
-        </ChatProvider>
+         <App />
      </ConfigProvider>
 
       </AlertProvider>

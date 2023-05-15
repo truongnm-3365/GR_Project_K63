@@ -35,7 +35,7 @@ const TopicForm = ({courseId, newTopic }) => {
         </div>
 
         <button type="submit" className="btn btn-primary mt-2">
-          Gửi
+          Hoàn thành
         </button>
       </form>
     </>

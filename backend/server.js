@@ -14,8 +14,6 @@ process.on('uncaughtException', err => {
 // Setting up config file
 if (process.env.NODE_ENV !== 'PRODUCTION') require('dotenv').config({ path: './config/config.env' })
 
-// dotenv.config({ path: 'backend/config/config.env' })
-
 
 // Connecting to database
 connectDatabase();
@@ -28,7 +26,7 @@ const server = app.listen(process.env.PORT, () => {
 const io = require("socket.io")(server, {
     pingTimeout: 60000,
     cors: {
-      origin: "http://localhost:3000",
+      origin: process.env.FRONTEND_URL,
       // credentials: true,
     },
   });

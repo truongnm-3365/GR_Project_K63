@@ -3,14 +3,25 @@ import './index.css'
 import { getCategories } from '../../actions/categoryAction'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+
+function limit(c){
+    return this.filter((x,i)=>{
+        if(i<=(c-1)){return true}
+    })
+}
+    
+Array.prototype.limit= limit;
+
 const Footer = () => {
     const dispatch = useDispatch();
 
     const { categories } = useSelector(state => state.categories);
     const { user, loading } = useSelector(state => state.auth)
+    
 
     useEffect(() => {
         dispatch(getCategories())
+
     },[dispatch])
 
     return (
@@ -48,7 +59,7 @@ const Footer = () => {
                             <div className="single-widget widget-quick-links">
                                 <h5 className="widget-title">Danh mục các khóa học</h5>
                                 <ul>
-                                    {categories && categories.map((category) => (
+                                    {categories && categories.sort((a,b)=> b.numCourses-a.numCourses).limit(4).map((category) => (
                                         <li><Link key={category._id}  to={`/search?keyword=&&category=${category.name}`} >{category.name}</Link></li>
                                     ))}
                                 </ul>

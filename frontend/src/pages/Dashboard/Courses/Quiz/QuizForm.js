@@ -69,7 +69,7 @@ const QuizForm = ({topicId}) => {
         </div>
 
         <button style={{position:'absolute', bottom:'10px'}} type="submit" className="btn btn-success mt-2">
-          Gửi
+          Hoàn thành
         </button>
       </form>
       <div className="form-group">

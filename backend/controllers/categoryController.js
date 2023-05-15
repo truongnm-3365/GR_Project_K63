@@ -1,9 +1,11 @@
 const Category = require('../models/category');
+const Course = require('../models/course');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 
 exports.newCategory = catchAsyncErrors(async (req, res, next) => {
 
     const category = await Category.create(req.body);
+
 
     res.status(201).json({
         success: true,
@@ -13,13 +15,32 @@ exports.newCategory = catchAsyncErrors(async (req, res, next) => {
 
 
 
+
+
 exports.getCategories = catchAsyncErrors(async (req, res, next) => {
 
     const categories = await Category.find();
 
+    const courses = await Course.find();
+
+    let categoriesTmp = []
+
+    for(let cate of categories){
+        let numCourses = 0
+        for(let course of courses){
+            if(cate.name === course.category){
+                numCourses = numCourses + 1;
+            }
+        }
+        
+        cate._doc.numCourses = numCourses;
+        categoriesTmp.push(cate)
+    }
+
+
     res.status(200).json({
         success: true,
-        categories
+        categories:categoriesTmp
     })
 
 })

@@ -12,7 +12,6 @@ import '../../App.css'
 import { getCategories } from '../../actions/categoryAction'
 import './index.css'
 import { MessageFilled  } from '@ant-design/icons';
-import { ChatState } from "../../Context/ChatProvider";
 import NotificationBadge from "react-notification-badge";
 import { Effect } from "react-notification-badge";
 import { Button } from 'antd'
@@ -29,11 +28,11 @@ const Header = () => {
 
     const { categories } = useSelector(state => state.categories);
     const { notifies, error, isDeleted } = useSelector(state => state.notifies)
-    const {
-        notify,
-        setNotify,
-        setSelectedChat
-    } = ChatState();
+    // const {
+    //     notify,
+    //     setNotify,
+    //     setSelectedChat
+    // } = ChatState();
     
     const isObjectEmpty = (objectName) => {
         if(objectName)
@@ -68,7 +67,7 @@ const Header = () => {
             dispatch({ type: DELETE_ALL_NOTIFIES_RESET })
         }
 
-    }, [dispatch, alert, error,user,isDeleted,notify,window.location.pathname])
+    }, [dispatch, alert, error,user,isDeleted,window.location.pathname])
 
     return (
         
@@ -141,7 +140,7 @@ const Header = () => {
 
                                 <MessageFilled style={{color:'rgb(148, 224, 162)'}} />
                                 <NotificationBadge
-                                    count={notify.length}
+                                    // count={notify.length}
                                     effect={Effect.SCALE}
                                 />
                             </Link>

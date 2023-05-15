@@ -6,9 +6,6 @@ const Topic = require("../models/topic");
 exports.getAll = async (req, res, next) => {
   
     let documents = await Document.find({course:req.params.courseId});
-
-    //let documents = docs.find(item => item.course.toString() === req.params.courseId)
-    //console.log(JSON.stringify(documents));
     res.status(201).json({
       success: true,
       documents

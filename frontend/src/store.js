@@ -2,7 +2,13 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension'
 
-import { coursesReducer, newCourseReducer, courseReducer, courseDetailsReducer, newReviewReducer, courseReviewsReducer, reviewReducer, newLessonReducer, courseLessonsReducer, lessonReducer, courseLessonReducer, courseTopicReducer, courseTopicsReducer, newTopicReducer, newQuizReducer, topicQuizReducer, topicQuizsReducer, newDocumentReducer, courseDocumentsReducer, documentReducer, regularCoursesReducer, newNoteReducer, noteReducer, notesReducer } from './reducers/courseReducers'
+import { coursesReducer, newCourseReducer, courseReducer, courseDetailsReducer, newReviewReducer, 
+        courseReviewsReducer, reviewReducer, newLessonReducer, courseLessonsReducer, lessonReducer, 
+        courseLessonReducer, courseTopicReducer, courseTopicsReducer, newTopicReducer, newQuizReducer, 
+        topicQuizReducer, topicQuizsReducer, newDocumentReducer, courseDocumentsReducer, documentReducer, 
+        regularCoursesReducer, newNoteReducer, noteReducer, notesReducer } 
+
+        from './reducers/courseReducers'
 import { notifiesReducer } from './reducers/notifyReducer';
 import { authReducer, userReducer, forgotPasswordReducer, allUsersReducer, userDetailsReducer, profileReducer } from './reducers/userReducers'
 import { cartReducer } from './reducers/cartReducers'
@@ -11,6 +17,7 @@ import { newRegisterCourseReducer, RegisterCourseReducer, registerCoursesReducer
 import { categoriesReducer, categoryDetailsReducer, categoryReducer, newCategoryReducer } from './reducers/categoryReducer';
 import { bannerDetailsReducer, bannerReducer, bannersReducer, newBannerReducer } from './reducers/bannerReducer';
 import questionsReducer from './reducers/questionReducer';
+import { accessChatReducer, chatsReducer, messagesReducer, searchChatReducer, selectedChatReducer, sendMessagesReducer } from './reducers/chatReducer';
 
 
 const reducer = combineReducers({
@@ -63,6 +70,12 @@ const reducer = combineReducers({
     newNote: newNoteReducer,
     note: noteReducer,
     notes:notesReducer,
+    chats:chatsReducer,
+    messages:messagesReducer,
+    newMessage: sendMessagesReducer,
+    accessChat: accessChatReducer,
+    searchChat: searchChatReducer,
+    selectedChat: selectedChatReducer
 })
 
 

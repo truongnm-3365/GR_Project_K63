@@ -19,20 +19,20 @@ const ProfileModal = ({ user, children }) => {
 
       <Button style={{display:'flex',alignItems:'center'}} onClick={showModal} ><EyeOutlined/></Button>
     
-      <Modal size="large" title={user.name} onCancel={hideModal} onOk={hideModal} open={open} >
+      <Modal size="large" title={user?.name} onCancel={hideModal} cancelText={"Đóng"} onOk={hideModal} open={open} >
 
           <div className="d-flex flex-column justify-content-between align-items-center">
             <Image
               style={{width:'150px'}}
-              src={process.env.REACT_APP_API_URL + user.avatar?.url}
-              alt={user.name}
+              src={process.env.REACT_APP_API_URL + user?.avatar?.url}
+              alt={user?.name}
             />
             <span
               style ={{fontSize:"28px"}}
             >
-              Email: {user.email}
+              Email: {user?.email}
             </span>
-            <Link to={`profile/${user._id}`}>Xem thông tin chi tiết</Link>
+            <Link to={`profile/${user?._id}`}>Xem thông tin chi tiết</Link>
           </div>      
       </Modal>
     </>

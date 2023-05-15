@@ -1,40 +1,44 @@
-import axios from "../../axios/axios";
 import { useEffect, useState } from "react";
 import { getSender } from "../../config/ChatLogics";
 import ChatLoading from "./ChatLoading";
-import { ChatState } from "../../Context/ChatProvider";
 import { useAlert } from "react-alert";
+import { useDispatch, useSelector } from "react-redux";
+import { getChats, setSeletedChat } from "../../actions/chatAction";
 
 const MyChats = ({ fetchAgain }) => {
 
-  const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
+  const { user } = useSelector( state => state.auth)
+
+  const dispatch = useDispatch();
+  const { selectedChat } = useSelector(state => state.selectedChat)
+  const { chats} = useSelector(state => state.chats)
+  const { accessChat } = useSelector(state => state.accessChat)
 
   let alert = useAlert()
 
   let chatsStyle = (chat) => ({
     cursor:"pointer",
-    background: selectedChat === chat ? "#38B2AC" : "#E8E8E8",
-    color: selectedChat === chat ? "white" : "black",
+    background: selectedChat._id === chat._id ? "#38B2AC" : "#E8E8E8",
+    color: selectedChat._id === chat._id ? "white" : "black",
     borderRadius:'10px',
     padding:'5px 10px',
     marginBottom:'10px'
   })
 
   const fetchChats = async () => {
-    // console.log(user._id);
     try {
+      dispatch(getChats())
 
-      const { data } = await axios.get("/api/v1/chat");
-      setChats(data);
     } catch (error) {
       alert.error('Khổng tải được tin nhắn')
     }
   };
 
+
   useEffect(() => {
     fetchChats();
     // eslint-disable-next-line
-  }, [fetchAgain]);
+  }, [dispatch,fetchAgain,accessChat]);
 
   return (
 
@@ -57,7 +61,7 @@ const MyChats = ({ fetchAgain }) => {
             <div style={{overflowY:"scroll"}}>
               {chats.map((chat) => (
                 <div
-                  onClick={() => setSelectedChat(chat)}
+                  onClick={() => dispatch(setSeletedChat(chat))}
                   style={chatsStyle(chat)}                
                   key={chat._id}
                 >

@@ -1,12 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Chatbox from "../../components/chat/Chatbox";
 import MyChats from "../../components/chat/MyChats";
 import SideDrawer from "../../components/chat/miscellaneous/SideDrawer";
-import { ChatState } from "../../Context/ChatProvider";
+import { useSelector } from "react-redux";
+
+
 
 const Chatpage = () => {
   const [fetchAgain, setFetchAgain] = useState(false);
-  const { user } = ChatState();
+  const { user } = useSelector(state => state.auth)
+
+  
+
 
   return (
 

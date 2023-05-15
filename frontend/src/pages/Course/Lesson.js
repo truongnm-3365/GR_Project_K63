@@ -38,7 +38,7 @@ const Lessons = ({match}) => {
   const {user} = useSelector(state => state.auth)
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
-  const [videoTime, setVideoTime] = useState(0);
+  const [videoTime, setVideoTime] = useState();
   const [isModalNoteOpen, setIsModalNoteOpen] = useState(false);
   const [isNoteListOpen, setIsNoteListOpen] = useState(false);
   const [note, setNote] = useState("");
@@ -355,14 +355,14 @@ return (
 
         <div className="mt-3">
           <Button onClick={showModalNote}>Thêm ghi chú </Button>
-          <Modal title={"Thêm ghi chú tại: " + secondsToHms(vid?.currentTime)} open={isModalNoteOpen} width={1000} onOk={handleOk} onCancel={handleCancel} cancelText={"Hủy bỏ"}>
+          <Modal title={"Thêm ghi chú tại: " + secondsToHms(vid?.currentTime)} open={isModalNoteOpen} width={1000} onOk={handleOk} onCancel={handleCancel} okText={"Hoàn thành"} cancelText={"Hủy bỏ"}>
             
             <TextArea onChange={(e) => setNote(e.target.value)} rows={4} />
   
           </Modal>
 
           {vid &&<Button onClick={showNoteList}>Danh sách ghi chú </Button>}
-          <Modal title={"Danh sách ghi chú"} open={isNoteListOpen} onOk={handleListOk} onCancel={handleListCancel} cancelText={"Hủy bỏ"} width={1000}>
+          <Modal title={"Danh sách ghi chú"} open={isNoteListOpen} onOk={handleListOk} onCancel={handleListCancel} cancelText={"Hủy bỏ"}  width={1000}>
               {!notesLoading ? notes.map(item => {
                 return <div key={item._id} className="mb-3">
                     <Button danger onClick={() => handleVideoTiem(item) }>{secondsToHms(item.time)}</Button>
@@ -384,7 +384,7 @@ return (
               <div className="col-md-8">
                 <span style={{display:'none'}}>
                 { 
-                  !!vid ? vid.currentTime = videoTime : ""
+                  typeof videoTime === 'number' && isFinite(videoTime) && vid && (vid.currentTime = videoTime )
                 }
                 </span>
 

@@ -30,7 +30,7 @@ const UploadsList = ({ medias,deleteLessonHandler }) => {
                             height="240"
                             controls
                             >
-                              <source src={process.env.REACT_APP_API_URL+ video} />
+                              <source src={process.env.REACT_APP_API_URL + video} />
                               
                             </video>
                             <button onClick={() => deleteLessonHandler(media._id)}>Xóa</button>

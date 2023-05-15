@@ -28,10 +28,23 @@ exports.newCourse = catchAsyncErrors(async (req, res, next) => {
   }
 
 
+
+
+
     req.body.images = imagesLinks;
-    req.body.user = req.user.id;
+    req.body.user = req.user._id;
 
     const course = await Course.create(req.body);
+
+    const admins = await User.find({role:'admin'})
+
+    for(let admin of admins) {
+      const notify = await Notify.create({
+          user: admin._id,
+          content: `Có một yêu cầu phê duyệt khóa học ${course.name} từ ${req.user.name}`,
+          course:course._id
+      })
+    }
 
     res.status(201).json({
         success: true,

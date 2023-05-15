@@ -1,21 +1,21 @@
 import { Drawer, Button, Input, Tooltip, Spin, notification  } from 'antd';
 import { useEffect, useState } from "react";
-import axios from "../../../axios/axios";
 import ChatLoading from "../ChatLoading";
 import { getSender } from "../../../config/ChatLogics";
 import UserListItem from "../userAvatar/UserListItem";
-import { ChatState } from "../../../Context/ChatProvider";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
+import { getAccessChat, getSearchChat, setSeletedChat } from '../../../actions/chatAction';
 
 function SideDrawer() {
   const [search, setSearch] = useState("");
-  const [searchResult, setSearchResult] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [loadingChat, setLoadingChat] = useState(false);
   const [open, setOpen] = useState(false);
 
   const alert = useAlert();
+  const dispatch = useDispatch();
+
+  const { searchResult, loading} = useSelector(state => state.searchChat)
+  const { loading:loadingChat,accessChat:chat ,success} = useSelector(state => state.accessChat)
 
   const { user } = useSelector(state => state.auth)
   const showDrawer = () => {
@@ -25,48 +25,30 @@ function SideDrawer() {
     setOpen(false);
   };
 
-  const {
-    setSelectedChat,
-    chats,
-    setChats,
-  } = ChatState();
 
   useEffect(async () => {
     try {
-      setLoading(true);
-
-      const { data } = await axios.get(`/api/v1/user?search=${search}`);
-
-      setLoading(false);
-      setSearchResult(data);
+      dispatch(getSearchChat(search));
     } catch (error) {
       alert.error('Tìm kiếm thất bại')
     }
-  },[])
+    dispatch(setSeletedChat(chat));
+
+  },[dispatch,chat])
 
   const handleSearch = async () => {
     try {
-      setLoading(true);
-
-      const { data } = await axios.get(`/api/v1/user?search=${search}`);
-
-      setLoading(false);
-      setSearchResult(data);
+      dispatch(getSearchChat(search));
     } catch (error) {
       alert.error("Tìm kiếm thất bại")
     }
   };
 
-  const accessChat = async (userId) => {
-
+  const accessChat = (userId) => {
+    
     try {
-      setLoadingChat(true);
-
-      const { data } = await axios.post(`/api/v1/chat`, { userId });
-
-      if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
-      setSelectedChat(data);
-      setLoadingChat(false);
+      dispatch(getAccessChat(userId))
+      
       onClose();
     } catch (error) {
       alert.error('Không tải được chat')
@@ -103,7 +85,7 @@ function SideDrawer() {
                 <UserListItem
                   key={item._id}
                   user={item}
-                  handleFunction={() => accessChat(item._id)}
+                  handleFunction={() => {accessChat(item._id);}}
                 />
               ))
             )}

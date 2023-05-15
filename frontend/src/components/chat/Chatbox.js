@@ -1,12 +1,22 @@
 import "./styles.css";
 import SingleChat from "./SingleChat";
-import { ChatState } from "../../Context/ChatProvider";
+import { useSelector } from "react-redux";
+
+const isObjectEmpty = (objectName) => {
+  if(objectName)
+      return Object.keys(objectName).length === 0
+  else{
+      return true
+  }
+}
+
 
 const Chatbox = ({ fetchAgain, setFetchAgain }) => {
-  const { selectedChat } = ChatState();
+  const { selectedChat } = useSelector(state => state.selectedChat)
+
 
   let style ={
-    display: selectedChat ? 'flex' : 'none',
+    display: !isObjectEmpty(selectedChat) ? 'flex' : 'none',
     alignItems:'center',
     flexDirection: 'column',
     padding:'10px',

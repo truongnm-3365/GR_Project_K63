@@ -3,10 +3,6 @@ import { useState } from 'react'
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react';
 
-
-
-
-
 const systemMessage = {
   "role": "system", "content": "Giải thích những điều giống như bạn đang nói chuyện với một chuyên gia phần mềm với 2 năm kinh nghiệm."
 }

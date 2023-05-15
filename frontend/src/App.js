@@ -54,8 +54,9 @@ import FinalTest from './pages/FinalTest/FinalTest'
 import FinalResult from './pages/FinalTest/FinalResult'
 import { useDispatch, useSelector } from 'react-redux'
 import Forum from './pages/Forum/Forum'
-import AskQuestion from './pages/AskQuestion/AskQuestion'
-import DisplayQuestion from './pages/Questions/DisplayQuestion'
+
+import DisplayQuestion from './pages/Forum/Question/DisplayQuestion'
+import AskQuestion from './pages/Forum/AskQuestion/AskQuestion'
 
 
 function App() {
