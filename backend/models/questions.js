@@ -19,6 +19,11 @@ const QuestionSchema = new mongoose.Schema({
       answeredOn: { type: Date, default: Date.now },
     },
   ],
+
+  isSolved:{
+    type:Boolean,
+    default: false
+  }
 });
 
 module.exports = mongoose.model("Question", QuestionSchema);

@@ -1,5 +1,7 @@
 const Questions = require ("../models/questions");
+const User = require("../models/user");
 const mongoose = require ("mongoose");
+const Notify = require("../models/notify");
 const ErrorHandler = require('../utils/errorHandler');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 
@@ -39,6 +41,56 @@ exports.deleteQuestion = catchAsyncErrors(async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 });
+
+
+exports.markSolveQuestion = catchAsyncErrors(async (req,res) =>{
+  let question = await Questions.findById(req.params.id);
+
+  let users = req.body.answeredUsers
+
+
+
+  if (!question) {
+      return next(new ErrorHandler('Question not found', 404));
+  }
+
+  for (let user of users){
+    userTmp = await User.findById(user);
+
+    await User.findByIdAndUpdate(user, { consumPoint: userTmp.consumPoint + 1 }, {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false
+    });
+
+
+    await Notify.create({
+
+      user: user,
+      content: `Bạn được cộng điểm do câu trả lời của bạn có ích đối với câu hỏi ${question.questionTitle}`,
+      type: 2
+    })
+
+
+
+  }
+
+
+  question = await Questions.findByIdAndUpdate(req.params.id, { isSolved:true }, {
+
+    new: true,
+      runValidators: true,
+      useFindAndModify: false
+  });
+
+
+
+
+  res.status(200).json({
+      success: true,
+      question
+  })
+})
 
 exports.voteQuestion = catchAsyncErrors(async (req, res) => {
   const { id: _id } = req.params;

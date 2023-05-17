@@ -1,5 +1,5 @@
 import axios from '../../src/axios/axios'
-import { FETCH_ALL_QUESTIONS, POST_ANSWER, POST_QUESTION } from '../constants/questionContant';
+import { FETCH_ALL_QUESTIONS, MARK_SOLVED_FAIL, MARK_SOLVED_REQUEST, MARK_SOLVED_SUCCESS, POST_ANSWER, POST_QUESTION } from '../constants/questionContant';
 
 const postQuestion = (questionData) => axios.post("/api/v1/questions/Ask", questionData);
 
@@ -44,6 +44,27 @@ export const deleteQuestion = (id, navigate) => async (dispatch) => {
     console.log(error);
   }
 };
+
+export const markSolvedQuestion = (id,answeredUsers) => async (dispatch) => {
+
+  try {
+    dispatch({ type: MARK_SOLVED_REQUEST })
+    const { data } = await axios.put(`/api/v1/questions/mark-solved/${id}`,{answeredUsers})
+
+    dispatch({
+      type: MARK_SOLVED_SUCCESS,
+      payload: data.success
+    })
+
+
+  } catch (error) {
+    dispatch({
+      type: MARK_SOLVED_FAIL,
+      payload: error.response.data.message
+  })
+  }
+}
+
 
 export const voteQuestion = (id, value) => async (dispatch) => {
   try {

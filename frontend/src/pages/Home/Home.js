@@ -64,12 +64,12 @@ const Home = () => {
                     
 
                     <section id="courses" className="container mt-5">
-                        <RegularCourses courses={courses}/>
+                        <RegularCourses courses={courses ? courses : []}/>
                        <h1 id="courses_heading">Khóa học mới nhất</h1>
                         <div className="row">
 
                             {
-                                courses.map(course => (
+                                courses?.map(course => (
                                         <Course key={course._id} course={course} col={3} />
                                 ))
                             }

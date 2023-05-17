@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 
 import MetaData from '../../components/layout/MetaData'
 
@@ -11,6 +11,8 @@ import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcEl
 import axios from '../../axios/axios'
 import { newRegisterCourse,extendCourse } from '../../actions/registerCourseAction'
 import { useLocation } from 'react-router-dom/cjs/react-router-dom.min'
+import { spendConsumPoint } from '../../actions/userActions'
+
 
 const options = {
     style: {
@@ -37,10 +39,13 @@ const Payment = ({ history,match }) => {
     const elements = useElements();
     const dispatch = useDispatch();
     const courseId = match.params.courseId
-    const amount = match.params.amount
+    //let amount = match.params.amount
 
     const { user } = useSelector(state => state.auth)
     const { error } = useSelector(state => state.newOrder)
+
+    const [point,setPoint] = useState(0);
+    const [amount,setMount] = useState(match.params.amount)
 
     useEffect(() => {
 
@@ -49,18 +54,32 @@ const Payment = ({ history,match }) => {
             dispatch(clearErrors())
         }
 
-    }, [dispatch, alert, error])
+    }, [dispatch, alert, error,amount])
 
 
     const createdAt = query.get("createdAt") || ""
     
 
-    const paymentData = {
-        amount:amount*100 === 0 ? 100 : amount*100
+    const usePoint = (e) =>{
+        e.preventDefault();
+        if(user.consumPoint < point){
+            alert.error("Bạn không đủ điểm tiêu dùng để sử dụng")
+        }else{
+            setMount(match.params.amount - match.params.amount*(point/100))
+        }
+        
     }
+
+
+
+
 
     const submitHandler = async (e) => {
         e.preventDefault();
+
+        const paymentData = {
+            amount:amount*100 === 0 ? 100 : amount*100
+        }
 
         document.querySelector('#pay_btn').disabled = true;
 
@@ -77,7 +96,6 @@ const Payment = ({ history,match }) => {
 
             const clientSecret = res.data.client_secret;
 
-            console.log(clientSecret);
 
             if (!stripe || !elements) {
                 return;
@@ -100,11 +118,14 @@ const Payment = ({ history,match }) => {
 
                 // The payment is processed or not
                 if (result.paymentIntent.status === 'succeeded') {
+                    dispatch(spendConsumPoint(point))
                     if(createdAt){
                         dispatch(extendCourse({createdAt}))
                     }else{
                         dispatch(newRegisterCourse(courseId))
+                        
                     }
+                    
                      
                     history.push(`/success/${courseId}`)
                 } else {
@@ -119,13 +140,28 @@ const Payment = ({ history,match }) => {
         }
     }
 
+
+
     return (
         <Fragment>
             <MetaData title={'Thanh toán'} />
 
-            <div className="row wrapper">
+            <div className="row wrapper mt-0">
                 <div className="col-10 col-lg-5">
+                    <div className="form-group">
+                    <form onSubmit={usePoint}>
+                        <label htmlFor="card_num_field">Điểm tiêu dùng</label>
+                            <div className='d-flex'>
+                            <input placeholder='Sử dụng điểm sẽ giảm giá lên tới 20%' onChange={(e) => setPoint(e.target.value)} className='form-control col-8' min="0" max="20" type='number'></input>
+                            <button type="submit" className='btn btn-success mt-0 ml-2 w-100'>Sử dụng điểm</button>
+                        </div>
+                    </form>
+
+                           
+                    </div>
+
                     <form className="shadow-lg" onSubmit={submitHandler}>
+
                         <h1 className="mb-4">Thông tin thẻ</h1>
                         <div className="form-group">
                             <label htmlFor="card_num_field">Số thẻ</label>

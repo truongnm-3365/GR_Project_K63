@@ -37,6 +37,8 @@ const updateNoOfQuestions = catchAsyncErrors(async (_id, noOfAnswers) => {
   }
 });
 
+
+
 exports.deleteAnswer = catchAsyncErrors(async (req, res, next) => {
   const { id: _id } = req.params;
   const { answerId, noOfAnswers } = req.body;

@@ -28,6 +28,8 @@ const Header = () => {
 
     const { categories } = useSelector(state => state.categories);
     const { notifies, error, isDeleted } = useSelector(state => state.notifies)
+
+    console.log(notifies);
     // const {
     //     notify,
     //     setNotify,

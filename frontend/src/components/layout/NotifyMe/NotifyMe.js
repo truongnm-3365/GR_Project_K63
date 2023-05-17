@@ -192,7 +192,7 @@ const NotifyMe = (props) => {
                       }
                       key={index}
                     >
-                      <Link to= {`/course/${message['course']}`}>
+                      <Link to= {message.type ===2 ? "/me" : `/course/${message['course']}`}>
                         <div className="timestamp">
                           <span style={{paddingLeft: '8px'}}>{getDayDiff(message[key])}</span>
                           {showDate && (

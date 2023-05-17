@@ -37,10 +37,19 @@ const userSchema = new mongoose.Schema({
         default: 'user',
         enum:['user','admin','creator']
     },
+
+    consumPoint:{
+        type: Number,
+        default: 20 
+     },
+
+
     createdAt: {
         type: Date,
         default: Date.now
     },
+
+
     resetPasswordToken: String,
     resetPasswordExpire: Date
 

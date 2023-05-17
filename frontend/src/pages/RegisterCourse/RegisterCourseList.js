@@ -84,7 +84,7 @@ const CourseList = ({ history }) => {
 
 
     return (
-        <div className='container'>
+        <div className='container' style={{minHeight:'500px'}}>
             <MetaData title={'Khóa học đã đăng ký'} />
             {registerCourses && registerCourses.length !== 0 ?  (
                 <Fragment>

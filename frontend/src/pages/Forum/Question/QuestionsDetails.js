@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, Link, useHistory, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
@@ -7,27 +7,66 @@ import copy from "copy-to-clipboard";
 import upvote from "../../../assets/sort-up.svg";
 import downvote from "../../../assets/sort-down.svg";
 import "./Questions.css";
-import { Avatar } from 'antd';
+import { Avatar, Button, Modal, Space, Table ,Tag } from 'antd';
 import DisplayAnswer from "./DisplayAnswer";
 import {
   postAnswer,
   deleteQuestion,
   voteQuestion,
+  markSolvedQuestion,
 } from "../../../actions/questionAction";
 import Loader from "../../../components/layout/Loader";
 import { useAlert } from "react-alert";
+import { fetchAllQuestions } from "../../../actions/questionAction";
+import { MARK_SOLVED_RESET } from "../../../constants/questionContant";
+
+const columns = [
+  {
+    title: 'Câu trả lời',
+    dataIndex: 'answerBody'
+  },
+  {
+    title: 'Người trả lời',
+    dataIndex: 'userAnswered',
+  }
+];
+
+
+
 
 const QuestionsDetails = () => {
   const { id } = useParams();
   const questionsList = useSelector((state) => state.questionsReducer);
+
+  const history = useHistory();
+
+  const { isUpdated, loading } =  useSelector(state => state.question);
+
+  const { user } = useSelector(state => state.auth)
+
   const alert = useAlert()
+
+  const [answeredUsers,setAnsweredUsers] = useState([])
 
   const [Answer, setAnswer] = useState("");
   const Navigate = useHistory();
   const dispatch = useDispatch();
   const User = useSelector((state) => state.auth.user);
   const location = useLocation();
-  const url = "http://localhost:3000";
+  const url = process.env.REACT_APP_URL;
+
+  useEffect(() => {
+    dispatch(fetchAllQuestions())
+    if (isUpdated) {
+      dispatch(fetchAllQuestions())
+      alert.success('Câu hỏi đã được giải quyết');
+      dispatch({type:MARK_SOLVED_RESET})
+    }
+
+  },[dispatch,isUpdated,loading])
+
+
+
 
   const handlePostAns = (e, answerLength) => {
     e.preventDefault();
@@ -53,7 +92,7 @@ const QuestionsDetails = () => {
 
   const handleShare = () => {
     copy(url + location.pathname);
-    alert("Đường dẫn được sao chép : " + url + location.pathname);
+    alert.success("Sao chép thành công. Bạn có thế dán vào bất kỳ chỗ nào khác");
   };
 
   const handleDelete = () => {
@@ -78,9 +117,35 @@ const QuestionsDetails = () => {
     }
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = (id) => {
+    if(answeredUsers.length !== 0){
+      dispatch(markSolvedQuestion(id,answeredUsers))
+   
+      setIsModalOpen(false);
+    }else{
+      alert.error("Chưa có câu trả lời nên không thể hoàn thành")
+    }
+
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+ const rowSelection = {
+  onChange: (selectedRowKeys, selectedRows) => {
+    setAnsweredUsers(selectedRows.map(item => item.userId))
+  },
+};
+
+console.log(answeredUsers);
+
   return (
     <div className="container mt-2">
-      {questionsList.data === null ? (
+      {questionsList.data === null || loading ? (
         <Loader/>
       ) : (
         <>
@@ -89,7 +154,32 @@ const QuestionsDetails = () => {
             .map((question) => (
               <div key={question._id}>
                 <section className="question-details-container">
-                  <h1>{question.questionTitle}</h1>
+                  <Space>
+                    <h1>{question.questionTitle}</h1>
+                    {question.isSolved ? <Tag color="green" >Đã được giải quyết</Tag> :
+                      (user?._id === question.user._id &&
+                      <Button type="primary" onClick={showModal}>
+                        Đánh dấu đã được giải quyết
+                      </Button>
+                      )
+                    }
+                    <Modal title="Bạn được giải quyết bởi câu trả lời nào ?" width={1000} open={isModalOpen} onOk={()=>handleOk(question._id)} okText={"Hoàn thành"} onCancel={handleCancel} cancelText={"Hủy bỏ"}>
+                      <div>
+
+                        <Table
+                          locale={{ emptyText: 'Không có dữ liệu' }}
+                          rowSelection={{
+                            type: "checkbox",
+                            ...rowSelection
+                          }}
+                          columns={columns}
+                          dataSource={question?.answer?.map(item => { item.key = item._id; return item })}
+                        />
+                      </div>
+                    </Modal>
+                  </Space>
+
+                  
                   <div className="question-details-container-2">
                     <div className="question-votes">
                       <img
@@ -155,6 +245,7 @@ const QuestionsDetails = () => {
                     />
                   </section>
                 )}
+                {user?._id !== question.user._id &&
                 <section className="post-ans-container">
                   <h3>Câu trả lời của bạn</h3>
                   <form
@@ -195,6 +286,7 @@ const QuestionsDetails = () => {
                     </Link>
                   </p>
                 </section>
+                }
               </div>
             ))}
         </>

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../../components/layout/Loader'
 import MetaData from '../../components/layout/MetaData'
 import { clearErrors, publicProfile } from '../../actions/userActions'
-import { Pagination } from 'antd'
+import { Pagination, Space } from 'antd'
 
 import Course from '../../components/course/Course'
 
@@ -74,7 +74,7 @@ const Profile = ({ match }) => {
                     <MetaData title={'Thông tin của tôi'} />
                     {(user?._id === profile?._id || !userId) ?
                     <h2 className="mt-5">Thông tin của tôi</h2> :  <h2 className="mt-5">Thông tin cá nhân</h2>}
-                    <div className="row justify-content-around mt-5 user-info">
+                    <div className="row justify-content-around mt-5 ">
                         <div className="col-12 col-md-3">
                             <figure className='avatar avatar-profile'>
                                 <img className="rounded-circle img-fluid" src={process.env.REACT_APP_API_URL + profile?.avatar?.url} alt={profile?.name} />
@@ -86,17 +86,31 @@ const Profile = ({ match }) => {
                         </div>
 
                         <div className="col-12 col-md-5">
-                            <h4>Tên</h4>
-                            <p>{profile?.name}</p>
+                            <div className='d-flex'>
+                                <h4 className='mr-3 mb-3'>Tên: </h4>
+                                <h4 style={{color: '#006241'}}>{profile?.name}</h4>
+                            </div>
 
-                            <h4>Email</h4>
-                            <p>{profile?.email}</p>
+                            <div className='d-flex'>
+                                <h4 className='mr-3 mb-3'>Email: </h4>
+                                <h4 style={{color: '#006241'}}>{profile?.email}</h4>
+                            </div>    
 
-                            <h4>Ngày tham gia</h4>
-                            <p>{String(profile?.createdAt).substring(0, 10)}</p>
+                            <div className='d-flex'>
+                                <h4 className='mr-3 mb-3'>Ngày tham gia: </h4>
+                                <h4 style={{color: '#006241'}}>{String(profile?.createdAt).substring(0, 10)}</h4>
+                            </div>
 
-                            <h4>Vài trò</h4>
-                            <p>{profile?.role?.toUpperCase()}</p>
+                            <div className='d-flex'>
+                                <h4 className='mr-3 mb-3'>Vài trò: </h4>
+                                <h4 style={{color: '#006241'}}>{profile?.role?.toUpperCase()}</h4>
+                            </div>
+
+                            <div className='d-flex'>
+                                <h4 className='mr-3 mb-3'>Điểm tiêu dùng: </h4>
+                                <h4 style={{color: '#006241'}}>{profile?.consumPoint}</h4>
+                            </div>
+
 
 
                             {(user?._id === profile?._id || !userId) &&

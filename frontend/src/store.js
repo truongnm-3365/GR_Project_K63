@@ -16,7 +16,7 @@ import { newOrderReducer, myOrdersReducer, orderDetailsReducer, allOrdersReducer
 import { newRegisterCourseReducer, RegisterCourseReducer, registerCoursesReducer } from './reducers/registerCourseReducer';
 import { categoriesReducer, categoryDetailsReducer, categoryReducer, newCategoryReducer } from './reducers/categoryReducer';
 import { bannerDetailsReducer, bannerReducer, bannersReducer, newBannerReducer } from './reducers/bannerReducer';
-import questionsReducer from './reducers/questionReducer';
+import questionsReducer, { questionReducer } from './reducers/questionReducer';
 import { accessChatReducer, chatsReducer, messagesReducer, searchChatReducer, selectedChatReducer, sendMessagesReducer } from './reducers/chatReducer';
 
 
@@ -67,6 +67,7 @@ const reducer = combineReducers({
     bannerDetails: bannerDetailsReducer,
     profile: profileReducer,
     questionsReducer: questionsReducer,
+    question: questionReducer,
     newNote: newNoteReducer,
     note: noteReducer,
     notes:notesReducer,
