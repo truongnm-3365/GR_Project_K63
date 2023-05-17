@@ -50,3 +50,23 @@ export const deleteAllNotifies = (id) => async (dispatch) => {
         })
     }
 }
+
+export const deleteAllNotifiesMessage = (id) => async (dispatch) => {
+    try {
+
+        dispatch({ type: DELETE_ALL_NOTIFIES_REQUEST })
+
+        const { data } = await axios.delete(`/api/v1/me/notifies/delete-message/${id}`)
+
+        dispatch({
+            type: DELETE_ALL_NOTIFIES_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+        dispatch({
+            type: DELETE_ALL_NOTIFIES_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}

@@ -21,7 +21,6 @@ import UpdatePassword from './pages/User/UpdatePassword'
 import ForgotPassword from './pages/User/ForgotPassword'
 import NewPassword from './pages/User/NewPassword'
 
-import Dashboard from './pages/Dashboard/Dashboard'
 import CoursesList from './pages/Dashboard/Courses/CoursesList'
 import NewCourse from './pages/Dashboard/Courses/NewCourse'
 import UpdateCourse from './pages/Dashboard/Courses/UpdateCourse'
@@ -120,7 +119,6 @@ function App() {
           
         </div>
 
-        <ProtectedRoute path="/admin/courses" isAdmin={true} component={Dashboard} exact />
         <ProtectedRoute path="/me/courses" isAdmin={false} component={CoursesList} exact />
         <ProtectedRoute path="/me/course" isAdmin={false} component={NewCourse} exact />
         <ProtectedRoute path="/me/course/:id" isAdmin={false} component={UpdateCourse} exact />

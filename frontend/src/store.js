@@ -12,7 +12,6 @@ import { coursesReducer, newCourseReducer, courseReducer, courseDetailsReducer, 
 import { notifiesReducer } from './reducers/notifyReducer';
 import { authReducer, userReducer, forgotPasswordReducer, allUsersReducer, userDetailsReducer, profileReducer } from './reducers/userReducers'
 import { cartReducer } from './reducers/cartReducers'
-import { newOrderReducer, myOrdersReducer, orderDetailsReducer, allOrdersReducer, orderReducer } from './reducers/orderReducers'
 import { newRegisterCourseReducer, RegisterCourseReducer, registerCoursesReducer } from './reducers/registerCourseReducer';
 import { categoriesReducer, categoryDetailsReducer, categoryReducer, newCategoryReducer } from './reducers/categoryReducer';
 import { bannerDetailsReducer, bannerReducer, bannersReducer, newBannerReducer } from './reducers/bannerReducer';
@@ -46,11 +45,6 @@ const reducer = combineReducers({
     userDetails: userDetailsReducer,
     forgotPassword: forgotPasswordReducer,
     cart: cartReducer,
-    newOrder: newOrderReducer,
-    myOrders: myOrdersReducer,
-    allOrders: allOrdersReducer,
-    orderDetails: orderDetailsReducer,
-    order: orderReducer,
     newReview: newReviewReducer,
     newLesson: newLessonReducer,
     notifies: notifiesReducer,

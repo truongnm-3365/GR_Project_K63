@@ -14,6 +14,7 @@ import { Button, Spin, Form, Input,notification } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { getMessages, postMessage, setSeletedChat } from "../../actions/chatAction";
 import { TypingIndicator } from "@chatscope/chat-ui-kit-react";
+import { getMeNotifies } from "../../actions/notifyAction";
 
 const ENDPOINT = process.env.REACT_APP_API_URL; 
 var socket, selectedChatCompare;
@@ -119,11 +120,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         !selectedChatCompare || // if chat is not selected or doesn't match current chat
         selectedChatCompare._id !== newMessageRecieved.chat._id
       ) {
-        // if (!notify.includes(newMessageRecieved)) {
-        //   setNotify([newMessageRecieved, ...notify]);
-          
-        //   setFetchAgain(!fetchAgain);
-        // }
       } else {
         if (!isObjectEmpty(selectedChat)){
           fetchMessages();

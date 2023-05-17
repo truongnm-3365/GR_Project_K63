@@ -4,7 +4,7 @@ import { Route, Link, useHistory, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
 import { logout } from '../../actions/userActions'
-import { getMeNotifies, deleteAllNotifies } from '../../actions/notifyAction'
+import { getMeNotifies, deleteAllNotifies, deleteAllNotifiesMessage } from '../../actions/notifyAction'
 import Search from './Search'
 import NotifyMe from './NotifyMe/NotifyMe'
 import { DELETE_ALL_NOTIFIES_RESET } from '../../constants/notifyContants'
@@ -71,6 +71,8 @@ const Header = () => {
 
     }, [dispatch, alert, error,user,isDeleted,window.location.pathname])
 
+    console.log(notifies);
+
     return (
         
         <Fragment>
@@ -124,7 +126,7 @@ const Header = () => {
                         <>
                             <span className='ml-3'>
                                 <NotifyMe
-                                    data={notifies.sort(function(a,b){
+                                    data={notifies.filter(item => item.type !== 1).sort(function(a,b){
                                         return new Date(b.createdAt) - new Date(a.createdAt);
                                     })}
                                     storageKey="notific_key"
@@ -138,11 +140,11 @@ const Header = () => {
                                     deleteNotifiesHandler={deleteNotifiesHandler}
                                 />
                             </span>
-                            <Link to='/chats' className='ml-3 d-flex align-items-center' style={{fontSize:'40px'}}>
+                            <Link to='/chats' onClick={() => dispatch(deleteAllNotifiesMessage(user._id))} className='ml-3 d-flex align-items-center' style={{fontSize:'40px'}}>
 
                                 <MessageFilled style={{color:'rgb(148, 224, 162)'}} />
                                 <NotificationBadge
-                                    // count={notify.length}
+                                    count={notifies.filter(item => item.type === 1).length}
                                     effect={Effect.SCALE}
                                 />
                             </Link>

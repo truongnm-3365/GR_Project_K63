@@ -22,7 +22,23 @@ exports.getMeNotifies = catchAsyncErrors(async (req, res, next) => {
 
 exports.deleteAllNotifies = catchAsyncErrors(async (req, res, next) => {
 
-    const notifies = await Notify.deleteMany({user: req.params.userId});
+    const notifies = await Notify.deleteMany({user: req.params.userId,type: { $ne: 1 } });
+
+    if (!notifies) {
+        return next(new ErrorHandler('Notifies not found', 404));
+    }
+
+
+    res.status(200).json({
+        success: true,
+        message: 'Deleted successfully'
+    })
+
+})
+
+exports.deleteAllNotifiesMessage = catchAsyncErrors(async (req, res, next) => {
+
+    const notifies = await Notify.deleteMany({user: req.params.userId,type:1});
 
     if (!notifies) {
         return next(new ErrorHandler('Notifies not found', 404));

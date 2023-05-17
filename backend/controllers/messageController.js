@@ -2,6 +2,7 @@ const asyncHandler = require('../middlewares/catchAsyncErrors');
 const Message = require("../models/message");
 const User = require("../models/user");
 const Chat = require("../models/chat");
+const Notify = require("../models/notify");
 
 //@route           GET /api/Message/:chatId
 const allMessages = asyncHandler(async (req, res, next) => {
@@ -27,6 +28,13 @@ const sendMessage = asyncHandler(async (req, res, next) => {
     return res.sendStatus(400);
   }
 
+  const chat = await Chat.findById(chatId);
+
+  let users = chat.users
+
+  let receiver = users.filter(item => item.toString() !== req.user._id.toString())[0]
+
+
   var newMessage = {
     sender: req.user._id,
     content: content,
@@ -45,6 +53,12 @@ const sendMessage = asyncHandler(async (req, res, next) => {
 
   
     await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: message });
+
+    await Notify.create({
+      user: receiver,
+      content: `Bạn có một tin nhắn mới`,
+      type: 1
+    })
 
     res.json(message);
   } catch (error) {

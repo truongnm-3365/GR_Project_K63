@@ -25,7 +25,6 @@ app.use(cookieParser())
 const courses = require('./routes/course');
 const auth = require('./routes/auth');
 const payment = require('./routes/payment');
-const order = require('./routes/order');
 const mediaRoutes = require("./routes/media");
 const documentRoutes = require("./routes/document");
 const notify = require("./routes/notify");
@@ -45,7 +44,6 @@ app.use("/public", express.static(path.join(__dirname, "/public")));
 app.use('/api/v1', courses)
 app.use('/api/v1', auth)
 app.use('/api/v1', payment)
-app.use('/api/v1', order)
 app.use('/api/v1', notify)
 app.use('/api/v1',registerCourse)
 app.use('/api/v1',category)

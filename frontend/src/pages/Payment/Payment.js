@@ -4,7 +4,6 @@ import MetaData from '../../components/layout/MetaData'
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
-import { clearErrors } from '../../actions/orderActions'
 
 import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js'
 
@@ -42,19 +41,14 @@ const Payment = ({ history,match }) => {
     //let amount = match.params.amount
 
     const { user } = useSelector(state => state.auth)
-    const { error } = useSelector(state => state.newOrder)
 
     const [point,setPoint] = useState(0);
     const [amount,setMount] = useState(match.params.amount)
 
     useEffect(() => {
 
-        if (error) {
-            alert.error(error)
-            dispatch(clearErrors())
-        }
 
-    }, [dispatch, alert, error,amount])
+    }, [dispatch, alert,amount])
 
 
     const createdAt = query.get("createdAt") || ""

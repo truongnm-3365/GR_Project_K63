@@ -29,7 +29,7 @@ const path = require("path");
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       if (!fs.existsSync("public")) {
-        fs.mkdirSync("public1");
+        fs.mkdirSync("public");
       }
   
       if (!fs.existsSync("public/avatar")) {
