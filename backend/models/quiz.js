@@ -21,7 +21,7 @@ const quizSchema = new mongoose.Schema({
     }],
 
     topicId: {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Topic',
         required: true
     },

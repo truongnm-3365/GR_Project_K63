@@ -6,7 +6,7 @@ const topicSchema = new mongoose.Schema({
         require: true
     },
     courseId: {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Course',
         required: true
     },
@@ -22,7 +22,7 @@ const topicSchema = new mongoose.Schema({
     },
 
     user:{
-      type: mongoose.Schema.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
     },
 

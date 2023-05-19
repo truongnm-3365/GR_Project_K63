@@ -101,6 +101,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   }, []);
 
+  console.log(message);
 
 
   useEffect(() => {

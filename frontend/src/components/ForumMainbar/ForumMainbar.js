@@ -12,7 +12,7 @@ const useQuery = () => {
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
 
-const HomeMainbar = () => {
+const ForumMainbar = () => {
   const location = useLocation();
   const history = useHistory();
   const query = useQuery();
@@ -82,4 +82,4 @@ const HomeMainbar = () => {
   );
 };
 
-export default HomeMainbar;
+export default ForumMainbar;

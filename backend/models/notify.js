@@ -2,7 +2,8 @@ const mongoose = require('mongoose')
 
 const notifySchema = new mongoose.Schema({
     user: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "User",
         required: true
     },
 
@@ -12,7 +13,8 @@ const notifySchema = new mongoose.Schema({
     },
 
     course:{
-        type: String,
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "Course",
     },
     
     type:{

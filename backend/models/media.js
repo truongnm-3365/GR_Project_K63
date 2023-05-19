@@ -9,12 +9,12 @@ const MediaSchema = new mongoose.Schema(
     videos: [{ type: String }],
 
     course: {
-      type: mongoose.Schema.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Course',
       required: true
     },
     topicId: {
-      type: mongoose.Schema.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Topic',
       required: true
     },

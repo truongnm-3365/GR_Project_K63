@@ -3,6 +3,7 @@ const { newCategory, updateCategory, deleteCategory, getCategories, getCategory 
 const router = express.Router();
 const { isAuthenticatedUser, authorizeRoles } = require('../middlewares/auth');
 
+
 router.route('/categories').get(getCategories);
 router.route('/admin/category/:id').get(isAuthenticatedUser, authorizeRoles('admin'), getCategory)
 router.route('/admin/category/new').post(isAuthenticatedUser,authorizeRoles('admin'), newCategory);

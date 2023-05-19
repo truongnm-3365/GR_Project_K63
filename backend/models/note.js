@@ -2,12 +2,12 @@ const mongoose = require('mongoose')
 
 const noteSchema = new mongoose.Schema({
     user: {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
     course: {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Course',
         required: true
     },
@@ -18,7 +18,7 @@ const noteSchema = new mongoose.Schema({
     },
 
     media: {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Media',
         require:true
     },

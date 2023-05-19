@@ -2,12 +2,12 @@ const mongoose = require('mongoose')
 
 const registerCourseSchema = new mongoose.Schema({
     user: {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
     course: {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Course',
         required: true
     },
@@ -27,11 +27,11 @@ const registerCourseSchema = new mongoose.Schema({
         }
     ],
     topic: {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Topic',
     },
     media: {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Media',
     },
     completed: {

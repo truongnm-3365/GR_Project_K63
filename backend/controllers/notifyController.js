@@ -7,7 +7,8 @@ const User = require('../models/user');
 //const ObjectID = require('mongodb').ObjectID
 exports.getMeNotifies = catchAsyncErrors(async (req, res, next) => {
 
-    const notifies = await Notify.find({user: req.params.userId});
+    const notifies = await Notify.find({user: req.user._id});
+    
 
     if (!notifies) {
         return next(new ErrorHandler('Notify not found', 404));
