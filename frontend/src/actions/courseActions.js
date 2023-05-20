@@ -243,6 +243,32 @@ export const acceptCourse = (id, courseData) => async (dispatch) => {
     }
 }
 
+export const changeStatusCourse = (id) => async (dispatch) => {
+    try {
+
+        dispatch({ type: UPDATE_COURSE_REQUEST })
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        const { data } = await axios.put(`/api/v1/admin/course/change-status/${id}`)
+
+        dispatch({
+            type: UPDATE_COURSE_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+        dispatch({
+            type: UPDATE_COURSE_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
 export const getCourseDetails = (id) => async (dispatch) => {
     try {
 

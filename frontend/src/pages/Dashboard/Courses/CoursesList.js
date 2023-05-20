@@ -8,7 +8,7 @@ import Sidebar from '../Sidebar'
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
-import { getMeCourses, getAdminCourses, deleteCourse, clearErrors, acceptCourse } from '../../../actions/courseActions'
+import { getMeCourses, getAdminCourses, deleteCourse, clearErrors, acceptCourse, changeStatusCourse } from '../../../actions/courseActions'
 import { DELETE_COURSE_RESET,  UPDATE_COURSE_RESET } from '../../../constants/courseConstants'
 
 const columns = [
@@ -92,7 +92,9 @@ const CoursesList = ({ history }) => {
                 </Link>
             </Fragment>,
             status: <Fragment>
-                {course.accepted ?  <Tag color={'green'} >Đã phê duyệt </Tag> : <Tag color={'red'} >Chưa phê duyệt </Tag> }
+                {course.accepted ?  <Tag color={'green'} >Đã phê duyệt và đang hiện </Tag> : <Tag color={'red'} >Chưa phê duyệt hoặc đang bị ẩn </Tag> }
+               
+               
             </Fragment>,
             actions: <Fragment>
                 <Link to={`/me/course/${course._id}`} className="btn btn-success py-1 px-2">
@@ -101,10 +103,14 @@ const CoursesList = ({ history }) => {
                 <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => deleteCourseHandler(course._id)}>
                     <i className="fa fa-trash"></i>
                 </button>
-                {user.role === 'admin' && course.accepted === false &&
+                {user.role === 'admin' && 
+                    (course.accepted === false ?
                     <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => acceptCourseHandler(course._id)}>
                         Phê duyệt
-                    </button>
+                    </button> :
+                    <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => dispatch(changeStatusCourse(course._id))}>
+                        Ẩn 
+                    </button>)
                 }
             </Fragment>
         })
@@ -140,7 +146,7 @@ const CoursesList = ({ history }) => {
         }
 
         if (isUpdated) {
-            alert.success('Phê duyệt thành công');
+            alert.success('Cập nhật thành công');
             dispatch({ type: UPDATE_COURSE_RESET })
         }
     

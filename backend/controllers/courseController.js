@@ -165,6 +165,34 @@ exports.adminAcceptCourse = catchAsyncErrors(async (req, res, next) => {
 
 })
 
+
+exports.adminChangeStatusCourse = catchAsyncErrors(async (req, res, next) => {
+
+    let course = await Course.findById(req.params.id);
+
+    if (!course) {
+        return next(new ErrorHandler('Course not found', 404));
+    }
+
+    course = await Course.findByIdAndUpdate(req.params.id, {...req.body,accepted:!course.accepted}, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    });
+
+    const notify = await Notify.create({
+        user: course.user,
+        content: `Quản trị viên đã ${course.accepted ? "hiện" :"ẩn"} khóa học ${course.name} của bạn`,
+        course:course._id
+    })
+
+    res.status(200).json({
+        success: true,
+        course
+    })
+
+})
+
 // Get single course details   =>   /api/v1/course/:id
 exports.getSingleCourse = catchAsyncErrors(async (req, res, next) => {
 

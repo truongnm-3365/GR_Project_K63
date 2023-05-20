@@ -26,7 +26,8 @@ const {
     getNotes,
     newNote,
     updateNote,
-    deleteNote
+    deleteNote,
+    adminChangeStatusCourse
 
 } = require('../controllers/courseController')
 
@@ -91,6 +92,9 @@ router.route('/course/:id')
 
 router.route('/admin/course/accept/:id')
     .put(isAuthenticatedUser, authorizeRoles('admin'), adminAcceptCourse)
+    
+router.route('/admin/course/change-status/:id')
+    .put(isAuthenticatedUser, authorizeRoles('admin'), adminChangeStatusCourse)
 
 router.route('/admin/course/:id')
     .put(isAuthenticatedUser, authorizeRoles('admin'), updateCourse)
