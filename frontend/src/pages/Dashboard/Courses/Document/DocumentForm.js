@@ -70,7 +70,7 @@ const DocumentForm = ({courseId, newDocument,topics }) => {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary mt-2">
+        <button type="submit" className="btn btn-success mt-2">
           Hoàn thành
         </button>
       </form>

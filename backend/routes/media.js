@@ -56,11 +56,20 @@ router.post(
   mediaController.create
 );
 
-// router.delete(
-//   "/delete/:id",
-//   isAuthenticatedUser,
-//   mediaController.delete
-// );
+
+router.put(
+  "/update/:id",
+  isAuthenticatedUser,
+  authorizeRoles('creator'),
+  upload.fields([
+    {
+      name: "videos",
+      maxCount: 100,
+    },
+  ]),
+  mediaController.update
+)
+
 
 router.route("/delete/:id").delete(isAuthenticatedUser,mediaController.delete)
 

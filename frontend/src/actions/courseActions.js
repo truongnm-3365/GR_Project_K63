@@ -109,7 +109,10 @@ import {
     MY_COURSES_FAIL,
     CREATOR_COURSES_REQUEST,
     CREATOR_COURSES_SUCCESS,
-    CREATOR_COURSES_FAIL
+    CREATOR_COURSES_FAIL,
+    UPDATE_LESSON_REQUEST,
+    UPDATE_LESSON_SUCCESS,
+    UPDATE_LESSON_FAIL
 
 } from '../constants/courseConstants'
 
@@ -126,7 +129,6 @@ export const getCourses = (keyword = '', currentPage = 1, price, category, ratin
 
         const { data } = await axios.get(link)
 
-        console.log(data);
 
         dispatch({
             type: ALL_COURSES_SUCCESS,
@@ -330,6 +332,31 @@ export const getCourseLesson = (courseId,index) => async (dispatch) => {
         })
     }
 }
+
+
+export const updateLesson = (id,lessonData) => async (dispatch) => {
+    try {
+
+        dispatch({ type: UPDATE_LESSON_REQUEST })
+
+        const { data } = await axios.put(`/api/v1/media/update/${id}`,lessonData)
+
+        dispatch({
+            type: UPDATE_LESSON_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+
+
+
+        dispatch({
+            type: UPDATE_LESSON_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
 
 export const deleteLesson = (id) => async (dispatch) => {
     try {

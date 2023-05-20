@@ -59,7 +59,6 @@ const UploadForm = ({courseId, newLesson,topics }) => {
             type="file"
             name="videos"
             id="videos"
-            multiple
             className="form-control"
             accept=".mp4, .mkv"
             
@@ -69,7 +68,7 @@ const UploadForm = ({courseId, newLesson,topics }) => {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary mt-2">
+        <button type="submit" className="btn btn-success mt-2">
           Hoàn thành
         </button>
       </form>

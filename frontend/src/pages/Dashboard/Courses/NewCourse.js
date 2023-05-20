@@ -9,6 +9,7 @@ import { newCourse, clearErrors } from '../../../actions/courseActions'
 import { NEW_COURSE_RESET } from '../../../constants/courseConstants'
 
 import { getCategories } from '../../../actions/categoryAction'
+import { Select } from 'antd'
 
 
 const NewCourse = ({ history }) => {
@@ -148,12 +149,25 @@ const NewCourse = ({ history }) => {
 
                                 <div className="form-group">
                                     <label htmlFor="category_field">Danh mục</label>
-                                    <select className="form-control" id="category_field" value={category} onChange={(e) => setCategory(e.target.value)}>
+                                    <Select
+                                        style={{width:'100%'}} 
+                                        showSearch 
+                                        placeholder='Chọn danh mục'
+                                        onChange={(value) => setCategory(value)}
+                                        filterOption={(input, option) =>
+                                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                        }
+                                        options= {categories && categories.map(category => {
+                                            return { value:category.name, label: category.name }
+                                        })}
+                                    >      
+                                    </Select>
+                                    {/* <select className="form-control" id="category_field" value={category} onChange={(e) => setCategory(e.target.value)}>
                                         {categories && categories.map(category => (
                                             <option key={category._id} value={category.name} >{category.name}</option>
                                         ))}
 
-                                    </select>
+                                    </select> */}
                                 </div>
 
                                 <div className="form-group">

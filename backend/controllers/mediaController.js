@@ -61,6 +61,59 @@ exports.create = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
+
+exports.update = catchAsyncErrors(async (req, res, next) => {
+  const { name, topicId } = req.body;
+
+  let media = await Media.findById(req.params.id);
+
+  if (!media) {
+        return next(new ErrorHandler('Media not found', 404));
+  }
+
+
+  const topic = await Topic.findById(topicId)
+
+  let videosPaths = [];
+
+  if (Array.isArray(req.files.videos) && req.files.videos.length > 0) {
+    for (let video of req.files.videos) {
+      videosPaths.push("/" + video.path);
+    }
+    fs.unlink("../backend" + media.videos[0], (err => {
+      if (err) console.log(err);
+    }));
+
+    media = await Media.findByIdAndUpdate(req.params.id, {
+      name,
+      videos: videosPaths,
+      topicId,
+      topic:topic.name
+    }, {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false
+  });
+  }else{
+    media = await Media.findByIdAndUpdate(req.params.id, {
+      name,
+      topicId,
+      topic:topic.name
+    }, {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false
+  });
+  }
+  
+
+
+    res.status(201).json({ 
+      success: true, 
+      media 
+    });
+});
+
 exports.delete = catchAsyncErrors(async (req, res, next) => {
   const media = await Media.findById(req.params.id);
 
@@ -71,10 +124,10 @@ exports.delete = catchAsyncErrors(async (req, res, next) => {
   await media.remove();
   fs.unlink("../backend" + media.videos[0], (err => {
     if (err) console.log(err);
-    else {
-      console.log("\nDeleled file succesffully");
-    }
+
   }));
+
+  
 
   res.status(200).json({
       success: true,

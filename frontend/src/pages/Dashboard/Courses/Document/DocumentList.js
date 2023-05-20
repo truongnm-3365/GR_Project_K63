@@ -1,3 +1,4 @@
+import { Button } from "antd";
 import React from "react";
 
 const DocumentList = ({ documents,deleteDocumentHandler }) => {
@@ -36,7 +37,7 @@ const DocumentList = ({ documents,deleteDocumentHandler }) => {
                             </button>
  
                             
-                            <button onClick={() => deleteDocumentHandler(document._id)}>Xóa</button>
+                            <Button onClick={() => deleteDocumentHandler(document._id)} >Xóa</Button>
                           </>
 
                         );

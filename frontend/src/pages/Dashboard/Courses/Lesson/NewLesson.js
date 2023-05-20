@@ -8,14 +8,14 @@ import Sidebar from '../../Sidebar'
 import { useAlert } from 'react-alert'
 import {  newLesson, clearErrors, getCourseLessons, deleteLesson, getCourseTopics } from '../../../../actions/courseActions'
 import { useDispatch, useSelector } from 'react-redux'
-import { NEW_LESSON_RESET,DELETE_LESSON_RESET } from '../../../../constants/courseConstants'
+import { NEW_LESSON_RESET,DELETE_LESSON_RESET, UPDATE_LESSON_RESET } from '../../../../constants/courseConstants'
 
 const NewLesson = ({match}) => {
   const alert = useAlert();
   const dispatch = useDispatch();
   const { loading, lessons,error } = useSelector(state => state.courseLessons)
   const { error: lessonError, success } = useSelector(state => state.newLesson)
-  const { error: deleteError, isDeleted } = useSelector(state => state.lesson)
+  const { error: deleteError, isDeleted, isUpdated } = useSelector(state => state.lesson)
   const {  topics } = useSelector(state => state.courseTopics)
   useEffect(() => {
     dispatch(getCourseLessons(match.params.id))
@@ -46,7 +46,12 @@ const NewLesson = ({match}) => {
         dispatch({ type: DELETE_LESSON_RESET })
     }
 
-}, [dispatch, alert, error,lessonError,success,deleteError, isDeleted, match.params.id])
+    if (isUpdated) {
+      alert.success('Cập nhật thành công');
+      dispatch({ type: UPDATE_LESSON_RESET })
+  }
+
+}, [dispatch, alert, error,lessonError,success,deleteError, isDeleted, isUpdated, match.params.id])
 
   const deleteLessonHandler = (id) => {
     dispatch(deleteLesson(id))
@@ -89,7 +94,7 @@ const NewLesson = ({match}) => {
               >
                 {loading ? <Loader /> :
                 <div className="card-body">
-                  <UploadsList  medias={lessons} deleteLessonHandler={deleteLessonHandler} />
+                  <UploadsList topics={topics}  medias={lessons} deleteLessonHandler={deleteLessonHandler} />
                 </div>
                 }
               </div>

@@ -34,6 +34,10 @@ import {
     DELETE_LESSON_SUCCESS,
     DELETE_LESSON_RESET,
     DELETE_LESSON_FAIL,
+    UPDATE_LESSON_REQUEST,
+    UPDATE_LESSON_SUCCESS,
+    UPDATE_LESSON_RESET,
+    UPDATE_LESSON_FAIL,
     NEW_REVIEW_REQUEST,
     NEW_REVIEW_SUCCESS,
     NEW_REVIEW_RESET,
@@ -445,6 +449,7 @@ export const courseLessonReducer = (state = {media:{}}, action) => {
 export const lessonReducer = (state = {}, action) => {
     switch (action.type) {
 
+        case UPDATE_LESSON_REQUEST:
         case DELETE_LESSON_REQUEST:
             return {
                 ...state,
@@ -458,6 +463,14 @@ export const lessonReducer = (state = {}, action) => {
                 isDeleted: action.payload
             }
 
+        case UPDATE_LESSON_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                isUpdated: action.payload
+            }
+    
+        case UPDATE_LESSON_FAIL:
         case DELETE_LESSON_FAIL:
             return {
                 ...state,
@@ -468,6 +481,12 @@ export const lessonReducer = (state = {}, action) => {
             return {
                 ...state,
                 isDeleted: false
+            }
+
+        case UPDATE_LESSON_RESET:
+            return {
+                ...state,
+                isUpdated: false
             }
 
         case CLEAR_ERRORS:
@@ -698,8 +717,8 @@ export const courseTopicReducer = (state = {topic:{}}, action) => {
                 }
         case UPDATE_TOPIC_RESET:
                     return {
-                        ...state,
-                        isDeleted: false
+                    ...state,
+                    isUpdated: false
                 }
         case CLEAR_ERRORS:
             return {
