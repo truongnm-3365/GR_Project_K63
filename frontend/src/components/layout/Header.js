@@ -22,6 +22,8 @@ const Header = () => {
     const history = useHistory();
     const location = useLocation();
 
+    console.log(location);
+
     const { user, loading } = useSelector(state => state.auth)
     
 
@@ -29,12 +31,7 @@ const Header = () => {
     const { categories } = useSelector(state => state.categories);
     const { notifies, error, isDeleted } = useSelector(state => state.notifies)
 
-    console.log(notifies);
-    // const {
-    //     notify,
-    //     setNotify,
-    //     setSelectedChat
-    // } = ChatState();
+
     
     const isObjectEmpty = (objectName) => {
         if(objectName)
@@ -69,9 +66,22 @@ const Header = () => {
             dispatch({ type: DELETE_ALL_NOTIFIES_RESET })
         }
 
-    }, [dispatch, alert, error,user,isDeleted,window.location.pathname])
+    }, [dispatch, alert, error,user,isDeleted])
 
-    console.log(notifies);
+    const onGoBack = () =>{
+        if(location.pathname.includes("/lessons") && !location.pathname.includes("me") ){
+            history.push(location.pathname.replace("/lessons",""))
+        }else if(location.pathname.split("/").length === 4 && location.pathname.includes("/course") ){
+            history.push(location.pathname.replace("/"+location.pathname.split("/")[3],""))
+        }
+        else{
+            history.goBack()
+        }
+        
+    }
+
+    console.log(location.pathname.split("/"));
+
 
     return (
         
@@ -97,7 +107,7 @@ const Header = () => {
                             
                             
                         </Link>
-                        {location.pathname !== '/' && <Button onClick={history.goBack} style={{color:'white'}} type="text"><i class="fa fa-arrow-left" aria-hidden="true"></i><span className='ml-1'>QUAY LẠI</span></Button>}
+                        {location.pathname !== '/'   && <Button onClick={() => onGoBack()} style={{color:'white'}} type="text"><i class="fa fa-arrow-left" aria-hidden="true"></i><span className='ml-1'>QUAY LẠI</span></Button>}
                     </div>
                     <div className="ml-1 dropdown d-inline dropdown-hover">
                         <Link to="#!" className="btn dropdown-toggle text-white mr-4" type="button" id="dropDownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

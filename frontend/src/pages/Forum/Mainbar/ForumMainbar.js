@@ -3,8 +3,9 @@ import { useLocation, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "./ForumMainbar.css";
 import QuestionList from "./QuestionList";
-import { fetchAllQuestions } from "../../actions/questionAction";
-import Loader from "../layout/Loader";
+import { fetchAllQuestions } from "../../../actions/questionAction";
+import Loader from "../../../components/layout/Loader";
+
 
 const useQuery = () => {
   const { search } = useLocation();
@@ -12,7 +13,7 @@ const useQuery = () => {
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
 
-const ForumMainbar = () => {
+const Forummainbar = () => {
   const location = useLocation();
   const history = useHistory();
   const query = useQuery();
@@ -48,7 +49,7 @@ const ForumMainbar = () => {
   }
 
   return (
-    <div className="container mt-2">
+    <div className="container mt-2" style={{minHeight:'500px'}}>
       <div className="main-bar-header">
         {keyword ? <h2>Danh sách các câu hỏi liên quan đến "{keyword}"</h2> : <h2>Danh sách các câu hỏi</h2>}
         <button onClick={checkAuth} className="btn btn-success">
@@ -82,4 +83,4 @@ const ForumMainbar = () => {
   );
 };
 
-export default ForumMainbar;
+export default Forummainbar;

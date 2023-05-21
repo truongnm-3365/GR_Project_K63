@@ -34,7 +34,10 @@ const CourseDetails = ({ match }) => {
 
 
     useEffect(() => {
+        
         dispatch(getCourseDetails(match.params.id))
+        
+       
         if(localStorage.getItem('token')){
             dispatch(getMeRegisterCourses())
         }
@@ -306,7 +309,7 @@ const CourseDetails = ({ match }) => {
 
                             <hr />
 
-                            <p id="course_price">{course.details.price} ĐỒNG</p>
+                            <p id="course_price">{course.details.price} ĐƠN VỊ TIỀN</p>
 
                             {
                                 isRegister() ? 
@@ -316,7 +319,7 @@ const CourseDetails = ({ match }) => {
                                     <>
                                         <button type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" >Đã đăng ký</button>
                                         <Link to={`/course/${course.details._id}/lessons`}>
-                                            <button type="button" id="cart_btn" className="btn btn-danger d-inline ml-4" >Xem khóa học</button>
+                                            <button type="button" id="cart_btn" className="btn btn-danger d-inline ml-4" >Truy cập khóa học</button>
                                         
                                         </Link>
                                     </> 
