@@ -71,7 +71,7 @@ const Header = () => {
     const onGoBack = () =>{
         if(location.pathname.includes("/lessons") && !location.pathname.includes("me") ){
             history.push(location.pathname.replace("/lessons",""))
-        }else if(location.pathname.split("/").length === 4 && location.pathname.includes("/course") ){
+        }else if(location.pathname.split("/").length === 4 && location.pathname.includes("/course") && !location.pathname.includes("me")){
             history.push(location.pathname.replace("/"+location.pathname.split("/")[3],""))
         }
         else{

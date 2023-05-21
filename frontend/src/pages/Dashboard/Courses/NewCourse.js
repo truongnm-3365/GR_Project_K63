@@ -10,6 +10,7 @@ import { NEW_COURSE_RESET } from '../../../constants/courseConstants'
 
 import { getCategories } from '../../../actions/categoryAction'
 import { Select } from 'antd'
+import Editor from '../../../components/editor/Editor'
 
 
 const NewCourse = ({ history }) => {
@@ -144,7 +145,8 @@ const NewCourse = ({ history }) => {
 
                                 <div className="form-group">
                                     <label htmlFor="description_field">Mô tả</label>
-                                    <textarea className="form-control" id="description_field" rows="8" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
+                                    <Editor value={description} onChange={setDescription} />
+                                    {/* <textarea className="form-control" id="description_field" rows="8" value={description} onChange={(e) => setDescription(e.target.value)}></textarea> */}
                                 </div>
 
                                 <div className="form-group">
@@ -162,12 +164,7 @@ const NewCourse = ({ history }) => {
                                         })}
                                     >      
                                     </Select>
-                                    {/* <select className="form-control" id="category_field" value={category} onChange={(e) => setCategory(e.target.value)}>
-                                        {categories && categories.map(category => (
-                                            <option key={category._id} value={category.name} >{category.name}</option>
-                                        ))}
 
-                                    </select> */}
                                 </div>
 
                                 <div className="form-group">

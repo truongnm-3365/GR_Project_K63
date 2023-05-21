@@ -6,10 +6,11 @@ import Sidebar from '../Sidebar'
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateCourse, getCourseDetails, clearErrors } from '../../../actions/courseActions'
-import { UPDATE_COURSE_RESET } from '../../../constants/courseConstants'
+import { COURSE_DETAILS_RESET, UPDATE_COURSE_RESET } from '../../../constants/courseConstants'
 import moment from 'moment'
 import { getCategories } from '../../../actions/categoryAction'
 import { Select } from 'antd'
+import Editor from '../../../components/editor/Editor'
 const UpdateCourse = ({ match, history }) => {
 
     const [name, setName] = useState('');
@@ -17,8 +18,6 @@ const UpdateCourse = ({ match, history }) => {
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
     const [images, setImages] = useState([]);
-    const [startDate,setStartDate] = useState('');
-    const [endDate,setEndDate] = useState('');
     const [timeLimitFinalExam,setTimeLimitFinalExam] = useState(0);
     const [timeLimit,setTimeLimit] = useState(0);
 
@@ -32,10 +31,9 @@ const UpdateCourse = ({ match, history }) => {
     const { error, course } = useSelector(state => state.courseDetails)
     const { loading, error: updateError, isUpdated } = useSelector(state => state.course);
 
-    const courseId = match.params.id;
 
-    console.log(course);
     useEffect(() => {
+        dispatch({type: COURSE_DETAILS_RESET})
         dispatch(getCategories());
         dispatch(getCourseDetails(match.params.id));
         
@@ -57,21 +55,9 @@ const UpdateCourse = ({ match, history }) => {
             dispatch({ type: UPDATE_COURSE_RESET })
         }
 
-    }, [dispatch, alert, error, isUpdated, history, updateError,match])
+    }, [dispatch, alert, error, isUpdated, history, updateError, match.params.id])
 
 
-    const onChangeStartDate = e => {
-        const newDate = moment(new Date(e.target.value)).format('YYYY-MM-DD');
-        setStartDate(newDate);
-        
-      };
-
-      
-    const onChangeEndDate = e => {
-        const newDate = moment(new Date(e.target.value)).format('YYYY-MM-DD');
-        setEndDate(newDate);
-        
-      };
 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -95,16 +81,6 @@ const UpdateCourse = ({ match, history }) => {
             }
             
         }
-
-        // const data = {
-        //     name: name? name: course.details.name,
-        //     price: price ? price: course.details.price,
-        //     description:  description ? description : course.details.description,
-        //     category: category ? category : course.details.category,
-        //     images:images.length > 0 ? images : course.details.images,
-        //     startDate: startDate ? startDate : course.details.startDate,
-        //     endDate: endDate ? endDate : course.details.endDate
-        // }
         
         dispatch(updateCourse(course.details._id, formData))
     }
@@ -171,9 +147,11 @@ const UpdateCourse = ({ match, history }) => {
                                     />
                                 </div>
 
+                           
                                 <div className="form-group">
                                     <label htmlFor="description_field">Mô tả</label>
-                                    <textarea className="form-control" id="description_field" rows="8" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
+                                    <Editor value={course.details.description} onChange={setDescription} />
+                                    {/* <textarea className="form-control" id="description_field" rows="8" value={description} onChange={(e) => setDescription(e.target.value)}></textarea> */}
                                 </div>
 
                                 <div className="form-group">
@@ -192,12 +170,7 @@ const UpdateCourse = ({ match, history }) => {
                                         })}
                                     >      
                                     </Select>
-                                    {/* <select className="form-control" id="category_field" defaultValue={course.details.category} onChange={(e) => setCategory(e.target.value)}>
-                                        {categories && categories.map(category => (
-                                            <option key={category._id} value={category.name} >{category.name}</option>
-                                        ))}
 
-                                    </select> */}
                                 </div>
 
                                 <div className="form-group">

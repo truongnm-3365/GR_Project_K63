@@ -120,7 +120,8 @@ import {
     MY_COURSES_SUCCESS,
     CREATOR_COURSES_SUCCESS,
     MY_COURSES_FAIL,
-    CREATOR_COURSES_FAIL
+    CREATOR_COURSES_FAIL,
+    COURSE_DETAILS_RESET
 
 } from '../constants/courseConstants'
 
@@ -329,6 +330,12 @@ export const courseDetailsReducer = (state = { course: {} }, action) => {
             return {
                 ...state,
                 error: action.payload
+            }
+
+        case COURSE_DETAILS_RESET:
+            return {
+                ...state,
+                course: {}
             }
 
         case CLEAR_ERRORS:

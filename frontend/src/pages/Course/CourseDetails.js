@@ -342,7 +342,7 @@ const CourseDetails = ({ match }) => {
                             <hr />
 
                             <h4 className="mt-2">Mô tả:</h4>
-                            <p>{course.details.description}</p>
+                            <p dangerouslySetInnerHTML={{__html:course.details.description}} ></p>
                             <hr />
 
                             <h4 className="mt-2">Thông tin tác giả:</h4>
