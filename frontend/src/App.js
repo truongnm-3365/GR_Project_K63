@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+
 
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
@@ -31,7 +32,6 @@ import NewLesson from './pages/Dashboard/Courses/Lesson/NewLesson'
 import Lessons from './pages/Course/Lesson'
 import ProtectedRoute from './components/route/ProtectedRoute'
 import { loadUser } from './actions/userActions'
-import store from './store'
 import axios from '../src/axios/axios'
 
 import { Elements } from '@stripe/react-stripe-js'
@@ -56,6 +56,7 @@ import Forum from './pages/Forum/Forum'
 
 import DisplayQuestion from './pages/Forum/Question/DisplayQuestion'
 import AskQuestion from './pages/Forum/AskQuestion/AskQuestion'
+import PageNotFound from './pages/PageNotFound/PageNotFound'
 
 
 function App() {
@@ -87,26 +88,30 @@ function App() {
 
   return (
     <Router>
+     
       <div className="App">
         <Header />
-        <div className="">
-          <Route path="/" component={Home} exact />
+ 
+        <Route path="/" component={Home} exact />
           <Route path="/chats" component={Chatpage} />
           <Route path="/about" component={About}/>
           <Route path="/chatbot" component={ChatBot} />
           <Route path="/search" component={Search} exact />
           <Route path="/course/:id" component={CourseDetails} exact />
           <ProtectedRoute path="/course/:id/lessons"  component={Lessons} exact/>
+          
           <ProtectedRoute path="/course/:id/finalexam/:examId"  component={FinalTest} exact/>
           <ProtectedRoute path="/course/:id/finalexam/:examId/result"  component={FinalResult} exact/>
           <ProtectedRoute path="/registerCourse" component={RegisterCourseList} exact />
-        
+          
+          
           <ProtectedRoute path="/success/:courseId" component={OrderSuccess} exact/>
           {stripeApiKey &&
             <Elements stripe={loadStripe(stripeApiKey)}>
               <ProtectedRoute path="/payment/:courseId/:amount" component={Payment} exact/>
             </Elements>
-          } 
+          }
+           
 
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
@@ -117,33 +122,33 @@ function App() {
           <ProtectedRoute path="/me/update" component={UpdateProfile} exact />
           <ProtectedRoute path="/password/update" component={UpdatePassword} exact />
           
-        </div>
+          <ProtectedRoute path="/me/courses" isAdmin={false} component={CoursesList} exact />
+          <ProtectedRoute path="/me/course" isAdmin={false} component={NewCourse} exact />
+          <ProtectedRoute path="/me/course/:id" isAdmin={false} component={UpdateCourse} exact />
+          <ProtectedRoute path="/me/course/:id/lessons" isAdmin={false} component={NewLesson} exact />
+          <ProtectedRoute path="/me/course/:id/documents" isAdmin={false} component={NewDocument} exact />
+          <ProtectedRoute path="/me/course/:id/topics" isAdmin={false} component={NewTopic} exact />
+          <ProtectedRoute path="/me/topic/:id/quizs" isAdmin={false} component={NewQuiz} exact />
+          <ProtectedRoute path="/admin/users" isAdmin={true} component={UsersList} exact />
+          <ProtectedRoute path="/admin/user/:id" isAdmin={true} component={UpdateUser} exact />
+          <ProtectedRoute path="/admin/reviews" isAdmin={true} component={CourseReviews} exact />
+          <ProtectedRoute path="/admin/categories" isAdmin={false} component={CategoryList} exact />
+          <ProtectedRoute path="/admin/category/new" isAdmin={false} component={NewCategory} exact />
+          <ProtectedRoute path="/admin/category/update/:id" isAdmin={false} component={UpdateCategory} exact />
+          <ProtectedRoute path="/admin/banners" isAdmin={false} component={BannerList} exact />
+          <ProtectedRoute path="/admin/banner/new" isAdmin={false} component={NewBanner} exact />
+          <ProtectedRoute path="/admin/banner/update/:id" isAdmin={false} component={UpdateBanner} exact />
 
-        <ProtectedRoute path="/me/courses" isAdmin={false} component={CoursesList} exact />
-        <ProtectedRoute path="/me/course" isAdmin={false} component={NewCourse} exact />
-        <ProtectedRoute path="/me/course/:id" isAdmin={false} component={UpdateCourse} exact />
-        <ProtectedRoute path="/me/course/:id/lessons" isAdmin={false} component={NewLesson} exact />
-        <ProtectedRoute path="/me/course/:id/documents" isAdmin={false} component={NewDocument} exact />
-        <ProtectedRoute path="/me/course/:id/topics" isAdmin={false} component={NewTopic} exact />
-        <ProtectedRoute path="/me/topic/:id/quizs" isAdmin={false} component={NewQuiz} exact />
-        <ProtectedRoute path="/admin/users" isAdmin={true} component={UsersList} exact />
-        <ProtectedRoute path="/admin/user/:id" isAdmin={true} component={UpdateUser} exact />
-        <ProtectedRoute path="/admin/reviews" isAdmin={true} component={CourseReviews} exact />
-        <ProtectedRoute path="/admin/categories" isAdmin={false} component={CategoryList} exact />
-        <ProtectedRoute path="/admin/category/new" isAdmin={false} component={NewCategory} exact />
-        <ProtectedRoute path="/admin/category/update/:id" isAdmin={false} component={UpdateCategory} exact />
-        <ProtectedRoute path="/admin/banners" isAdmin={false} component={BannerList} exact />
-        <ProtectedRoute path="/admin/banner/new" isAdmin={false} component={NewBanner} exact />
-        <ProtectedRoute path="/admin/banner/update/:id" isAdmin={false} component={UpdateBanner} exact />
+          <ProtectedRoute path="/forum" component={Forum} exact/>
+          <ProtectedRoute path="/forum/ask" component={AskQuestion} exact />
+          <ProtectedRoute path="/forum/questions/:id" component={DisplayQuestion} exact/>
 
-        <Route path="/forum" component={Forum} exact/>
-        <Route path="/forum/ask" component={AskQuestion} exact />
-        <Route path="/forum/questions/:id" component={DisplayQuestion} exact/>
-
+      
        
         <Footer />
         
       </div>
+      
     </Router>
   );
 }

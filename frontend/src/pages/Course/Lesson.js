@@ -3,7 +3,7 @@ import Loader from '../../components/layout/Loader'
 import { clearErrors, getCourseLessons, getCourseLesson, getCourseTopics, getTopicQuizs, getCourseDetails, getCourseDocuments, newReview, getNotes, newNote, deleteNote } from '../../actions/courseActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { NEW_LESSON_RESET,NEW_NOTE_RESET,NEW_REVIEW_RESET } from '../../constants/courseConstants'
-import { Button, Collapse, Form, Modal, Progress, Space, Typography } from 'antd';
+import { Alert, Button, Collapse, Form, Modal, Progress, Space, Typography } from 'antd';
 import { useAlert } from 'react-alert'
 import './index.css'
 import Quiz from "../../components/quiz/Quiz";
@@ -43,6 +43,8 @@ const Lessons = ({match}) => {
   const [isNoteListOpen, setIsNoteListOpen] = useState(false);
   const [note, setNote] = useState("");
   const { notes, loading:notesLoading } = useSelector(state => state.notes);
+  const { registerCourses } = useSelector(state => state.registerCourses)
+  const [register, setRegister] = useState(false)
 
   function secondsToHms(d) {
     d = Number(d);
@@ -56,6 +58,7 @@ const Lessons = ({match}) => {
     return hDisplay + mDisplay + sDisplay; 
   }
   
+
   
 
   const showModalNote = () => {
@@ -162,6 +165,20 @@ const Lessons = ({match}) => {
   const { success: complete } = useSelector(state => state.newRegisterCourse)
   const { loading:videoLoading, isUpdated } = useSelector(state => state.registerCourse)
   
+  const isRegister = () =>{
+    if(localStorage.getItem('token')){
+        for(let i =0; i < registerCourses?.length; i++){
+            if(registerCourses[i].course === match.params.id){
+              return true;
+              
+            }
+        }
+        return false
+        
+    }
+    return false
+  
+  }
 
 
   useEffect(() => {
@@ -169,7 +186,9 @@ const Lessons = ({match}) => {
     dispatch(getCourseTopics(match.params.id))
     dispatch(getCourseDetails(match.params.id))
     dispatch(getCourseDocuments(match.params.id))
+    
     dispatch(getMeRegisterCourses())
+    
     
 
     if (error) {
@@ -200,15 +219,11 @@ const Lessons = ({match}) => {
   if (complete || isUpdated ) {
     dispatch({type: NEW_REGISTER_COURSE_RESET})
   }
-
-  // if(vid ){
-  //   vid.currentTime = videoTime
-  //   console.log(vid.currentTime);
-  // }
     
 
-}, [dispatch, alert, error,lessonError,success,match.params.id,checked,checkedExercise,reviewSuccess,complete,isUpdated,videoLoading])
+}, [dispatch, alert, error,lessonError,success,match.params.id,checked,checkedExercise,reviewSuccess,complete,isUpdated,videoLoading,register])
   
+
 
 
 function setUserRatings() {
@@ -348,9 +363,13 @@ const completedPercent = () =>{
 }
 
 
+
+
+
 return (
     <>
-        {loading  ? <Loader/> :
+        {isRegister() ?
+        (loading  ? <Loader/> :
         <div className="container">
 
         <div className="mt-3">
@@ -618,8 +637,10 @@ return (
 
     
       </div>
-
-         }
+         ):<div className="container text-center " style={{minHeight:'500px',paddingTop:'200px'}}>
+             <Alert message="Bạn không có thể truy cập khóa học này" type="error" />
+             <Button className="mt-2" onClick={() => history.push(`/course/${match.params.id}`)} type="primary" >Quay lại khóa học</Button>
+          </div>}
     </>
 
   );
