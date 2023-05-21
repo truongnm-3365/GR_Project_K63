@@ -52,7 +52,7 @@ import About from './pages/About/About'
 import FinalTest from './pages/FinalTest/FinalTest'
 import FinalResult from './pages/FinalTest/FinalResult'
 import { useDispatch, useSelector } from 'react-redux'
-import Forum from './pages/Forum/Forum'
+import Forum from './pages/Forum/Mainbar/ForumMainbar'
 
 import DisplayQuestion from './pages/Forum/Question/DisplayQuestion'
 import AskQuestion from './pages/Forum/AskQuestion/AskQuestion'
