@@ -45,6 +45,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { accessChat, success } = useSelector(state => state.accessChat);
   const { user } = useSelector(state => state.auth)
 
+  console.log(selectedChat);
+
   const defaultOptions = {
     loop: true,
     autoplay: true,

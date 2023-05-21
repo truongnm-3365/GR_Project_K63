@@ -13,12 +13,12 @@ import { DELETE_COURSE_RESET,  UPDATE_COURSE_RESET } from '../../../constants/co
 
 const columns = [
     {
-        title: 'ID',
-        dataIndex: 'id',
-    },
-    {
         title: 'Tên',
         dataIndex: 'name',
+    },
+    {
+        title: 'Thể loại',
+        dataIndex: 'category',
     },
     {
         title: 'Giá thành',
@@ -73,8 +73,8 @@ const CoursesList = ({ history }) => {
           : (item.accepted === status);
       }).forEach(course => {
         data.push({
-            id: course._id,
             name: course.name,
+            category:course.category,
             price: `${course.price} Đồng`,
             lessons: <Fragment>
                 <Link to={`/me/course/${course._id}/lessons`} className="btn btn-success py-1 px-2">
@@ -103,6 +103,9 @@ const CoursesList = ({ history }) => {
                 <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => deleteCourseHandler(course._id)}>
                     <i className="fa fa-trash"></i>
                 </button>
+                <Link to={`/course/${course._id}`} className="btn btn-success py-1 px-2 ml-2">
+                    <i className="fa fa-eye"></i>
+                </Link>
                 {user.role === 'admin' && 
                     (course.accepted === false ?
                     <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => acceptCourseHandler(course._id)}>

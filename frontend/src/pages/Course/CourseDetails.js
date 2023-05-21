@@ -9,8 +9,9 @@ import { getCourseDetails, newReview, clearErrors, getCourseLessons, getCourseTo
 import { NEW_REVIEW_RESET } from '../../constants/courseConstants'
 import { extendCourse, getMeRegisterCourses, newRegisterCourse } from '../../actions/registerCourseAction'
 import { NEW_REGISTER_COURSE_RESET } from '../../constants/registerCourseContants'
-import { Collapse } from 'antd'
+import { Button, Collapse, Modal, Table } from 'antd'
 import './index.css'
+import { getAccessChat } from '../../actions/chatAction'
 const CourseDetails = ({ match }) => {
 
     const { Panel } = Collapse;
@@ -30,7 +31,6 @@ const CourseDetails = ({ match }) => {
     const { success: newSuccess} = useSelector(state => state.newRegisterCourse)
     const { lessons  } = useSelector(state => state.courseLessons)
     const {  topics } = useSelector(state => state.courseTopics)
-    
 
 
     useEffect(() => {
@@ -197,7 +197,40 @@ const CourseDetails = ({ match }) => {
         dispatch(newReview(formdata));
     }
 
-    console.log(course);
+
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const showModal = () => {
+      setIsModalOpen(true);
+    };
+    const handleOk = () => {
+      setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+      setIsModalOpen(false);
+    };
+
+    const columns = [
+        {
+            title:"Tên",
+            dataIndex:"name",
+            key:"name"
+        },
+        {
+            title:"Email",
+            dataIndex:"email",
+            key:"email"
+        },
+        {
+            title:"Thao tác",
+            key:"action",
+            render: (_, record) => (
+                <Button onClick={() => {dispatch(getAccessChat(record._id)); history.push('/chats')}}>
+                    Tin nhắn
+                </Button>
+              ),
+        }
+    ]
 
     return (
         <Fragment>
@@ -208,7 +241,7 @@ const CourseDetails = ({ match }) => {
                         <div className="col-12 col-lg-5 img-fluid" id="course_image">
                             
                             {course.details.images && course.details.images.map(image => (
-                                <img className="d-block w-100" src={process.env.REACT_APP_API_URL + image.url} alt={course.title} />
+                                <img key={image._id} className="d-block w-100" src={process.env.REACT_APP_API_URL + image.url} alt={course.title} />
                             ))}
                             <div><h2 className='mt-5'>Danh sách bài học</h2></div>
                             <div>
@@ -313,8 +346,23 @@ const CourseDetails = ({ match }) => {
                             <p>Tên: {course.user.name}</p>
                             <p>Email: {course.user.email}</p>
                             <Link to={`/profile/${course.user._id}`} >Xem thêm thông tin chi tiết</Link>
+                            <div>
+                            {isRegister() && course.user._id !== user._id && <Button onClick={() => {dispatch(getAccessChat(course.user._id));history.push('/chats')}} >Nhắn tin</Button>} 
+                            </div>
+                            
                             <hr />
-                            {/* <p id="course_seller mb-3">Sold by: <strong>{course.seller}</strong></p> */}
+                            
+                            {course.user._id === user._id &&
+                            <>
+                                <Button type="primary" onClick={showModal}>
+                                    Danh sách học viên
+                                </Button>
+                                <Modal title="Danh sách học viên" open={isModalOpen}  onOk={handleOk} onCancel={handleCancel} okText="Đóng" cancelText="Hủy bỏ">
+                                    <Table columns={columns} dataSource={course.registerUsers.map(item => {return {...item,key:item._id}})}></Table>
+                                </Modal>                            
+                            </>
+
+                            }
 
                             {isRegister() && <h4 className='mt-2'>Thời gian</h4>}
                              {/* <p>Ngày bắt đầu: {formatDate(course.details.startDate)}</p> 

@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import 'moment/locale/vi';
+import { Tag } from "antd";
 
 
 const Questions = ({ question }) => {
@@ -16,7 +17,8 @@ const Questions = ({ question }) => {
         <p>Trả lời</p>
       </div>
       <div className="display-question-details">
-        <Link to={`/forum/questions/${question?._id}`} className="question-title-link">
+        
+        <Link to={`/forum/questions/${question?._id}`} className="question-title-link mr-3">
           {question?.questionTitle.length > (window.innerWidth <= 400 ? 70 : 90)
             ? question?.questionTitle.substring(
                 0,
@@ -24,6 +26,7 @@ const Questions = ({ question }) => {
               ) + "..."
             : question?.questionTitle}
         </Link>
+        {question.isSolved && <Tag color="green">Đã giải quyết</Tag>}
         <div className="display-tags-time">
           <div className="display-tags">
             {question?.questionTags.map((tag) => (

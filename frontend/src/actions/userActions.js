@@ -1,6 +1,6 @@
 import axios from '../../src/axios/axios'
 import setAuthToken from '../axios/setAuthToken'
-import { CLEAR_SELECTED_CHAT } from '../constants/chatContant'
+import { CLEAR_SELECTED_CHAT, RESET_ACCESS_CHAT } from '../constants/chatContant'
 import {
     LOGIN_REQUEST,
     LOGIN_SUCCESS,
@@ -279,6 +279,11 @@ export const logout = () => async (dispatch) => {
 
         dispatch({
             type: CLEAR_SELECTED_CHAT
+        })
+
+
+        dispatch({
+            type: RESET_ACCESS_CHAT
         })
 
     } catch (error) {

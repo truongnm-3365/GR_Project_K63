@@ -198,16 +198,27 @@ exports.getSingleCourse = catchAsyncErrors(async (req, res, next) => {
 
     const courseDetails = await Course.findById(req.params.id);
 
+
     if (!courseDetails) {
         return next(new ErrorHandler('Course not found', 404));
     }
+
+
+    const registerCourse = await RegisterCourse.find();
+    let users = registerCourse.filter(item => item.course.toString() === courseDetails._id.toString())
+    users = users.map(item => item.user.toString())
+    users = [...new Set(users)]
+
+    users  = users.map(item => mongoose.Types.ObjectId(item))
+    users = await User.find({_id:{ $in: users}});
 
     const user = await User.findById(courseDetails.user)
 
 
     let course = {
         details:courseDetails,
-        user
+        user,
+        registerUsers:users
     }
 
     res.status(200).json({

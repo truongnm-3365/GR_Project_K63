@@ -8,6 +8,7 @@ import { ACCESS_CHAT_FAIL,
         FETCH_MESSAGES_FAIL, 
         FETCH_MESSAGES_REQUEST,
         FETCH_MESSAGES_SUCCESS,
+        RESET_ACCESS_CHAT,
         SEARCH_CHAT_FAIL,
         SEARCH_CHAT_REQUEST,
         SEARCH_CHAT_SUCCESS,
@@ -17,7 +18,6 @@ import { ACCESS_CHAT_FAIL,
         SEND_MESSAGE_SUCCESS
 
     } from "../constants/chatContant"
-import { LOGOUT_SUCCESS } from "../constants/userConstants"
 
 export const chatsReducer = (state = { chats: [] }, action) => {
     switch (action.type) {
@@ -91,6 +91,11 @@ export const accessChatReducer = (state = { accessChat: {} }, action) => {
             return {
                 loading: false,
                 error: action.payload
+            }
+
+        case RESET_ACCESS_CHAT:
+            return {
+                accessChat:{}
             }
 
         default:
