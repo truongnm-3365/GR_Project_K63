@@ -143,7 +143,11 @@ exports.adminAcceptCourse = catchAsyncErrors(async (req, res, next) => {
     let courseNotAccept = await Course.findById(req.params.id);
 
     if (!courseNotAccept) {
-        return next(new ErrorHandler('Course not found', 404));
+        res.status(404).json({
+            success: false,
+            message:"Không tìm thấy khóa học"
+        })
+        
     }
 
     const course = await Course.findByIdAndUpdate(req.params.id, {...req.body,accepted:true}, {
@@ -171,7 +175,11 @@ exports.adminChangeStatusCourse = catchAsyncErrors(async (req, res, next) => {
     let course = await Course.findById(req.params.id);
 
     if (!course) {
-        return next(new ErrorHandler('Course not found', 404));
+        res.status(404).json({
+            success: false,
+            message:"Không tìm thấy khóa học"
+        })
+       
     }
 
     course = await Course.findByIdAndUpdate(req.params.id, {...req.body,accepted:!course.accepted}, {
@@ -200,7 +208,10 @@ exports.getSingleCourse = catchAsyncErrors(async (req, res, next) => {
 
 
     if (!courseDetails) {
-        return next(new ErrorHandler('Course not found', 404));
+        res.status(404).json({
+            success: false,
+            message:"Không tìm thấy khóa học"
+        })
     }
 
 
@@ -234,7 +245,11 @@ exports.updateCourse = catchAsyncErrors(async (req, res, next) => {
     let course = await Course.findById(req.params.id);
 
     if (!course) {
-        return next(new ErrorHandler('Course not found', 404));
+        res.status(404).json({
+            success: false,
+            message:"Không tìm thấy khóa học"
+        })
+       
     }
     
     let imagesLinks = [];
@@ -281,7 +296,11 @@ exports.deleteCourse = catchAsyncErrors(async (req, res, next) => {
     const medias = await Media.find({course: req.params.id})
 
     if (!course) {
-        return next(new ErrorHandler('Course not found', 404));
+        res.status(404).json({
+            success: false,
+            message:"Không tìm thấy khóa học"
+        })
+        
     }
 
     for(let i = 0; i < medias.length; i++) {
@@ -424,7 +443,11 @@ exports.deleteTopic = catchAsyncErrors(async (req, res, next) => {
     const topic = await Topic.findById(req.params.id);
   
     if (!topic) {
-        return next(new ErrorHandler('Topic not found', 404));
+        res.status(404).json({
+            success: false,
+            message:"Không tìm thấy chủ đề"
+        })
+      
     }
   
     await topic.remove();
@@ -441,7 +464,11 @@ exports.updateTopic = catchAsyncErrors(async (req, res, next) => {
     let topic = await Topic.findById(req.params.id);
 
     if (!topic) {
-        return next(new ErrorHandler('Topic not found', 404));
+        res.status(404).json({
+            success: false,
+            message:"Không tìm thấy chủ đề"
+        })
+        
     }
     
     
@@ -488,7 +515,11 @@ exports.deleteTopicQuiz = catchAsyncErrors(async (req, res, next) => {
     const quiz= await Quiz.findById(req.params.id);
   
     if (!quiz) {
-        return next(new ErrorHandler('Quiz not found', 404));
+        res.status(404).json({
+            success: false,
+            message:"Không tìm thấy câu đố"
+        })
+        
     }
   
     await quiz.remove();
@@ -496,7 +527,7 @@ exports.deleteTopicQuiz = catchAsyncErrors(async (req, res, next) => {
   
     res.status(200).json({
         success: true,
-        message: 'Quiz is deleted.'
+        message: 'Đã xóa câu đố'
     })
   });
 
@@ -505,7 +536,11 @@ exports.deleteTopicQuiz = catchAsyncErrors(async (req, res, next) => {
     let quiz = await Quiz.findById(req.params.id);
 
     if (!quiz) {
-        return next(new ErrorHandler('Topic not found', 404));
+        res.status(404).json({
+            success: false,
+            message:"Không tìm thấy câu đố"
+        })
+       
     }
     
     
@@ -550,7 +585,11 @@ exports.deleteNote = catchAsyncErrors(async (req, res, next) => {
     const note = await Note.findById(req.params.id);
   
     if (!note) {
-        return next(new ErrorHandler('Note not found', 404));
+        res.status(404).json({
+            success: false,
+            message:"Không tìm thấy ghi chú"
+        })
+      
     }
   
     await note.remove();
@@ -567,7 +606,11 @@ exports.updateNote = catchAsyncErrors(async (req, res, next) => {
     let note = await Note.findById(req.params.id);
 
     if (!note) {
-        return next(new ErrorHandler('Topic not found', 404));
+        res.status(404).json({
+            success: false,
+            message:"Không tìm thấy ghi chú"
+        })
+        
     }
     
     

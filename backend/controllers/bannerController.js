@@ -42,7 +42,11 @@ exports.getBanner = catchAsyncErrors(async (req, res, next) => {
 
     const banner = await Banner.findById(req.params.id);
     if (!banner) {
-        return next(new ErrorHandler('Banner not found', 404));
+        res.status(404).json({
+            success: false,
+            message:'Không tìm thấy banner'
+        })
+       
     }
 
     res.status(200).json({
@@ -57,7 +61,11 @@ exports.updateBanner = catchAsyncErrors(async (req, res, next) => {
     let banner = await Banner.findById(req.params.id);
 
     if (!banner) {
-        return next(new ErrorHandler('Banner not found', 404));
+        res.status(404).json({
+            success: false,
+            message:'Không tìm thấy banner'
+        })
+       
     }
 
     let imagesLinks = [];
@@ -99,7 +107,11 @@ exports.deleteBanner = catchAsyncErrors(async (req, res, next) => {
     const banner = await Banner.findById(req.params.id);
 
     if (!banner) {
-        return next(new ErrorHandler('Banner not found', 404));
+        res.status(404).json({
+            success: false,
+            message:'Không tìm thấy banner'
+        })
+        
     }
 
     for (let i = 0; i < banner.images.length; i++) {

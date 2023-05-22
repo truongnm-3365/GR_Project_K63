@@ -52,15 +52,16 @@ exports.delete = catchAsyncErrors(async (req, res, next) => {
   const document = await Document.findById(req.params.id);
 
   if (!document) {
-      return next(new ErrorHandler('document not found', 404));
+      res.status(404).json({
+          success: false,
+          message:"Không tìm thấy tài liệu"
+      })
+      
   }
 
   await document.remove();
   fs.unlink("../backend" + document.docs[0], (err => {
     if (err) console.log(err);
-    else {
-      console.log("\nDeleled file succesffully");
-    }
   }));
 
   res.status(200).json({

@@ -16,10 +16,6 @@ const options = {
   transition: transitions.SCALE
 }
 
-if(localStorage.getItem("token")){
-  setAuthToken(localStorage.getItem("token"));
-}
-
 
 ReactDOM.render(
     <Provider store={store} >

@@ -24,7 +24,7 @@ const CourseDetails = ({ match }) => {
     const alert = useAlert();
 
     const { loading, error, course } = useSelector(state => state.courseDetails)
-    const { user } = useSelector(state => state.auth)
+    const { user, isAuthenticated } = useSelector(state => state.auth)
     
     const { error: reviewError, success } = useSelector(state => state.newReview)
     const { registerCourses } = useSelector(state => state.registerCourses)
@@ -38,7 +38,7 @@ const CourseDetails = ({ match }) => {
         dispatch(getCourseDetails(match.params.id))
         
        
-        if(localStorage.getItem('token')){
+        if(isAuthenticated){
             dispatch(getMeRegisterCourses())
         }
         dispatch(getCourseLessons(match.params.id))
@@ -65,7 +65,7 @@ const CourseDetails = ({ match }) => {
         }
 
 
-    }, [dispatch, alert, error, reviewError, match.params.id,success,newSuccess])
+    }, [dispatch, alert, match.params.id,success,newSuccess])
 
 
     const checkCompletedCourse = () =>{
@@ -246,7 +246,7 @@ const CourseDetails = ({ match }) => {
                             {course.details.images && course.details.images.map(image => (
                                 <img key={image._id} className="d-block w-100" src={process.env.REACT_APP_API_URL + image.url} alt={course.title} />
                             ))}
-                            <div><h2 className='mt-5'>Danh sách bài học</h2></div>
+                            {lessons?.length !== 0 && <div><h2 className='mt-5'>Danh sách bài học</h2></div> }
                             <div>
                                 <div className="season_tabs">
                                     {topics[indexTopic] &&
@@ -331,7 +331,7 @@ const CourseDetails = ({ match }) => {
                                     }
                                 </>
                                 :<>
-                                {localStorage.getItem('token') ?
+                                {isAuthenticated ?
                                     <button onClick={() => addCourse()} type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" >Đăng ký học</button>
                                 :  <div className="alert alert-danger mt-5" type='alert'>Đăng nhập để đăng ký khóa học</div> }
                                 </>                                
@@ -348,14 +348,14 @@ const CourseDetails = ({ match }) => {
                             <h4 className="mt-2">Thông tin tác giả:</h4>
                             <p>Tên: {course.user.name}</p>
                             <p>Email: {course.user.email}</p>
-                            <Link to={`/profile/${course.user._id}`} >Xem thêm thông tin chi tiết</Link>
+                            <Link to={`/profile/${course.user?._id}`} >Xem thêm thông tin chi tiết</Link>
                             <div>
-                            {isRegister() && course.user._id !== user._id && <Button onClick={() => {dispatch(getAccessChat(course.user._id));history.push('/chats')}} >Nhắn tin</Button>} 
+                            {isRegister() && course.user?._id !== user?._id && <Button onClick={() => {dispatch(getAccessChat(course.user._id));history.push('/chats')}} >Nhắn tin</Button>} 
                             </div>
                             
                             <hr />
                             
-                            {course.user._id === user._id &&
+                            {course.user?._id === user?._id &&
                             <>
                                 <Button type="primary" onClick={showModal}>
                                     Danh sách học viên
@@ -371,7 +371,7 @@ const CourseDetails = ({ match }) => {
                              {/* <p>Ngày bắt đầu: {formatDate(course.details.startDate)}</p> 
                              <p>Ngày kết thúc: {formatDate(course.details.endDate)}</p>        */}
                              { isRegister() && <p>Ngày hết hạn: {expriedDate()}</p>}
-                            {localStorage.getItem('token') ? 
+                            {isAuthenticated ? 
                             ( 
                                 checkCompletedCourse() ? 
                                 <button id="review_btn" type="button" className="btn btn-primary mt-4" data-toggle="modal" data-target="#ratingModal" onClick={setUserRatings}>

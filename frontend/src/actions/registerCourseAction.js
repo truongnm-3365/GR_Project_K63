@@ -35,7 +35,7 @@ export const getMeRegisterCourses = () => async (dispatch) => {
         console.log(error);
         dispatch({
             type: ALL_REGISTER_COURSES_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -63,7 +63,7 @@ export const newRegisterCourse = (courseId) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: NEW_REGISTER_COURSE_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -91,7 +91,7 @@ export const comleteVideo = (videoData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: NEW_REGISTER_COURSE_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -119,7 +119,7 @@ export const completedVideo = (videoData) => async (dispatch) => {
 
         dispatch({
             type: UPDATE_REGISTER_COURSE_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -146,7 +146,7 @@ export const extendCourse = (course) => async (dispatch) => {
 
         dispatch({
             type: UPDATE_REGISTER_COURSE_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -169,7 +169,7 @@ export const deleteRegisterCourse = (id) => async (dispatch) => {
 
         dispatch({
             type: DELETE_REGISTER_COURSE_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }

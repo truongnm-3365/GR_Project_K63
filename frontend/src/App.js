@@ -57,6 +57,7 @@ import Forum from './pages/Forum/Mainbar/ForumMainbar'
 import DisplayQuestion from './pages/Forum/Question/DisplayQuestion'
 import AskQuestion from './pages/Forum/AskQuestion/AskQuestion'
 import PageNotFound from './pages/PageNotFound/PageNotFound'
+import setAuthToken from './axios/setAuthToken'
 
 
 function App() {
@@ -69,6 +70,7 @@ function App() {
   useEffect(() => {
 
     if(localStorage.getItem("token")){
+      setAuthToken(localStorage.getItem("token"));
       dispatch(loadUser())
       async function getStripApiKey() {
         const { data } = await axios.get('/api/v1/stripeapi');

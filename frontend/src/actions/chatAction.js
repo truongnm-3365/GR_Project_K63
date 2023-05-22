@@ -34,7 +34,7 @@ export const getSearchChat = (search) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: SEARCH_CHAT_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -55,7 +55,7 @@ export const getAccessChat = (userId) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: ACCESS_CHAT_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -79,7 +79,7 @@ export const getMessages = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: FETCH_MESSAGES_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -104,7 +104,7 @@ export const postMessage = (messageData,socket) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: SEND_MESSAGE_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -125,7 +125,7 @@ export const getChats = () => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: FETCH_CHATS_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }

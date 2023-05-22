@@ -26,7 +26,7 @@ export const getMeNotifies = (id) => async (dispatch) => {
 
         dispatch({
             type: GET_NOTIFIES_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -46,7 +46,7 @@ export const deleteAllNotifies = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: DELETE_ALL_NOTIFIES_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -66,7 +66,7 @@ export const deleteAllNotifiesMessage = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: DELETE_ALL_NOTIFIES_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }

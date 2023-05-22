@@ -49,7 +49,11 @@ exports.getCategory = catchAsyncErrors(async (req, res, next) => {
 
     const category = await Category.findById(req.params.id);
     if (!category) {
-        return next(new ErrorHandler('Category not found', 404));
+        res.status(404).json({
+            success: false,
+            message:'Không tìm thấy danh mục'
+        })
+       
     }
 
     res.status(200).json({
@@ -64,7 +68,11 @@ exports.updateCategory = catchAsyncErrors(async (req, res, next) => {
     let category = await Category.findById(req.params.id);
 
     if (!category) {
-        return next(new ErrorHandler('Category not found', 404));
+        res.status(404).json({
+            success: false,
+            message:'Không tìm thấy danh mục'
+        })
+       
     }
     
 
@@ -86,7 +94,11 @@ exports.deleteCategory = catchAsyncErrors(async (req, res, next) => {
     const category = await Category.findById(req.params.id);
 
     if (!category) {
-        return next(new ErrorHandler('Category not found', 404));
+        res.status(404).json({
+            success: false,
+            message:'Không tìm thấy danh mục'
+        })
+       
     }
 
 

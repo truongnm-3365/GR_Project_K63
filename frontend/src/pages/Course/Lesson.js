@@ -35,7 +35,7 @@ const Lessons = ({match}) => {
   const [checkedExercise, setCheckedExercise] = useState([false])
   const [exercise,setExercise] = useState(false)
   const { course } = useSelector(state => state.courseDetails)
-  const {user} = useSelector(state => state.auth)
+  const {user, isAuthenticated} = useSelector(state => state.auth)
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [videoTime, setVideoTime] = useState();
@@ -166,7 +166,7 @@ const Lessons = ({match}) => {
   const { loading:videoLoading, isUpdated } = useSelector(state => state.registerCourse)
   
   const isRegister = () =>{
-    if(localStorage.getItem('token')){
+    if(isAuthenticated){
         for(let i =0; i < registerCourses?.length; i++){
             if(registerCourses[i].course === match.params.id){
               return true;

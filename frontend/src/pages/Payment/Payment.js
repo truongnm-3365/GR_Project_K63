@@ -130,7 +130,7 @@ const Payment = ({ history,match }) => {
 
         } catch (error) {
             document.querySelector('#pay_btn').disabled = false;
-            alert.error(error.response.data.message)
+            alert.error(error.response?.data?.message)
         }
     }
 

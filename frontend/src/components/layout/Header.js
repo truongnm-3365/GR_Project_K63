@@ -22,9 +22,8 @@ const Header = () => {
     const history = useHistory();
     const location = useLocation();
 
-    console.log(location);
 
-    const { user, loading } = useSelector(state => state.auth)
+    const { user, loading ,isAuthenticated } = useSelector(state => state.auth)
     
 
 
@@ -32,14 +31,6 @@ const Header = () => {
     const { notifies, error, isDeleted } = useSelector(state => state.notifies)
 
 
-    
-    const isObjectEmpty = (objectName) => {
-        if(objectName)
-            return Object.keys(objectName).length === 0
-        else{
-            return true
-        }
-    }
 
     const logoutHandler = () => {
         dispatch(logout());
@@ -56,7 +47,7 @@ const Header = () => {
         if (error) {
             return alert.error(error)
         }
-        if(!isObjectEmpty(user)){
+        if(isAuthenticated){
             dispatch(getMeNotifies(user?._id))
         }
             
@@ -69,15 +60,7 @@ const Header = () => {
     }, [dispatch, alert, error,user,isDeleted])
 
     const onGoBack = () =>{
-        if(location.pathname.includes("/lessons") && !location.pathname.includes("me") ){
-            history.push(location.pathname.replace("/lessons",""))
-        }else if(location.pathname.split("/").length === 4 && location.pathname.includes("/course") && !location.pathname.includes("me")){
-            history.push(location.pathname.replace("/"+location.pathname.split("/")[3],""))
-        }
-        else{
-            history.goBack()
-        }
-        
+        history.goBack()
     }
 
     console.log(location.pathname.split("/"));
@@ -86,7 +69,7 @@ const Header = () => {
     return (
         
         <Fragment>
-        {!isObjectEmpty(user) &&
+        {isAuthenticated &&
             <div className="icon-bar">
             <Link className="" to='/chatbot'>
                 <div style={{fontSize:'14px'}}>Chat Bot</div>
@@ -132,7 +115,7 @@ const Header = () => {
 
                 <div className="col-12 col-md-3 mt-4 mt-md-0 text-center d-flex">
                     
-                    {!isObjectEmpty(user) ? (
+                    {isAuthenticated ? (
                         <>
                             <span className='ml-3'>
                                 <NotifyMe

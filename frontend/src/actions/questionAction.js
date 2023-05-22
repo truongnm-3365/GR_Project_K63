@@ -60,7 +60,7 @@ export const markSolvedQuestion = (id,answeredUsers) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: MARK_SOLVED_FAIL,
-      payload: error.response.data.message
+      payload: error.response?.data?.message
   })
   }
 }

@@ -68,7 +68,11 @@ exports.update = catchAsyncErrors(async (req, res, next) => {
   let media = await Media.findById(req.params.id);
 
   if (!media) {
-        return next(new ErrorHandler('Media not found', 404));
+    res.status(404).json({
+      success: false,
+      message:"Không tìm thấy video"
+  })
+     
   }
 
 
@@ -118,7 +122,11 @@ exports.delete = catchAsyncErrors(async (req, res, next) => {
   const media = await Media.findById(req.params.id);
 
   if (!media) {
-      return next(new ErrorHandler('Media not found', 404));
+    res.status(404).json({
+        success: false,
+        message:"Không tìm thấy video"
+    })
+      
   }
 
   await media.remove();

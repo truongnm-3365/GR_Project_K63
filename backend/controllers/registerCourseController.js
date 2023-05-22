@@ -51,7 +51,11 @@ exports.completedVideo = catchAsyncErrors(async (req, res, next) => {
     let completedVideo = await RegisterCourse.findOne(req.body);
 
     if (!completedVideo) {
-        return next(new ErrorHandler('Video not found', 404));
+        res.status(404).json({
+            success: false,
+            message:"Không tìm thấy video"
+        })
+       
     }
 
     req.body.completed = true
@@ -96,7 +100,11 @@ exports.getRegisterCourse = catchAsyncErrors(async(req, res, next) =>{
 exports.deleteRegisterCourse = catchAsyncErrors(async(req, res, next) =>{
     const course = await RegisterCourse.findById(req.params.id);
     if (!course) {
-        return next(new ErrorHandler('Not found', 404));
+        res.status(404).json({
+            success: false,
+            message:"Không tìm thấy khóa học"
+        })
+       
     }
 
     await course.remove();
@@ -112,7 +120,11 @@ exports.courseExtend = catchAsyncErrors(async(req,res,next) =>{
     let course = await RegisterCourse.findOne(req.body);
 
     if (!course) {
-        return next(new ErrorHandler('Video not found', 404));
+        res.status(404).json({
+            success: false,
+            message:"Không tìm thấy khóa học"
+        })
+       
     }
 
     req.body.createdAt = Date.now()

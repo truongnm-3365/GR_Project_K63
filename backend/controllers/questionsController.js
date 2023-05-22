@@ -51,7 +51,11 @@ exports.markSolveQuestion = catchAsyncErrors(async (req,res) =>{
 
 
   if (!question) {
-      return next(new ErrorHandler('Question not found', 404));
+    res.status(404).json({
+        success: false,
+        message:"Không tìm thấy câu hỏi"
+    })
+      
   }
 
   for (let user of users){

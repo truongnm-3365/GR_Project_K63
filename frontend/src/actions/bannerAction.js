@@ -35,7 +35,7 @@ export const getBanners = () => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: ALL_BANNERS_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -61,7 +61,7 @@ export const newBanner = (bannerData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: NEW_BANNER_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -81,7 +81,7 @@ export const deletebanner = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: DELETE_BANNER_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -107,7 +107,7 @@ export const updateBanner = (id, bannerData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: UPDATE_BANNER_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -129,7 +129,7 @@ export const getBannerDetails = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: BANNER_DETAILS_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }

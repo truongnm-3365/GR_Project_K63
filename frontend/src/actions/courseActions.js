@@ -138,7 +138,7 @@ export const getCourses = (keyword = '', currentPage = 1, price, category, ratin
     } catch (error) {
         dispatch({
             type: ALL_COURSES_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -164,7 +164,7 @@ export const newCourse = (courseData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: NEW_COURSE_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -185,7 +185,7 @@ export const deleteCourse = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: DELETE_COURSE_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -212,7 +212,7 @@ export const updateCourse = (id, courseData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: UPDATE_COURSE_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -238,7 +238,7 @@ export const acceptCourse = (id, courseData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: UPDATE_COURSE_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -264,7 +264,7 @@ export const changeStatusCourse = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: UPDATE_COURSE_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -286,9 +286,10 @@ export const getCourseDetails = (id) => async (dispatch) => {
         
 
     } catch (error) {
+        console.log(error);
         dispatch({
             type: COURSE_DETAILS_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -316,7 +317,7 @@ export const newLesson = (lessonData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: NEW_LESSON_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -337,7 +338,7 @@ export const getCourseLessons = (id) => async (dispatch) => {
 
         dispatch({
             type: GET_LESSONS_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -358,7 +359,7 @@ export const getCourseLesson = (courseId,index) => async (dispatch) => {
 
         dispatch({
             type: GET_LESSON_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -382,7 +383,7 @@ export const updateLesson = (id,lessonData) => async (dispatch) => {
 
         dispatch({
             type: UPDATE_LESSON_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -406,7 +407,7 @@ export const deleteLesson = (id) => async (dispatch) => {
 
         dispatch({
             type: DELETE_LESSON_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -435,7 +436,7 @@ export const newReview = (reviewData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: NEW_REVIEW_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -457,7 +458,7 @@ export const getAdminCourses = () => async (dispatch) => {
 
         dispatch({
             type: ADMIN_COURSES_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -478,7 +479,7 @@ export const getRegularCourses = () => async (dispatch) => {
 
         dispatch({
             type: REGULAR_COURSES_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -499,7 +500,7 @@ export const getMeCourses = (userId) => async (dispatch) => {
 
         dispatch({
             type: CREATOR_COURSES_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -521,7 +522,7 @@ export const getCourseReviews = (id) => async (dispatch) => {
 
         dispatch({
             type: GET_REVIEWS_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -545,7 +546,7 @@ export const deleteReview = (id, courseId) => async (dispatch) => {
 
         dispatch({
             type: DELETE_REVIEW_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -581,7 +582,7 @@ export const newTopic = (topicData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: NEW_TOPIC_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -602,7 +603,7 @@ export const getCourseTopics = (id) => async (dispatch) => {
 
         dispatch({
             type: GET_TOPICS_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -626,7 +627,7 @@ export const deleteTopic = (id) => async (dispatch) => {
 
         dispatch({
             type: DELETE_TOPIC_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -652,7 +653,7 @@ export const updateTopic = (id, topicData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: UPDATE_TOPIC_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -681,7 +682,7 @@ export const newQuiz = (quizData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: NEW_QUIZ_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -702,7 +703,7 @@ export const getTopicQuizs = (id) => async (dispatch) => {
 
         dispatch({
             type: GET_QUIZS_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -727,7 +728,7 @@ export const deleteQuiz = (id) => async (dispatch) => {
 
         dispatch({
             type: DELETE_QUIZ_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -753,7 +754,7 @@ export const updateQuiz = (id, quizData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: UPDATE_QUIZ_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -782,7 +783,7 @@ export const newDocument = (docData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: NEW_DOCUMENT_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -803,7 +804,7 @@ export const getCourseDocuments = (id) => async (dispatch) => {
 
         dispatch({
             type: GET_DOCUMENTS_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -824,7 +825,7 @@ export const getCourseDocument = (courseId,index) => async (dispatch) => {
 
         dispatch({
             type: GET_DOCUMENT_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -845,7 +846,7 @@ export const deleteDocument = (id) => async (dispatch) => {
 
         dispatch({
             type: DELETE_DOCUMENT_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -874,7 +875,7 @@ export const newNote = (noteData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: NEW_NOTE_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -895,7 +896,7 @@ export const getNotes = (id) => async (dispatch) => {
 
         dispatch({
             type: GET_NOTES_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -920,7 +921,7 @@ export const deleteNote = (id) => async (dispatch) => {
 
         dispatch({
             type: DELETE_NOTE_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -946,7 +947,7 @@ export const updateNote = (id, noteData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: UPDATE_NOTE_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }

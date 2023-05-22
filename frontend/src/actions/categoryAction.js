@@ -34,7 +34,7 @@ export const getCategories = () => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: ALL_CATEGORIES_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -60,7 +60,7 @@ export const newCategory = (categoryData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: NEW_CATEGORY_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -80,7 +80,7 @@ export const deleteCategory = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: DELETE_CATEGORY_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -106,7 +106,7 @@ export const updateCategory = (id, categoryData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: UPDATE_CATEGORY_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }
@@ -128,7 +128,7 @@ export const getCategoryDetails = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: CATEGORY_DETAILS_FAIL,
-            payload: error.response.data.message
+            payload: error.response?.data?.message
         })
     }
 }

@@ -44,21 +44,34 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 
     // Checks if email and password is entered by user
     if (!email || !password) {
-        return next(new ErrorHandler('Please enter email & password', 400))
+        res.status(400).json({
+            success: false,
+            message:'Nhập email và password'
+        })
+        
     }
 
     // Finding user in database
     const user = await User.findOne({ email }).select('+password')
 
     if (!user) {
-        return next(new ErrorHandler('Invalid Email or Password', 401));
+        res.status(401).json({
+            success: false,
+            message:'Sai email hoặc mật khẩu'
+        })
+
+        
     }
 
     // Checks if password is correct or not
     const isPasswordMatched = await user.comparePassword(password);
 
     if (!isPasswordMatched) {
-        return next(new ErrorHandler('Invalid Email or Password', 401));
+        res.status(401).json({
+            success: false,
+            message:'Sai email hoặc mật khẩu'
+        })
+       
     }
 
     sendToken(user, 200, res)
@@ -70,7 +83,11 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
-        return next(new ErrorHandler('User not found with this email', 404));
+        res.status(404).json({
+            success: false,
+            message:'Không tìm thấy người dùng với email này'
+        })
+       
     }
 
     // Get reset token
@@ -102,7 +119,12 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
 
         await user.save({ validateBeforeSave: false });
 
-        return next(new ErrorHandler(error.message, 500))
+        res.status(500).json({
+            success: false,
+            message:error.message
+        })
+
+        
     }
 
 })
@@ -119,11 +141,19 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
     })
 
     if (!user) {
-        return next(new ErrorHandler('Password reset token is invalid or has been expired', 400))
+        res.status(400).json({
+            success: false,
+            message:'Token sai hoạc đã hết hạn'
+        })
+       
     }
 
     if (req.body.password !== req.body.confirmPassword) {
-        return next(new ErrorHandler('Password does not match', 400))
+        res.status(400).json({
+            success: false,
+            message:'Mật khẩu không trùng khớp'
+        })
+        
     }
 
     // Setup new password
@@ -170,7 +200,11 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
     // Check previous user password
     const isMatched = await user.comparePassword(req.body.oldPassword)
     if (!isMatched) {
-        return next(new ErrorHandler('Old password is incorrect'));
+        res.status(401).json({
+            success: false,
+            message:'Mật khẩu cũ bị sai'
+        })
+       
     }
 
     user.password = req.body.password;
@@ -194,9 +228,7 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
     if (Array.isArray(req.files.avatar) && req.files.avatar.length > 0) {
         fs.unlink("../backend" + userTmp.avatar.url, (err => {
             if (err) console.log(err);
-            else {
-              console.log("\nDeleled file succesffully");
-            }
+
         }));
         for (let avatar of req.files.avatar) {
             avatarPaths.push("/" + avatar.path);
@@ -229,7 +261,7 @@ exports.logout = catchAsyncErrors(async (req, res, next) => {
 
     res.status(200).json({
         success: true,
-        message: 'Logged out'
+        message: 'Đã đăng xuất'
     })
 })
 
@@ -297,7 +329,11 @@ exports.getUserDetails = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findById(req.params.id);
 
     if (!user) {
-        return next(new ErrorHandler(`User does not found with id: ${req.params.id}`))
+        res.status(401).json({
+            success: false,
+            message:'Không tìm thấy người dùng'
+        })
+       
     }
 
     res.status(200).json({
@@ -330,20 +366,19 @@ exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findById(req.params.id);
 
     if (!user) {
-        return next(new ErrorHandler(`User does not found with id: ${req.params.id}`))
+        res.status(401).json({
+            success: false,
+            message:'Không tìm thấy người dùng'
+        })
+        
     }
 
-    // Remove avatar from cloudinary
-    // const image_id = user.avatar.public_id;
-    // await cloudinary.v2.uploader.destroy(image_id);
 
     const image_url = user.avatar.url
 
     fs.unlink("../backend" + image_url, (err => {
         if (err) console.log(err);
-        else {
-          console.log("\nDeleled file succesffully");
-        }
+
     }));
 
     await user.remove();

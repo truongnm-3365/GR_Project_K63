@@ -11,7 +11,11 @@ exports.getMeNotifies = catchAsyncErrors(async (req, res, next) => {
     
 
     if (!notifies) {
-        return next(new ErrorHandler('Notify not found', 404));
+        res.status(404).json({
+            success: false,
+            message:"Không tìm thấy thông báo"
+        })
+       
     }
 
     res.status(200).json({
@@ -26,7 +30,11 @@ exports.deleteAllNotifies = catchAsyncErrors(async (req, res, next) => {
     const notifies = await Notify.deleteMany({user: req.params.userId,type: { $ne: 1 } });
 
     if (!notifies) {
-        return next(new ErrorHandler('Notifies not found', 404));
+        res.status(404).json({
+            success: false,
+            message:"Không tìm thấy thông báo"
+        })
+      
     }
 
 
@@ -42,7 +50,11 @@ exports.deleteAllNotifiesMessage = catchAsyncErrors(async (req, res, next) => {
     const notifies = await Notify.deleteMany({user: req.params.userId,type:1});
 
     if (!notifies) {
-        return next(new ErrorHandler('Notifies not found', 404));
+        res.status(404).json({
+            success: false,
+            message:"Không tìm thấy thông báo"
+        })
+        
     }
 
 

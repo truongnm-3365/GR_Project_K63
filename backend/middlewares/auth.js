@@ -15,18 +15,16 @@ exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
     if (!token) {
         res.status(401).json({
             success: false,
-            message: 'Login first to access this resource.'
+            message: 'Phải thực hiện đăng nhập trước khi truy cập vào đây'
         })
-        //return next(new ErrorHandler('Login first to access this resource.', 401))
+       
     }
     
-
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
     
 
     let user = await User.findById(decoded.id);   
     
-
     req.user = user;
 
     next()
