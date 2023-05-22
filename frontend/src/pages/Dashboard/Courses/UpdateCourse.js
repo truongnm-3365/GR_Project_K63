@@ -130,7 +130,7 @@ const UpdateCourse = ({ match, history }) => {
                                     <input
                                         type="text"
                                         id="name_field"
-                                        className="form-control"
+                                        className="form-control form-control-sm"
                                         defaultValue={course.details.name}
                                         onChange={(e) => setName(e.target.value)}
                                     />
@@ -141,7 +141,7 @@ const UpdateCourse = ({ match, history }) => {
                                     <input
                                         type="number"
                                         id="price_field"
-                                        className="form-control"
+                                        className="form-control form-control-sm"
                                         defaultValue={course.details.price}
                                         onChange={(e) => setPrice(e.target.value)}
                                     />
@@ -151,7 +151,7 @@ const UpdateCourse = ({ match, history }) => {
                                 <div className="form-group">
                                     <label htmlFor="description_field">Mô tả</label>
                                     <Editor value={course.details.description} onChange={setDescription} />
-                                    {/* <textarea className="form-control" id="description_field" rows="8" value={description} onChange={(e) => setDescription(e.target.value)}></textarea> */}
+                                    {/* <textarea className="form-control form-control-sm" id="description_field" rows="8" value={description} onChange={(e) => setDescription(e.target.value)}></textarea> */}
                                 </div>
 
                                 <div className="form-group">
@@ -178,7 +178,7 @@ const UpdateCourse = ({ match, history }) => {
                                     <input
                                         type="number"
                                         id="exam_field"
-                                        className="form-control"
+                                        className="form-control form-control-sm"
                                         defaultValue={course.details.timeLimitFinalExam}
                                         onChange={(e) => setTimeLimitFinalExam(e.target.value)}
                                     />
@@ -190,7 +190,7 @@ const UpdateCourse = ({ match, history }) => {
                                         step="any"
                                         type="number"
                                         id="time_field"
-                                        className="form-control"
+                                        className="form-control form-control-sm"
                                         defaultValue={course.details.timeLimit}
                                         onChange={(e) => setTimeLimit(e.target.value)}
                                     />
@@ -201,7 +201,7 @@ const UpdateCourse = ({ match, history }) => {
                                     <input
                                         type='date'
                                         id='startDate_field'
-                                        className='form-control'
+                                        className='form-control form-control-sm'
                                         defaultValue={course.details.startDate ? new Date(course.details.startDate).toISOString().substr(0, 10) :""}
                                         onChange={onChangeStartDate}
                                     />
@@ -211,28 +211,26 @@ const UpdateCourse = ({ match, history }) => {
                                     <input
                                         type='date'
                                         id='endDate_field'
-                                        className='form-control'
+                                        className='form-control form-control-sm'
                                         defaultValue={course.details.endDate ? new Date(course.details.endDate).toISOString().substr(0, 10) : ""}
                                         onChange={onChangeEndDate}
                                     />
                                 </div> */}
 
                                 <div className='form-group'>
-                                    <label>Ảnh</label>
+                                    <label htmlFor="customFile">Ảnh</label>
 
-                                    <div className='custom-file'>
-                                        <input
-                                            type='file'
-                                            name='images'
-                                            className='custom-file-input'
-                                            id='customFile'
-                                            onChange={onChange}
-                                            accept='.png ,.jpg ,.jpeg'
-                                        />
-                                        <label className='custom-file-label' htmlFor='customFile'>
-                                            Chọn ảnh
-                                 </label>
-                                    </div>
+                                    
+                                    <input
+                                        type='file'
+                                        name='images'
+                                        className='form-control-file'
+                                        id='customFile'
+                                        onChange={onChange}
+                                        accept='.png ,.jpg ,.jpeg'
+                                    />
+
+                                   
 
                                     {course.details.images && course.details.images.map(img => (
                                         <img key={img} src={process.env.REACT_APP_API_URL + img.url} alt={img.url} className="mt-3 mr-2" width="55" height="52" />

@@ -126,7 +126,7 @@ const NewCourse = ({ history }) => {
                                     <input
                                         type="text"
                                         id="name_field"
-                                        className="form-control"
+                                        className="form-control form-control-sm"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
                                     />
@@ -137,7 +137,7 @@ const NewCourse = ({ history }) => {
                                     <input
                                         type="number"
                                         id="price_field"
-                                        className="form-control"
+                                        className="form-control form-control-sm"
                                         value={price}
                                         onChange={(e) => setPrice(e.target.value)}
                                     />
@@ -146,7 +146,7 @@ const NewCourse = ({ history }) => {
                                 <div className="form-group">
                                     <label htmlFor="description_field">Mô tả</label>
                                     <Editor value={description} onChange={setDescription} />
-                                    {/* <textarea className="form-control" id="description_field" rows="8" value={description} onChange={(e) => setDescription(e.target.value)}></textarea> */}
+                                    {/* <textarea className="form-control form-control-sm" id="description_field" rows="8" value={description} onChange={(e) => setDescription(e.target.value)}></textarea> */}
                                 </div>
 
                                 <div className="form-group">
@@ -172,7 +172,7 @@ const NewCourse = ({ history }) => {
                                     <input
                                         type="number"
                                         id="exam_field"
-                                        className="form-control"
+                                        className="form-control form-control-sm"
                                         value={timeLimitFinalExam}
                                         onChange={(e) => setTimeLimitFinalExam(e.target.value)}
                                     />
@@ -183,7 +183,7 @@ const NewCourse = ({ history }) => {
                                     <input
                                         type="number"
                                         id="time_field"
-                                        className="form-control"
+                                        className="form-control form-control-sm"
                                         value={timeLimit}
                                         onChange={(e) => setTimeLimit(e.target.value)}
                                     />
@@ -194,7 +194,7 @@ const NewCourse = ({ history }) => {
                                     <input
                                         type='date'
                                         id='startDate_field'
-                                        className='form-control'
+                                        className='form-control form-control-sm'
                                         onChange={(e) => setStartDate(e.target.value)}
                                     />
                                 </div>
@@ -203,29 +203,26 @@ const NewCourse = ({ history }) => {
                                     <input
                                         type='date'
                                         id='endDate_field'
-                                        className='form-control'
+                                        className='form-control form-control-sm'
                                         onChange={(e) => setEndDate(e.target.value)}
                                     />
                                 </div> */}
 
 
                                 <div className='form-group'>
-                                    <label>Ảnh đại diện</label>
+                                    <label htmlFor='customFile'>Ảnh đại diện</label>
 
-                                    <div className='custom-file'>
+                                    
                                         <input
                                             type='file'
                                             name='images'
-                                            className='custom-file-input'
+                                            className='form-control-file'
                                             id='customFile'
                                             onChange={onChange}
-                                            //multiple
                                             accept=".png, .jpeg, .jpg"
                                         />
-                                        <label className='custom-file-label' htmlFor='customFile'>
-                                            Chọn ảnh
-                                     </label>
-                                    </div>
+
+                                    
 
                                     {console.log(imagesPreview)}    
 

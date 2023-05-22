@@ -16,7 +16,7 @@ const SearchCourse = ({ course, col }) => {
                         <h5 className="card-title font-weight-bold">
                             <Link to={`/course/${course._id}`}>{course.name}</Link>
                         </h5>
-                        <p>{course.description}</p>
+                        <p dangerouslySetInnerHTML={{__html:course.description}} ></p>
                         <div className="ratings mt-auto">
                             <div className="rating-outer" style={{fontSize:'14px'}}>
                                 <div className="rating-inner" style={{ fontSize:'14px', width: `${(course.ratings / 5) * 100}%` }}></div>

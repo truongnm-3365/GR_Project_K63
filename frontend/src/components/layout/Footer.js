@@ -27,7 +27,7 @@ const Footer = () => {
     return (
         <Fragment>
 
-            <div className="footer-bottom-area bg-dark-light section-padding-sm" style={{position:'relative', marginTop:'40px'}}>
+            <div className="footer-bottom-area bg-dark-light section-padding-sm" style={{position:'relative', marginTop:'50px'}}>
                 <div className="container py-3">
                     <div className="row widgets footer-widgets">
 

@@ -1,9 +1,25 @@
-import { Button } from "antd";
-import React from "react";
+import { Button, Modal } from "antd";
+import React, { useState } from "react";
 
 const DocumentList = ({ documents,deleteDocumentHandler }) => {
   const openInNewTab = (url) => {
     window.open(url, '_blank', 'noreferrer');
+
+  };
+
+  const [documentId,setDocumentId] = useState();
+
+  const [isModalOpenDel, setIsModalOpenDel] = useState(false);
+  const showModalDel = (id) => {
+    setDocumentId(id)
+    setIsModalOpenDel(true);
+  };
+  const handleOkDel = (id) => {
+    deleteDocumentHandler(id)
+    setIsModalOpenDel(false);
+  };
+  const handleCancelDel = () => {
+    setIsModalOpenDel(false);
   };
   return (
     <div className="row">
@@ -35,9 +51,12 @@ const DocumentList = ({ documents,deleteDocumentHandler }) => {
                               <i style={{fontSize:'40px',color:'red'}} className="fa fa-file-pdf-o " aria-hidden="true"></i>
                               <div>{document.name}</div>
                             </button>
- 
+
+                            <Modal title="Xóa chủ đề" open={isModalOpenDel} onOk={() => handleOkDel(documentId)} onCancel={handleCancelDel} okText={"Hoàn thành"} cancelText={"Hủy bỏ"}>
+                                Bạn có chắc sẽ xóa chủ đề này
+                            </Modal>
                             
-                            <Button onClick={() => deleteDocumentHandler(document._id)} >Xóa</Button>
+                            <Button onClick={() => showModalDel(document._id)} >Xóa</Button>
                           </>
 
                         );

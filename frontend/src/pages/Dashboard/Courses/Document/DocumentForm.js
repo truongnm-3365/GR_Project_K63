@@ -61,7 +61,7 @@ const DocumentForm = ({courseId, newDocument,topics }) => {
             type="file"
             name="documents"
             id="documents"
-            className="form-control"
+            className="form-control-file"
             accept=".pdf"
             
             onChange={(e) => {

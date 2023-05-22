@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Table,Tag, Input  } from 'antd';
+import { Button, Table,Tag, Input, Modal  } from 'antd';
 
 import MetaData from '../../../components/layout/MetaData'
 import Loader from '../../../components/layout/Loader'
@@ -58,68 +58,10 @@ const CoursesList = ({ history }) => {
 
     const [search, setSearch] = useState('');
     const [status,setStatus] = useState('');
+    const [courseId,setCourseId] = useState('');
     const onSearch = (value) => setSearch(value);
 
     const data = [];
-    
-
-    !!courses && courses.filter((item) => {
-        return search === ''
-          ? item
-          : (item.name.toLowerCase().includes(search.toLowerCase()) || item._id.toLowerCase().includes(search.toLowerCase()));
-      }).filter((item) => {
-        return status === ''
-          ? item
-          : (item.accepted === status);
-      }).forEach(course => {
-        data.push({
-            name: course.name,
-            category:course.category,
-            price: `${course.price} Đồng`,
-            lessons: <Fragment>
-                <Link to={`/me/course/${course._id}/lessons`} className="btn btn-success py-1 px-2">
-                    <i className="fa fa-eye"></i>
-                </Link>
-            </Fragment>,
-            documents: <Fragment>
-                <Link to={`/me/course/${course._id}/documents`} className="btn btn-success py-1 px-2">
-                    <i className="fa fa-eye"></i>
-                </Link>
-            </Fragment>,
-            topics: <Fragment>
-                <Link to={`/me/course/${course._id}/topics`} className="btn btn-success py-1 px-2">
-                    <i className="fa fa-eye"></i>
-                </Link>
-            </Fragment>,
-            status: <Fragment>
-                {course.accepted ?  <Tag color={'green'} >Đã phê duyệt và đang hiện </Tag> : <Tag color={'red'} >Chưa phê duyệt hoặc đang bị ẩn </Tag> }
-               
-               
-            </Fragment>,
-            actions: <Fragment>
-                <Link to={`/me/course/${course._id}`} className="btn btn-success py-1 px-2">
-                    <i className="fa fa-pencil"></i>
-                </Link>
-                <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => deleteCourseHandler(course._id)}>
-                    <i className="fa fa-trash"></i>
-                </button>
-                <Link to={`/course/${course._id}`} className="btn btn-success py-1 px-2 ml-2">
-                    <i className="fa fa-eye"></i>
-                </Link>
-                {user.role === 'admin' && 
-                    (course.accepted === false ?
-                    <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => acceptCourseHandler(course._id)}>
-                        Phê duyệt
-                    </button> :
-                    <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => dispatch(changeStatusCourse(course._id))}>
-                        Ẩn 
-                    </button>)
-                }
-            </Fragment>
-        })
-    })
-    
-
     const deleteCourseHandler = (id) => {
         dispatch(deleteCourse(id))
     }
@@ -155,6 +97,80 @@ const CoursesList = ({ history }) => {
     
 
     }, [dispatch, alert, error, deleteError, isDeleted, isUpdated, history])
+
+
+    const [isModalOpenDel, setIsModalOpenDel] = useState(false);
+    const showModalDel = (id) => {
+      setCourseId(id)
+      setIsModalOpenDel(true);
+    };
+    const handleOkDel = (id) => {
+      deleteCourseHandler(id)
+      setIsModalOpenDel(false);
+    };
+    const handleCancelDel = () => {
+      setIsModalOpenDel(false);
+    };
+
+    !!courses && courses.filter((item) => {
+        return search === ''
+          ? item
+          : (item.name.toLowerCase().includes(search.toLowerCase()) || item._id.toLowerCase().includes(search.toLowerCase()));
+      }).filter((item) => {
+        return status === ''
+          ? item
+          : (item.accepted === status);
+      }).forEach(course => {
+        data.push({
+            name: course.name,
+            category:course.category,
+            price: `${course.price} Đơn vị tiền`,
+            lessons: <Fragment>
+                <Link to={`/me/course/${course._id}/lessons`} className="btn btn-success py-1 px-2">
+                    <i className="fa fa-eye"></i>
+                </Link>
+            </Fragment>,
+            documents: <Fragment>
+                <Link to={`/me/course/${course._id}/documents`} className="btn btn-success py-1 px-2">
+                    <i className="fa fa-eye"></i>
+                </Link>
+            </Fragment>,
+            topics: <Fragment>
+                <Link to={`/me/course/${course._id}/topics`} className="btn btn-success py-1 px-2">
+                    <i className="fa fa-eye"></i>
+                </Link>
+            </Fragment>,
+            status: <Fragment>
+                {course.accepted ?  <Tag color={'green'} >Đã phê duyệt và đang hiện </Tag> : <Tag color={'red'} >Chưa phê duyệt hoặc đang bị ẩn </Tag> }
+               
+               
+            </Fragment>,
+            actions: <Fragment>
+                <Link to={`/me/course/${course._id}`} className="btn btn-success py-1 px-2">
+                    <i className="fa fa-pencil"></i>
+                </Link>
+                <Modal title="Xóa chủ đề" open={isModalOpenDel} onOk={() => handleOkDel(courseId)} onCancel={handleCancelDel} okText={"Hoàn thành"} cancelText={"Hủy bỏ"}>
+                    Bạn có chắc sẽ xóa chủ đề này
+                </Modal>
+                <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => showModalDel(course._id)}>
+                    <i className="fa fa-trash"></i>
+                </button>
+                <Link to={`/course/${course._id}`} className="btn btn-success py-1 px-2 ml-2">
+                    <i className="fa fa-eye"></i>
+                </Link>
+                {user.role === 'admin' && 
+                    (course.accepted === false ?
+                    <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => acceptCourseHandler(course._id)}>
+                        Phê duyệt
+                    </button> :
+                    <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => dispatch(changeStatusCourse(course._id))}>
+                        Ẩn 
+                    </button>)
+                }
+            </Fragment>
+        })
+    })
+    
 
 
 
@@ -196,7 +212,7 @@ const CoursesList = ({ history }) => {
                                 }}
                               >
                               </span>
-                              <Button type="primary" style={{ background: "#006241"}} onClick={() => setStatus('')}>
+                              <Button type="primary" onClick={() => setStatus('')} ghost>
                                 Tất cả
                               </Button>
                               <span
@@ -205,7 +221,7 @@ const CoursesList = ({ history }) => {
                                 }}
                               >
                               </span>
-                              <Button type="primary" style={{ background: "#006241"}} onClick={() => {setStatus(true)}} >
+                              <Button type="primary" onClick={() => {setStatus(true)}} >
                                 Đã phê duyệt
                               </Button>
                               <span
@@ -214,7 +230,7 @@ const CoursesList = ({ history }) => {
                                 }}
                               >
                               </span>
-                              <Button type="primary" style={{ background: "#006241"}} onClick={() => {setStatus(false)}} >
+                              <Button type="primary" onClick={() => {setStatus(false)}} danger>
                                 Đang chờ phê duyệt
                               </Button>
                               <span
@@ -224,6 +240,7 @@ const CoursesList = ({ history }) => {
                               >
                               </span>
                             </div>
+
                             <Table columns={columns} dataSource={data} 
                                    pagination={{ defaultPageSize: 4 }}
 
