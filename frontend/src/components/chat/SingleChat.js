@@ -6,15 +6,13 @@ import { useEffect, useState } from "react";
 
 import ProfileModal from "./miscellaneous/ProfileModal";
 import ScrollableChat from "./ScrollableChat";
-import Lottie from "react-lottie";
-import animationData from "../../animations/typing.json";
 
 import io from "socket.io-client";
 import { Button, Spin, Form, Input,notification } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { getMessages, postMessage, setSeletedChat } from "../../actions/chatAction";
 import { TypingIndicator } from "@chatscope/chat-ui-kit-react";
-import { getMeNotifies } from "../../actions/notifyAction";
+
 
 const ENDPOINT = process.env.REACT_APP_API_URL; 
 var socket, selectedChatCompare;
@@ -27,11 +25,9 @@ const isObjectEmpty = (objectName) => {
   }
 }
 
-const SingleChat = ({ fetchAgain, setFetchAgain }) => {
+const SingleChat = () => {
   const dispatch = useDispatch();
 
-  //const [messages, setMessages] = useState([]);
-  // const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
@@ -45,16 +41,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { accessChat, success } = useSelector(state => state.accessChat);
   const { user } = useSelector(state => state.auth)
 
-  console.log(selectedChat);
-
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: animationData,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
 
   const fetchMessages = (accessChat) => {
     try {
@@ -111,16 +97,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     if (!isObjectEmpty(selectedChat)){
       fetchMessages();
     }
-    
 
     selectedChatCompare = selectedChat;
-    // eslint-disable-next-line
+
   }, [selectedChat,message,dispatch,accessChat,success]);
 
   useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
       if (
-        !selectedChatCompare || // if chat is not selected or doesn't match current chat
+        !selectedChatCompare || 
         selectedChatCompare._id !== newMessageRecieved.chat._id
       ) {
       } else {

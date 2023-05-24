@@ -3,7 +3,7 @@ import Loader from '../../components/layout/Loader'
 import { clearErrors, getCourseLessons, getCourseLesson, getCourseTopics, getTopicQuizs, getCourseDetails, getCourseDocuments, newReview, getNotes, newNote, deleteNote } from '../../actions/courseActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { NEW_LESSON_RESET,NEW_NOTE_RESET,NEW_REVIEW_RESET } from '../../constants/courseConstants'
-import { Alert, Button, Collapse, Form, Modal, Progress, Space, Typography } from 'antd';
+import { Alert, Button, Collapse, Form, Layout, Modal, Progress, Space, Tabs, Typography } from 'antd';
 import { useAlert } from 'react-alert'
 import './index.css'
 import Quiz from "../../components/quiz/Quiz";
@@ -13,6 +13,7 @@ import { comleteVideo, completedVideo, getMeRegisterCourses } from "../../action
 
 import { useHistory } from "react-router-dom";
 import TextArea from "antd/es/input/TextArea";
+
 
 const { Text } = Typography;
 
@@ -45,6 +46,7 @@ const Lessons = ({match}) => {
   const { notes, loading:notesLoading } = useSelector(state => state.notes);
   const { registerCourses } = useSelector(state => state.registerCourses)
   const [register, setRegister] = useState(false)
+  const [collapsed, setCollapsed] = useState(false);
 
   function secondsToHms(d) {
     d = Number(d);
@@ -362,6 +364,108 @@ const completedPercent = () =>{
   }
 }
 
+const items = [
+  {
+    key: '1',
+    label: `Bài giảng`,
+    children:            
+      <table className="table table-bordered">
+        <thead>
+          <tr>
+          
+            <th>Bài giảng</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>
+          {
+            documents?.map((document) => {
+              return (
+                <>
+                    {document.docs.map((doc) => {
+                      return (
+                        <span key={doc._id}>
+                          <button
+                            style={{width:'100px',height:'100px',marginRight:'10px',background:'white'}}
+                            role="link"
+                            onClick={() => openInNewTab(`http://localhost:4000${doc}`)}
+                          >
+                            <i style={{fontSize:'40px',color:'red'}} className="fa fa-file-pdf-o " aria-hidden="true"></i>
+                            <div>{document.name}</div>
+                          </button>
+
+                        </span>
+
+                      );
+                    })}
+
+                </>
+              );
+            })}
+            </td>
+            </tr>
+        </tbody>
+      </table>
+      },
+  ,
+  {
+    key: '2',
+    label: `Đánh giá`,
+    children:  <div className="">
+    {user && checkCompletedCourse() ? <button id="review_btn" type="button" className="btn btn-primary mb-2" data-toggle="modal" data-target="#ratingModal" onClick={setUserRatings}>
+    Gửi đánh giá
+    </button>
+                        :
+    <div className="alert alert-info mt-5" type='alert'>Hoàn thành khóa học để viết đánh giá</div>
+    }
+    <div className="row mt-2" style={{height:'0px'}}>
+      <div className="rating w-50">
+
+                            <div className="modal fade" id="ratingModal" tabIndex="-1" role="dialog" aria-labelledby="ratingModalLabel" aria-hidden="true">
+                                <div className="modal-dialog" role="document">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            <h5 className="modal-title" id="ratingModalLabel">Đánh giá</h5>
+                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div className="modal-body">
+
+                                            <ul className="stars" >
+                                                <li className="star"><i className="fa fa-star"></i></li>
+                                                <li className="star"><i className="fa fa-star"></i></li>
+                                                <li className="star"><i className="fa fa-star"></i></li>
+                                                <li className="star"><i className="fa fa-star"></i></li>
+                                                <li className="star"><i className="fa fa-star"></i></li>
+                                            </ul>
+
+                                            <textarea
+                                                name="review"
+                                                id="review" className="form-control mt-3"
+                                                value={comment}
+                                                onChange={(e) => setComment(e.target.value)}
+                                            >
+
+                                            </textarea>
+
+                                            <button className="btn my-3 float-right review-btn px-4 text-white" onClick={(e) => reviewHandler(e)} data-dismiss="modal" aria-label="Close">Gửi</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+    </div>
+    
+    {course.details && course.details.reviews && course.details.reviews.length > 0 && (
+      <ListReviews reviews={course.details.reviews} />
+    )}
+  </div>,
+  },
+];
+
 
 
 
@@ -370,7 +474,7 @@ return (
     <>
         {isRegister() ?
         (loading  ? <Loader/> :
-        <div className="container">
+        <div className="" style={{marginRight:'8%',marginLeft:'8%'}}>
 
         <div className="mt-3">
           <Button onClick={showModalNote}>Thêm ghi chú </Button>
@@ -398,9 +502,9 @@ return (
           </Modal>
         </div>
                   
-        <div className="row mt-2">
+        <div className="row mt-2" style={{position:'relative'}}>
         {exercise === false  && lessons.length !== 0 &&
-              <div className="col-md-8">
+              <div className="col-md-9">
                 <span style={{display:'none'}}>
                 { 
                   typeof videoTime === 'number' && isFinite(videoTime) && vid && (vid.currentTime = videoTime )
@@ -417,8 +521,6 @@ return (
                           media: lessons[index + 1]._id
                         }
                         dispatch(comleteVideo(data))
-                      }else{
-                        
                       }
 
 
@@ -442,10 +544,10 @@ return (
 
             {exercise ? <Quiz quizs={quizs}/> : ''}
 
-      <div className="col-md-4">
+      <div className="col-md-3" style={{position:'absolute',right:'0'}}>
           <Space size={30}>
             <h5>Mức độ hoàn thành</h5>
-            <Progress type="circle" percent={ checkCompletedCourse() ? 100 : completedPercent()} size={20}  strokeColor={{'0%': '#006241','100%': '#87d068',}}/>
+            <Progress type="circle" percent={ checkCompletedCourse() ? 100 : completedPercent()} size={"small"}  strokeColor={{'0%': '#006241','100%': '#87d068',}}/>
           </Space>
       
           <div className="season_tabs">
@@ -534,104 +636,16 @@ return (
             </Collapse>
             }
           </div>
+       
       </div>
 
-        </div>
+      </div>
 
-        <div>
-          <div className="col-md-8 mt-3">
-            {documents &&
-          <table className="table table-bordered">
-            <thead>
-              <tr>
-              
-                <th>Bài giảng</th>
-              </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>
-              {
-                documents.map((document) => {
-                  return (
-                    <>
-                        {document.docs.map((doc) => {
-                          return (
-                            <span key={doc._id}>
-                              <button
-                                style={{width:'100px',height:'100px',marginRight:'10px',background:'white'}}
-                                role="link"
-                                onClick={() => openInNewTab(`http://localhost:4000${doc}`)}
-                              >
-                                <i style={{fontSize:'40px',color:'red'}} className="fa fa-file-pdf-o " aria-hidden="true"></i>
-                                <div>{document.name}</div>
-                              </button>
-  
-                            </span>
-
-                          );
-                        })}
-
-                    </>
-                  );
-                })}
-                </td>
-                </tr>
-            </tbody>
-          </table>
-          }
+        <div className="row mt-2">
+          <div className="col-md-9">
+          <Tabs type="card" defaultActiveKey="1" items={items}  />
           </div>
-          <div className="mt-5">
-            {user && checkCompletedCourse() ? <button id="review_btn" type="button" className="btn btn-primary mb-2" data-toggle="modal" data-target="#ratingModal" onClick={setUserRatings}>
-            Gửi đánh giá
-            </button>
-                                :
-            <div className="alert alert-info mt-5" type='alert'>Hoàn thành khóa học để viết đánh giá</div>
-            }
-            <div className="row mt-2" style={{height:'0px'}}>
-              <div className="rating w-50">
-
-                                    <div className="modal fade" id="ratingModal" tabIndex="-1" role="dialog" aria-labelledby="ratingModalLabel" aria-hidden="true">
-                                        <div className="modal-dialog" role="document">
-                                            <div className="modal-content">
-                                                <div className="modal-header">
-                                                    <h5 className="modal-title" id="ratingModalLabel">Đánh giá</h5>
-                                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div className="modal-body">
-
-                                                    <ul className="stars" >
-                                                        <li className="star"><i className="fa fa-star"></i></li>
-                                                        <li className="star"><i className="fa fa-star"></i></li>
-                                                        <li className="star"><i className="fa fa-star"></i></li>
-                                                        <li className="star"><i className="fa fa-star"></i></li>
-                                                        <li className="star"><i className="fa fa-star"></i></li>
-                                                    </ul>
-
-                                                    <textarea
-                                                        name="review"
-                                                        id="review" className="form-control mt-3"
-                                                        value={comment}
-                                                        onChange={(e) => setComment(e.target.value)}
-                                                    >
-
-                                                    </textarea>
-
-                                                    <button className="btn my-3 float-right review-btn px-4 text-white" onClick={(e) => reviewHandler(e)} data-dismiss="modal" aria-label="Close">Gửi</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-            </div>
-            
-            {course.details && course.details.reviews && course.details.reviews.length > 0 && (
-              <ListReviews reviews={course.details.reviews} />
-            )}
-          </div>
+    
         </div>
 
 

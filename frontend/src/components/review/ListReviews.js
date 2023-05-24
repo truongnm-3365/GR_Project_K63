@@ -2,7 +2,7 @@ import React from 'react'
 
 const ListReviews = ({ reviews }) => {
     return (
-        <div className="reviews w-75">
+        <div className="reviews">
             <h3>Đánh giá:</h3>
             <hr />
             {reviews && reviews.map(review => (

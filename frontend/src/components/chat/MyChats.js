@@ -5,7 +5,7 @@ import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { getChats, setSeletedChat } from "../../actions/chatAction";
 
-const MyChats = ({ fetchAgain }) => {
+const MyChats = () => {
 
   const { user } = useSelector( state => state.auth)
 
@@ -37,8 +37,7 @@ const MyChats = ({ fetchAgain }) => {
 
   useEffect(() => {
     fetchChats();
-    // eslint-disable-next-line
-  }, [dispatch,fetchAgain,accessChat]);
+  }, [dispatch,accessChat]);
 
   return (
 

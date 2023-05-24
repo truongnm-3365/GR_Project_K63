@@ -11,7 +11,7 @@ const isObjectEmpty = (objectName) => {
 }
 
 
-const Chatbox = ({ fetchAgain, setFetchAgain }) => {
+const Chatbox = () => {
   const { selectedChat } = useSelector(state => state.selectedChat)
 
 
@@ -29,7 +29,7 @@ const Chatbox = ({ fetchAgain, setFetchAgain }) => {
   return (
     <div className="col-12 col-md-9" style={style}
     >
-      <SingleChat fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
+      <SingleChat />
     </div>
   );
 };

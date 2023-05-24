@@ -1,8 +1,9 @@
 .season_tabs {
-    position: relative;   
-    min-height: 360px; /* This part sucks */
-    clear: both;
-    margin: 25px 0;
+    position: relative;
+    overflow-y: auto;
+    max-height: 500px;
+    min-height: fit-content;   
+    margin-top: 10px;
   }
   .season_tab {
     clear: both;
@@ -121,4 +122,10 @@
     font-weight: bold;
   
     border-radius: 24px;
+  }
+
+  .ant-progress-inner.ant-progress-circle-gradient{
+    height: 74px!important;
+    width: 74px!important;
+    font-size: 16px!important;
   }
