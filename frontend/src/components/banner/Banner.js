@@ -17,7 +17,7 @@ const Banner = () => {
   return (
     <>
         <div className="">
-            <Carousel >
+            <Carousel>
                 {banners && banners.map(banner => (
                     <Carousel.Item key={banner._id}>
                         <img className="banner" src={process.env.REACT_APP_API_URL + banner.images[0]?.url} />

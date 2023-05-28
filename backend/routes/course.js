@@ -68,7 +68,7 @@ const storage = multer.diskStorage({
 
 router.route('/courses').get(getCourses);
 router.route('/me/courses/:userId').get(isAuthenticatedUser, getMeCourses);
-router.route('/admin/courses').get(isAuthenticatedUser,authorizeRoles('admin'),getAdminCourses);
+router.route('/admin/courses').get(getAdminCourses);
 router.route('/course/:id').get(getSingleCourse);
 
 //router.route('/course/new').post(isAuthenticatedUser,newCourse);

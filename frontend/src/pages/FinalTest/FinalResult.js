@@ -36,17 +36,8 @@ const FinalResult = ({match}) => {
 
 
 
-  const checkCompletedCourse = () =>{
-    for(let i = 0; i < topics?.length; i++){
-        if(topics[i].isPassed === true && topics[i].user === user._id){
-            return  true
-        }
-    }
-    return false
-  }
-
   return (
-    <div className='container mt-2'>
+    <div className='container mt-2' style={{minHeight:'500px'}}>
         
         {correct >= 0.8*sum ?
             <Result

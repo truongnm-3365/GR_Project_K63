@@ -1,3 +1,4 @@
+import { Alert } from "antd";
 import React, { useState } from "react";
 
 
@@ -55,7 +56,7 @@ function Quiz({quizs}) {
           <h2>
             Câu hỏi: {currentQuestion + 1} trên {quizs.length}
           </h2>
-          <div className="card text-success p-2">{quizs[currentQuestion].question}</div>
+          <div className="card text-success p-2"><span  dangerouslySetInnerHTML={{__html:quizs[currentQuestion].question}}></span></div>
 
           {/* List of possible answers  */}
           <ul>
@@ -65,7 +66,7 @@ function Quiz({quizs}) {
                   key={option._id}
                   onClick={() => optionClicked(option.isCorrect)}
                 >
-                  {option.body}
+                  <span  dangerouslySetInnerHTML={{__html:option.body}}></span>
                 </li>
               );
             })}
@@ -74,8 +75,10 @@ function Quiz({quizs}) {
       )}
     </div>
     :
-    <div className="quiz col-md-8">
-      Chưa có bài tập
+    <div className="col-md-9 mt-3 d-flex align-items-center justify-content-center" style={{minHeight:'400px',border:'solid 1px #ccc'}}>
+      <div className="text-center">
+        <Alert message="CHƯA CÓ BÀI TẬP" type="info" />
+      </div>
     </div>
     } 
     </>

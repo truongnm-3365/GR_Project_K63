@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import "./AskQuestion.css";
 import { askQuestion } from "../../../actions/questionAction";
 import { useAlert } from "react-alert";
+import Editor from "../../../components/editor/Editor";
 
 const AskQuestion = () => {
   const [questionTitle, setQuestionTitle] = useState("");
@@ -43,7 +44,7 @@ const AskQuestion = () => {
     }
   };
   return (
-    <div className="ask-question">
+    <div className="">
       <div className="ask-ques-container">
         <h1>Đặt câu hỏi</h1>
         <form onSubmit={handleSubmit}>
@@ -70,16 +71,11 @@ const AskQuestion = () => {
               <p  style={{fontSize:'14px',marginTop:'-10px'}}>
                 Hãy viết tất cả thông tin mà ai đó sẽ cần để trả lời câu hỏi của bạn
               </p>
-                <textarea
-                  className="form-control"
-                  id="ask-ques-body"
-                  onChange={(e) => {
-                    setQuestionBody(e.target.value);
-                  }}
-                  cols="30"
-                  rows="10"
-                  onKeyPress={handleEnter}
-                ></textarea>
+                <Editor 
+                  value={questionBody} 
+                  onChange={setQuestionBody}
+
+                />
             </div>
 
             <div className="form-group">
@@ -92,9 +88,9 @@ const AskQuestion = () => {
                 type="text"
                 id="ask-ques-tags"
                 onChange={(e) => {
-                  setQuestionTags(e.target.value.split(" "));
+                  setQuestionTags(e.target.value.split(","));
                 }}
-                placeholder="VD: (xml typescript wordpress)"
+                placeholder="VD: (xml,typescript,wordpress)"
               />
             </div>
             

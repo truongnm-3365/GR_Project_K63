@@ -17,7 +17,7 @@ const DisplayAnswer = ({ question, handleShare }) => {
     <div>
       {question.answer.map((ans) => (
         <div className="display-ans mt-2" key={ans._id}>
-          <p>{ans.answerBody}</p>
+          <p dangerouslySetInnerHTML={{__html:ans.answerBody}} ></p>
           <div className="question-actions-user">
             <div>
               <button type="button" onClick={handleShare}>

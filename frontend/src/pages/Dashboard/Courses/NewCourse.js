@@ -189,24 +189,6 @@ const NewCourse = ({ history }) => {
                                     />
                                 </div>
 
-                                {/* <div className='form-group'>
-                                    <label htmlFor='startDate_field'>Ngày bắt đầu</label>
-                                    <input
-                                        type='date'
-                                        id='startDate_field'
-                                        className='form-control form-control-sm'
-                                        onChange={(e) => setStartDate(e.target.value)}
-                                    />
-                                </div>
-                                <div className='form-group'>
-                                    <label htmlFor='startDate_field'>Ngày kết thúc</label>
-                                    <input
-                                        type='date'
-                                        id='endDate_field'
-                                        className='form-control form-control-sm'
-                                        onChange={(e) => setEndDate(e.target.value)}
-                                    />
-                                </div> */}
 
 
                                 <div className='form-group'>

@@ -32,9 +32,7 @@ exports.registerCourse = catchAsyncErrors(async(req,res,next)=>{
 
 exports.completeVideo = catchAsyncErrors(async(req,res) => {
     req.body.user = req.user.id
-    // req.body.course = req.params.id
-    // req.body.topic = req.params.topicId
-    // req.body.media = req.params.mediaId
+
     let completeVideo = await RegisterCourse.findOne(req.body);
     if(!completeVideo){
         completeVideo = await RegisterCourse.create(req.body)
@@ -43,6 +41,21 @@ exports.completeVideo = catchAsyncErrors(async(req,res) => {
             completeVideo
         })
     }
+})
+
+
+exports.completedCourse = catchAsyncErrors(async (req,res) => {
+    req.body.user = req.user.id
+    req.body.course = req.params.id
+    req.body.finalTestPassed = true
+    req.body.completed = true;
+    req.body.createdAt = Date.now();
+    const completedCourse = await RegisterCourse.create(req.body)
+
+    res.status(201).json({
+        success: true,
+        course: completedCourse
+    })
 })
 
 exports.completedVideo = catchAsyncErrors(async (req, res, next) => {
@@ -76,19 +89,20 @@ exports.completedVideo = catchAsyncErrors(async (req, res, next) => {
 exports.getRegisterCourse = catchAsyncErrors(async(req, res, next) =>{
     const coursesTmp = await RegisterCourse.find({user: req.user.id})
     const courses = coursesTmp.filter(item => item.name !== undefined )
-    let topics = await Topic.find({user: req.user.id});
+    // let registerCourses = await RegisterCourse.find({user: req.user.id});
 
     
 
     let coursesTmpp = courses.map(course => {
         let isPassed = false
-        topics.forEach(item => {
-            if(item.courseId.toString() === course.course.toString()){
+        coursesTmp.forEach(item => {
+            if(item.course.toString() === course.course.toString() && item.finalTestPassed === true){
                 isPassed = true
             }
         })
         return {...course._doc,isPassed}
     })
+
 
     res.status(201).json({
         success: true,
@@ -111,7 +125,7 @@ exports.deleteRegisterCourse = catchAsyncErrors(async(req, res, next) =>{
 
     res.status(200).json({
         success: true,
-        message: 'Course is cancelled.'
+        message: 'Hủy bỏ khóa học'
     })
 })
 

@@ -48,6 +48,12 @@ const courseSchema = new mongoose.Schema({
                 ref: 'User',
                 required: true
             },
+
+            avatar:{
+                type: String,
+                required: true
+            },
+
             name: {
                 type: String,
                 required: true
@@ -59,6 +65,10 @@ const courseSchema = new mongoose.Schema({
             comment: {
                 type: String,
                 required: true
+            },
+            createdAt: {
+                type: Date,
+                default: Date.now
             }
         }
     ],
