@@ -19,6 +19,7 @@ import Loader from "../../../components/layout/Loader";
 import { useAlert } from "react-alert";
 import { fetchAllQuestions } from "../../../actions/questionAction";
 import { MARK_SOLVED_RESET } from "../../../constants/questionContant";
+import Editor from "../../../components/editor/Editor";
 
 const columns = [
   {
@@ -199,7 +200,8 @@ console.log(answeredUsers);
                       />
                     </div>
                     <div style={{ width: "100%" }}>
-                      <p className="question-body">{question.questionBody}</p>
+                      <p className="question-body" dangerouslySetInnerHTML={{__html:question.questionBody}} ></p>
+                     
                       <div className="question-details-tags">
                         {question.questionTags.map((tag) => (
                           <p key={tag}>{tag}</p>
@@ -253,14 +255,12 @@ console.log(answeredUsers);
                       handlePostAns(e, question.answer.length);
                     }}
                   >
-                    <textarea
-                      name=""
-                      id=""
-                      cols="30"
-                      rows="10"
-                      value={Answer}
-                      onChange={(e) => setAnswer(e.target.value)}
-                    ></textarea>
+
+                    <Editor 
+                      value={Answer} 
+                      onChange={setAnswer}
+
+                    />
                     <br />
                     <input
                       type="submit"

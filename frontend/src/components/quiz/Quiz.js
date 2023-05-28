@@ -55,7 +55,7 @@ function Quiz({quizs}) {
           <h2>
             Câu hỏi: {currentQuestion + 1} trên {quizs.length}
           </h2>
-          <div className="card text-success p-2">{quizs[currentQuestion].question}</div>
+          <div className="card text-success p-2"><span  dangerouslySetInnerHTML={{__html:quizs[currentQuestion].question}}></span></div>
 
           {/* List of possible answers  */}
           <ul>
@@ -65,7 +65,7 @@ function Quiz({quizs}) {
                   key={option._id}
                   onClick={() => optionClicked(option.isCorrect)}
                 >
-                  {option.body}
+                  <span  dangerouslySetInnerHTML={{__html:option.body}}></span>
                 </li>
               );
             })}

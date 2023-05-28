@@ -223,7 +223,7 @@ const Lessons = ({match}) => {
   }
     
 
-}, [dispatch, alert, error,lessonError,success,match.params.id,checked,checkedExercise,reviewSuccess,complete,isUpdated,videoLoading,register])
+}, [dispatch, alert, error,lessonError,success,match.params.id,checked,checkedExercise,reviewSuccess,complete,isUpdated,videoLoading,register,isAuthenticated])
   
 
 
@@ -327,7 +327,7 @@ const checkCompletedTopic = (topicId) =>{
 
 const checkCompletedAllVideo = () =>{
 
-  if(completeVideos && user){
+  if(completeVideos && isAuthenticated){
     const completedVideos = completeVideos.filter(item => item.user === user._id && item.course === match.params.id)
     if(completedVideos.length === 0){
       return true;
@@ -335,6 +335,7 @@ const checkCompletedAllVideo = () =>{
 
     for(let i = 0; i < completedVideos.length;  i++){
       if(!completedVideos[i].completed){
+        console.log(completedVideos[i]);
         return false
       }
     }
@@ -344,22 +345,28 @@ const checkCompletedAllVideo = () =>{
 }
 
 const checkCompletedCourse = () =>{
-  for(let i = 0; i < topics?.length; i++){
-      if(topics[i].isPassed === true && topics[i].user === user._id){
-          return  true
+  if(isAuthenticated){
+      for(let i = 0; i < registerCourses?.length; i++){
+          if(registerCourses[i].course === match.params.id && registerCourses[i].isPassed === true ){
+              return true
+          }
       }
+      return false
   }
   return false
 }
 
 const completedPercent = () =>{
   let completed = 0;
-  if(completeVideos && user){
+  const lessonIds = lessons?.map(item => item._id)
+  if(completeVideos && isAuthenticated){
+    console.log(completeVideos);
     for(let i = 0; i < completeVideos.length; i++){
-      if(completeVideos[i].user === user._id && completeVideos[i].completed){
+      if(completeVideos[i].user === user._id && completeVideos[i].completed && completeVideos[i].course === match.params.id &&  lessonIds.includes(completeVideos[i].media)){
         completed = completed + 1;
       }
     }
+
     return ((completed/lessons.length)*0.9*100).toFixed(2)
   }
 }
@@ -413,7 +420,7 @@ const items = [
     key: '2',
     label: `Đánh giá`,
     children:  <div className="">
-    {user && checkCompletedCourse() ? <button id="review_btn" type="button" className="btn btn-primary mb-2" data-toggle="modal" data-target="#ratingModal" onClick={setUserRatings}>
+    {user && checkCompletedCourse() ? <button  type="button" className="btn btn-success mb-2" data-toggle="modal" data-target="#ratingModal" onClick={setUserRatings}>
     Gửi đánh giá
     </button>
                         :
@@ -422,8 +429,8 @@ const items = [
     <div className="row mt-2" style={{height:'0px'}}>
       <div className="rating w-50">
 
-                            <div className="modal fade" id="ratingModal" tabIndex="-1" role="dialog" aria-labelledby="ratingModalLabel" aria-hidden="true">
-                                <div className="modal-dialog" role="document">
+          <div className="modal fade" id="ratingModal" tabIndex="-1" role="dialog" aria-labelledby="ratingModalLabel" aria-hidden="true">
+                        <div className="modal-dialog" role="document">
                                     <div className="modal-content">
                                         <div className="modal-header">
                                             <h5 className="modal-title" id="ratingModalLabel">Đánh giá</h5>
@@ -454,13 +461,13 @@ const items = [
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                  </div>
 
-                        </div>
+              </div>
     </div>
     
     {course.details && course.details.reviews && course.details.reviews.length > 0 && (
-      <ListReviews reviews={course.details.reviews} />
+      <ListReviews ratings={course.details.ratings} reviews={course.details.reviews} />
     )}
   </div>,
   },
@@ -547,7 +554,7 @@ return (
       <div className="col-md-3" style={{position:'absolute',right:'0'}}>
           <Space size={30}>
             <h5>Mức độ hoàn thành</h5>
-            <Progress type="circle" percent={ checkCompletedCourse() ? 100 : completedPercent()} size={"small"}  strokeColor={{'0%': '#006241','100%': '#87d068',}}/>
+            <Progress type="circle" percent={ checkCompletedCourse() ? 100 : completedPercent()} size={"small"}  strokeColor={{'0%': '#006241','100%': '#87d068',}} format={() => checkCompletedCourse() ? '100%' : completedPercent()+'%'}/>
           </Space>
       
           <div className="season_tabs">
@@ -597,9 +604,9 @@ return (
 
                     })}
                   {
-                  checkCompletedTopic(topic._id) || checkCompletedAllVideo() ?  
+                  checkCompletedTopic(topic._id) || checkCompletedAllVideo()  ?  
                   <div className="season_tab">
-                    {topic.isFinalTest ?
+                    {topic.isFinalTest  ?
                     <> 
                       <label className="d-flex justify-content-between" htmlFor={`tabb-${indexTopic}`}>
                         <span onClick={() => history.push(`/course/${match.params.id}/finalexam/${topic._id}`)}>Bài kiểm tra cuối khóa</span>

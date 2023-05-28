@@ -11,12 +11,12 @@ import { coursesReducer, newCourseReducer, courseReducer, courseDetailsReducer, 
         from './reducers/courseReducers'
 import { notifiesReducer } from './reducers/notifyReducer';
 import { authReducer, userReducer, forgotPasswordReducer, allUsersReducer, userDetailsReducer, profileReducer } from './reducers/userReducers'
-import { cartReducer } from './reducers/cartReducers'
 import { newRegisterCourseReducer, RegisterCourseReducer, registerCoursesReducer } from './reducers/registerCourseReducer';
 import { categoriesReducer, categoryDetailsReducer, categoryReducer, newCategoryReducer } from './reducers/categoryReducer';
 import { bannerDetailsReducer, bannerReducer, bannersReducer, newBannerReducer } from './reducers/bannerReducer';
 import questionsReducer, { questionReducer } from './reducers/questionReducer';
 import { accessChatReducer, chatsReducer, messagesReducer, searchChatReducer, selectedChatReducer, sendMessagesReducer } from './reducers/chatReducer';
+import { deleteWishListReducer, newWishListReducer, wishListReducer } from './reducers/wishListReducer';
 
 
 const reducer = combineReducers({
@@ -44,7 +44,6 @@ const reducer = combineReducers({
     allUsers: allUsersReducer,
     userDetails: userDetailsReducer,
     forgotPassword: forgotPasswordReducer,
-    cart: cartReducer,
     newReview: newReviewReducer,
     newLesson: newLessonReducer,
     notifies: notifiesReducer,
@@ -70,7 +69,10 @@ const reducer = combineReducers({
     newMessage: sendMessagesReducer,
     accessChat: accessChatReducer,
     searchChat: searchChatReducer,
-    selectedChat: selectedChatReducer
+    selectedChat: selectedChatReducer,
+    wishList: wishListReducer,
+    newWishList: newWishListReducer,
+    deleteWishList: deleteWishListReducer
 })
 
 

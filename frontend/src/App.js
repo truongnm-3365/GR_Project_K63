@@ -58,6 +58,7 @@ import DisplayQuestion from './pages/Forum/Question/DisplayQuestion'
 import AskQuestion from './pages/Forum/AskQuestion/AskQuestion'
 import PageNotFound from './pages/PageNotFound/PageNotFound'
 import setAuthToken from './axios/setAuthToken'
+import WishList from './pages/WishList/WishList'
 
 
 function App() {
@@ -105,6 +106,7 @@ function App() {
           <ProtectedRoute path="/course/:id/finalexam/:examId"  component={FinalTest} exact/>
           <ProtectedRoute path="/course/:id/finalexam/:examId/result"  component={FinalResult} exact/>
           <ProtectedRoute path="/registerCourse" component={RegisterCourseList} exact />
+          <ProtectedRoute path="/wishList" component={WishList} exact />
           
           
           <ProtectedRoute path="/success/:courseId" component={OrderSuccess} exact/>

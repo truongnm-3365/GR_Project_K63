@@ -39,6 +39,12 @@ const registerCourseSchema = new mongoose.Schema({
         default: false
     },
 
+    finalTestPassed:{
+        type: Boolean,
+        default: false
+    },
+
+
     timeLimit:{
         type: Number
     },

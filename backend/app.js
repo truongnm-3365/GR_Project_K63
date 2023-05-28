@@ -35,6 +35,7 @@ const chatRoutes = require("./routes/chat")
 const messageRoutes = require("./routes/message")
 const questionRoutes = require("./routes/questions");
 const answerRoutes = require("./routes/answers");
+const wishList = require("./routes/wishList")
 
 app.use('/api/v1/media', mediaRoutes);
 app.use('/api/v1/document', documentRoutes);
@@ -52,6 +53,7 @@ app.use("/api/v1/chat", chatRoutes);
 app.use("/api/v1/message", messageRoutes);
 app.use("/api/v1/questions", questionRoutes);
 app.use("/api/v1/answer", answerRoutes);
+app.use("/api/v1",wishList);
 
 if (process.env.NODE_ENV === 'PRODUCTION') {
     app.use(express.static(path.join(__dirname, '../frontend/build')))

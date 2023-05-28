@@ -102,7 +102,7 @@ exports.getMeCourses = catchAsyncErrors(async (req, res, next) => {
 
 })
 
-exports.getAdminCourses = catchAsyncErrors(async (req, res, next) => {
+exports.getAdminCourses = catchAsyncErrors(async (req, res) => {
 
     const courses = await Course.find();
 
@@ -204,7 +204,7 @@ exports.adminChangeStatusCourse = catchAsyncErrors(async (req, res, next) => {
 // Get single course details   =>   /api/v1/course/:id
 exports.getSingleCourse = catchAsyncErrors(async (req, res, next) => {
 
-    const courseDetails = await Course.findById(req.params.id);
+    const courseDetails = await Course.findById(req.params.id)
 
 
     if (!courseDetails) {
@@ -339,6 +339,7 @@ exports.createCourseReview = catchAsyncErrors(async (req, res, next) => {
     const review = {
         user: req.user._id,
         name: req.user.name,
+        avatar: req.user.avatar.url,
         rating: Number(rating),
         comment
     }
@@ -354,6 +355,8 @@ exports.createCourseReview = catchAsyncErrors(async (req, res, next) => {
             if (review.user.toString() === req.user._id.toString()) {
                 review.comment = comment;
                 review.rating = rating;
+                review.avatar = req.user.avatar.url;
+                review.createdAt = Date.now();
             }
         })
 
@@ -471,7 +474,6 @@ exports.updateTopic = catchAsyncErrors(async (req, res, next) => {
         
     }
     
-    
 
     topic = await Topic.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
@@ -486,9 +488,8 @@ exports.updateTopic = catchAsyncErrors(async (req, res, next) => {
 
 })
 
-exports.newTopicQuiz = catchAsyncErrors(async (req, res, next) => {
 
-    const { question, choice, topicId } = req.body;
+exports.newTopicQuiz = catchAsyncErrors(async (req, res, next) => {
    
 
     const quiz = await Quiz.create( req.body);

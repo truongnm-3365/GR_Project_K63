@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { clearErrors, getCourseDetails, getCourseTopics, getTopicQuizs, updateTopic } from '../../actions/courseActions';
+import { clearErrors, getCourseDetails, getCourseTopics, getTopicQuizs, newTopic, updateTopic } from '../../actions/courseActions';
 import { Input, Radio, Space, Form, Button, Modal  } from 'antd';
 import { useAlert } from 'react-alert';
 import { useHistory } from 'react-router-dom'
 import Countdown from "react-countdown";
-
+import { completedCourse, getMeRegisterCourses } from '../../actions/registerCourseAction';
+import './index.css'
 const FinalTest = ({match}) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const alert = useAlert();
   const {  topics } = useSelector(state => state.courseTopics)
-  const { topic, isUpdated } = useSelector(state => state.topic)
   const {  quizs,error } = useSelector(state => state.topicQuizs)
-  const { user } = useSelector(state =>  state.auth)
+  const { user, isAuthenticated } = useSelector(state =>  state.auth)
+  const { registerCourses } = useSelector(state => state.registerCourses)
   const { course } = useSelector(state => state.courseDetails)
 
   const [values, setValues] = useState([]);
@@ -44,23 +45,30 @@ const FinalTest = ({match}) => {
         alert.error(error);
         dispatch(clearErrors())
     }
+
+    if(isAuthenticated){
+      dispatch(getMeRegisterCourses())
+    }
     
   
     dispatch(getTopicQuizs(match.params.examId));
     dispatch(getCourseDetails(match.params.id))
     dispatch(getCourseTopics(match.params.id));
 
-  },[dispatch,match.params.examId,error,isUpdated])
+  },[dispatch,match.params.examId,error])
 
 
   const checkCompletedCourse = () =>{
-    for(let i = 0; i < topics?.length; i++){
-        if(topics[i].isPassed === true && topics[i].user === user._id){
-            return  true
+    if(isAuthenticated){
+        for(let i =0; i < registerCourses?.length; i++){
+            if(registerCourses[i].course === match.params.id && registerCourses[i].isPassed === true ){
+                return true
+            }
         }
+        return false
     }
     return false
-  }
+}
 
 
   const corrects = quizs && quizs.map(item => {
@@ -73,10 +81,6 @@ const FinalTest = ({match}) => {
   
 
   const onFinish = () => {
-    console.log(values)
-    
-    console.log(corrects);
-   
     let newCount = count
 
    
@@ -86,8 +90,8 @@ const FinalTest = ({match}) => {
           setCount(newCount);
         }      
     }
-    if(newCount >= 0.8*corrects.length){
-      dispatch(updateTopic(match.params.examId,{isPassed:true,user:user._id}))
+    if(newCount >= 0.8*corrects.length && !checkCompletedCourse()){
+      dispatch(completedCourse(match.params.id));
     }
     if(!checkCompletedCourse())
       history.push(`/course/${match.params.id}/finalexam/${match.params.examId}/result?correct=${newCount}&&sum=${corrects.length}`) 
@@ -112,8 +116,6 @@ const FinalTest = ({match}) => {
     }
   };
 
-  console.log(quizs);
-
 
   
 
@@ -130,12 +132,12 @@ const FinalTest = ({match}) => {
            
             {quizs && quizs.map((item,index) => 
             <div key={item._id} className='mb-5'>
-                <div className='mb-2'>{item.question}</div>
+                <div className='mb-2'><span  dangerouslySetInnerHTML={{__html:item.question}}></span></div>
                
                 <Radio.Group  onChange={(e) => {onChange(e,index);console.log(index)}} defaultValue={values[index]}>
                     <Space direction="vertical">
                         {item.choice && item.choice.map(item => 
-                            <Radio   value={item._id} >{item.body}</Radio>
+                            <Radio   value={item._id} ><p style={{marginBottom:'auto'}} dangerouslySetInnerHTML={{__html:item.body}}></p></Radio>
                         )}
                     
                     </Space>

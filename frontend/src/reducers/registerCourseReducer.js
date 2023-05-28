@@ -62,8 +62,8 @@ export const newRegisterCourseReducer = (state = { registerCourse: {} }, action)
         case NEW_REGISTER_COURSE_SUCCESS:
             return {
                 loading: false,
-                success: action.payload.success,
-                registerCourse: action.payload.course
+                success: true,
+                registerCourse: action.payload
             }
 
         case NEW_REGISTER_COURSE_FAIL:

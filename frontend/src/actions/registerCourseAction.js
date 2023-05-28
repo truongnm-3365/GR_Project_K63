@@ -57,7 +57,35 @@ export const newRegisterCourse = (courseId) => async (dispatch) => {
 
         dispatch({
             type: NEW_REGISTER_COURSE_SUCCESS,
-            payload: data
+            payload: data.registerCourse
+        })
+
+    } catch (error) {
+        dispatch({
+            type: NEW_REGISTER_COURSE_FAIL,
+            payload: error.response?.data?.message
+        })
+    }
+}
+
+export const completedCourse = (courseId) => async (dispatch) => {
+    try {
+
+        dispatch({ type: NEW_REGISTER_COURSE_REQUEST })
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        
+
+        const { data } = await axios.post(`/api/v1/completedCourse/${courseId}`,{}, config)
+
+        dispatch({
+            type: NEW_REGISTER_COURSE_SUCCESS,
+            payload: data.completedCourse
         })
 
     } catch (error) {

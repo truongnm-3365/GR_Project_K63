@@ -17,7 +17,7 @@ const QuizList = ({ quizs,deleteQuizHandler }) => {
                 return (
                   <tr>
                     <td>
-                      {quiz.question}
+                      <span dangerouslySetInnerHTML={{__html:quiz.question}}></span>
                       <Button className="float-right" onClick={() => deleteQuizHandler(quiz._id)}>Xóa</Button>
                     </td>
                     <td>
@@ -25,7 +25,7 @@ const QuizList = ({ quizs,deleteQuizHandler }) => {
                       {quiz.choice && quiz.choice.map((choice,index) => {
                         return (
                           <li index={index} class="list-group-item d-flex justify-content-between align-items-center">
-                            {choice.body}
+                            <span dangerouslySetInnerHTML={{__html:choice.body}}></span>
                             {choice.isCorrect &&<span className="badge badge-success badge-pill">Đáp án đúng</span>}
                            
                           </li>

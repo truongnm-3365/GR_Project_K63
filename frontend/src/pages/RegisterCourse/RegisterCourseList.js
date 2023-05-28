@@ -5,7 +5,6 @@ import MetaData from '../../components/layout/MetaData'
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
-import { addItemToCart, removeItemFromCart } from '../../actions/cartActions'
 import { getMeRegisterCourses,newRegisterCourse,deleteRegisterCourse } from '../../actions/registerCourseAction'
 import { useEffect } from 'react'
 import { DELETE_REGISTER_COURSE_RESET } from '../../constants/registerCourseContants'
@@ -120,7 +119,7 @@ const CourseList = ({ history }) => {
                                 <Fragment>
                                     <hr />
 
-                                    <div className="cart-item" key={item.course}>
+                                    <div className="" key={item.course}>
                                         <div className="row">
                                             <div className="col-4 col-lg-2">
                                                 <img src={process.env.REACT_APP_API_URL + item.images[0].url} alt="Image" height="90" width="115" />
@@ -148,7 +147,7 @@ const CourseList = ({ history }) => {
 
 
                                             <div className="col-lg-2 mt-4 mt-lg-0">
-                                                <i id="delete_cart_item" className="fa fa-trash btn btn-danger" onClick={() => removeCourseHandler(item._id)} >
+                                                <i className="fa fa-trash btn btn-danger" onClick={() => removeCourseHandler(item._id)} >
                                                     {' '}Hủy Đăng ký
                                                 </i>
                                             </div>

@@ -5,13 +5,16 @@ import ListReviews from '../../components/review/ListReviews'
 import { Link,useHistory } from 'react-router-dom'
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
-import { getCourseDetails, newReview, clearErrors, getCourseLessons, getCourseTopics} from '../../actions/courseActions'
+import { getCourseDetails, newReview, clearErrors, getCourseLessons, getCourseTopics, getAdminCourses} from '../../actions/courseActions'
 import { NEW_REVIEW_RESET } from '../../constants/courseConstants'
 import { extendCourse, getMeRegisterCourses, newRegisterCourse } from '../../actions/registerCourseAction'
 import { NEW_REGISTER_COURSE_RESET } from '../../constants/registerCourseContants'
-import { Button, Collapse, Modal, Table } from 'antd'
+import { Button, Collapse, Modal, Pagination, Table } from 'antd'
 import './index.css'
 import { getAccessChat } from '../../actions/chatAction'
+import { addWishlist } from '../../actions/wishListAction'
+import { NEW_WISH_LIST_RESET } from '../../constants/wishListContant'
+import Course from '../../components/course/Course'
 const CourseDetails = ({ match }) => {
 
     const { Panel } = Collapse;
@@ -22,8 +25,16 @@ const CourseDetails = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const alert = useAlert();
+    
+    const [currentPage, setCurrentPage ] = useState(1);
+
+    const pageSize = 4
+
 
     const { loading, error, course } = useSelector(state => state.courseDetails)
+
+    const { courses } = useSelector(state => state.courses)
+    
     const { user, isAuthenticated } = useSelector(state => state.auth)
     
     const { error: reviewError, success } = useSelector(state => state.newReview)
@@ -31,12 +42,12 @@ const CourseDetails = ({ match }) => {
     const { success: newSuccess} = useSelector(state => state.newRegisterCourse)
     const { lessons  } = useSelector(state => state.courseLessons)
     const {  topics } = useSelector(state => state.courseTopics)
-
+    const {success: newWishList} = useSelector(state => state.newWishList);
 
     useEffect(() => {
         
         dispatch(getCourseDetails(match.params.id))
-        
+        dispatch(getAdminCourses());
        
         if(isAuthenticated){
             dispatch(getMeRegisterCourses())
@@ -59,26 +70,35 @@ const CourseDetails = ({ match }) => {
             dispatch({ type: NEW_REVIEW_RESET })
         }
 
+        if (newWishList) {
+            alert.success('Đã thêm vào danh sách yêu thích')
+            dispatch({ type: NEW_WISH_LIST_RESET })
+        }
+
         if (newSuccess) {
             alert.success('Đăng ký thành công')
             dispatch({ type: NEW_REGISTER_COURSE_RESET })
         }
 
 
-    }, [dispatch, alert, match.params.id,success,newSuccess])
+    }, [dispatch, alert, match.params.id,success,newSuccess,isAuthenticated,newWishList])
 
 
     const checkCompletedCourse = () =>{
-        for(let i = 0; i < topics?.length; i++){
-            if(topics[i].isPassed === true && topics[i].user === user?._id){
-                return  true
+        if(isAuthenticated){
+            
+            for(let i = 0; i < registerCourses?.length; i++){
+                if(registerCourses[i].course === match.params.id && registerCourses[i].isPassed === true ){
+                    return true
+                }
             }
+            return false
         }
         return false
     }
 
     const userCreatedAt = () =>{
-        if(user){
+        if(isAuthenticated){
             for(let i =0; i < registerCourses?.length; i++){
                 if(registerCourses[i].course === match.params.id){
                     return registerCourses[i].createdAt
@@ -104,7 +124,7 @@ const CourseDetails = ({ match }) => {
 
     const isRegister = () =>{
         if(user){
-            for(let i =0; i < registerCourses?.length; i++){
+            for(let i = 0; i < registerCourses?.length; i++){
                 if(registerCourses[i].course === match.params.id){
                     return true
                 }
@@ -298,8 +318,6 @@ const CourseDetails = ({ match }) => {
                         <div className="col-12 col-lg-5 mt-5">
                             {checkCompletedCourse() && <div className="alert alert-success mt-5" type='alert'>Khóa học này đã được hoàn thành</div> }
                             <h3>{course.details.name}</h3>
-                            <p id="course_id">Khóa học # {course.details._id}</p>
-
                             <hr />
 
                             <div className="rating-outer">
@@ -317,22 +335,25 @@ const CourseDetails = ({ match }) => {
                                     {new Date() < expriedDay() ? 
             
                                     <>
-                                        <button type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" >Đã đăng ký</button>
+                                        <button type="button" className="btn btn-success d-inline ml-4" >Đã đăng ký</button>
                                         <Link to={`/course/${course.details._id}/lessons`}>
-                                            <button type="button" id="cart_btn" className="btn btn-danger d-inline ml-4" >Truy cập khóa học</button>
+                                            <button type="button" className="btn btn-danger d-inline ml-4" >Truy cập khóa học</button>
                                         
                                         </Link>
                                     </> 
                                     :<div>
                                         <div className="alert alert-danger mt-5" type='alert'>Khóa học đã hết hạn</div>
-                                        <button onClick={() => extentionCourse()} type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" >Gia hạn khóa học</button>
+                                        <button onClick={() => extentionCourse()} type="button" className="btn btn-success d-inline ml-4" >Gia hạn khóa học</button>
                                     </div>
 
                                     }
                                 </>
                                 :<>
                                 {isAuthenticated ?
-                                    <button onClick={() => addCourse()} type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" >Đăng ký học</button>
+                                    <>
+                                        <button onClick={() => addCourse()} type="button"  className="btn btn-success d-inline ml-4" >Đăng ký học</button>
+                                        <button onClick={() => dispatch(addWishlist(course.details._id))} type="button"  className="btn btn-success d-inline ml-4" >Thêm vào danh sách yêu thích</button>
+                                    </>
                                 :  <div className="alert alert-danger mt-5" type='alert'>Đăng nhập để đăng ký khóa học</div> }
                                 </>                                
                             }
@@ -357,7 +378,7 @@ const CourseDetails = ({ match }) => {
                             
                             {course.user?._id === user?._id &&
                             <>
-                                <Button type="primary" onClick={showModal}>
+                                <Button type="success" onClick={showModal}>
                                     Danh sách học viên
                                 </Button>
                                 <Modal title="Danh sách học viên" open={isModalOpen}  onOk={handleOk} onCancel={handleCancel} okText="Đóng" cancelText="Hủy bỏ">
@@ -374,7 +395,7 @@ const CourseDetails = ({ match }) => {
                             {isAuthenticated ? 
                             ( 
                                 checkCompletedCourse() ? 
-                                <button id="review_btn" type="button" className="btn btn-primary mt-4" data-toggle="modal" data-target="#ratingModal" onClick={setUserRatings}>
+                                <button  type="button" className="btn btn-success mt-4" data-toggle="modal" data-target="#ratingModal" onClick={setUserRatings}>
                                     Gửi đánh giá
                                 </button> 
                                 : 
@@ -429,10 +450,44 @@ const CourseDetails = ({ match }) => {
                     </div>
 
                     {course.details.reviews && course.details.reviews.length > 0 && (
-                        <ListReviews reviews={course.details.reviews} />
+                        <ListReviews ratings={course.details.ratings} reviews={course.details.reviews} />
                     )}
 
-                </div>
+
+                    {courses?.filter(item => item.category === course.details.category && item._id !== course.details._id).length !== 0 
+                        && <h3 className='mt-4'>Khóa học có cùng thể loại</h3>
+                    }
+                    <div id="courses" className="mt-1">
+                        <div className="row">
+
+
+                            {(
+                                courses?.filter(item => item.category === course.details.category && item._id !== course.details._id).filter((item,index) => index >= (currentPage - 1)*pageSize & index <= (currentPage*pageSize - 1) )?.map(item => (
+                                    <>
+                                        <Course key={item._id} course={item} col={3} />
+                                       
+                                    </>
+                                    
+                                ))
+                            )}
+                            {courses?.filter(item => item.category === course.details.category && item._id !== course.details._id).length !== 0 &&
+                            <div className='w-100'>
+                                <Pagination
+                                    style={{float:'right',marginTop:'10px'}} 
+                                    onChange={(page) => setCurrentPage(page)} 
+                                    
+                                    total={courses?.filter(item => item.category === course.details.category && item._id !== course.details._id).length} 
+                                    pageSize={pageSize} 
+                                />
+
+                            </div>
+                            }
+
+
+                        </div>
+            </div>
+
+            </div>
             )}
         </Fragment>
     )

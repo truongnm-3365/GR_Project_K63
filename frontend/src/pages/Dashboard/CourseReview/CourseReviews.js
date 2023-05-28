@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useEffect } from 'react'
-import { MDBDataTable } from 'mdbreact'
 
 import MetaData from '../../../components/layout/MetaData'
 import Loader from '../../../components/layout/Loader'

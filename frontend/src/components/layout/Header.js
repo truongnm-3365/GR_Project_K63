@@ -164,6 +164,7 @@ const Header = () => {
                                 )}
                                 {/* <Link className="dropdown-item" to="/orders/me">Orders</Link> */}
                                 <Link className="dropdown-item" to="/registerCourse" >Khóa học đã đăng ký</Link>
+                                <Link className="dropdown-item" to="/wishList" >Danh sách yêu thích</Link>
                                 <Link className="dropdown-item" to="/me">Thông tin cá nhân</Link>
                                 <Link className="dropdown-item text-danger" to="/" onClick={logoutHandler}>
                                     Đăng xuất
