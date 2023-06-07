@@ -9,9 +9,9 @@ const UploadForm = ({courseId, newLesson,topics }) => {
   const alert = useAlert();
   const dispatch = useDispatch();
   
-  useEffect(() =>{
-    setTopicId(topics[0]?._id)
-  },[topics])
+  // useEffect(() =>{
+  //   setTopicId(topics[0]?._id)
+  // },[topics])
 
   const hadleSubmit = (e) => {
     e.preventDefault();

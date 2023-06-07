@@ -45,8 +45,9 @@ const Lessons = ({match}) => {
   const [note, setNote] = useState("");
   const { notes, loading:notesLoading } = useSelector(state => state.notes);
   const { registerCourses } = useSelector(state => state.registerCourses)
-  const [register, setRegister] = useState(false)
-  const [collapsed, setCollapsed] = useState(false);
+ 
+  console.log(quizs);
+
 
   function secondsToHms(d) {
     d = Number(d);
@@ -223,7 +224,7 @@ const Lessons = ({match}) => {
   }
     
 
-}, [dispatch, alert, error,lessonError,success,match.params.id,checked,checkedExercise,reviewSuccess,complete,isUpdated,videoLoading,register,isAuthenticated])
+}, [dispatch, alert, error,lessonError,success,match.params.id,checked,checkedExercise,reviewSuccess,complete,isUpdated,videoLoading,isAuthenticated])
   
 
 
@@ -396,7 +397,7 @@ const items = [
                           <button
                             style={{width:'100px',height:'100px',marginRight:'10px',background:'white'}}
                             role="link"
-                            onClick={() => openInNewTab(`http://localhost:4000${doc}`)}
+                            onClick={() => openInNewTab(`${process.env.REACT_APP_API_URL}${doc}`)}
                           >
                             <i style={{fontSize:'40px',color:'red'}} className="fa fa-file-pdf-o " aria-hidden="true"></i>
                             <div>{document.name}</div>
@@ -484,7 +485,7 @@ return (
         <div className="" style={{marginRight:'8%',marginLeft:'8%'}}>
 
         <div className="mt-3">
-          <Button onClick={showModalNote}>Thêm ghi chú </Button>
+          {!exercise && <Button onClick={showModalNote}>Thêm ghi chú </Button>}
           <Modal title={"Thêm ghi chú tại: " + secondsToHms(vid?.currentTime)} open={isModalNoteOpen} width={1000} onOk={handleOk} onCancel={handleCancel} okText={"Hoàn thành"} cancelText={"Hủy bỏ"}>
             
             <TextArea onChange={(e) => setNote(e.target.value)} rows={4} />
@@ -552,10 +553,13 @@ return (
             {exercise ? <Quiz quizs={quizs}/> : ''}
 
       <div className="col-md-3" style={{position:'absolute',right:'0'}}>
+          <div className="d-flex justify-content-center">
           <Space size={30}>
             <h5>Mức độ hoàn thành</h5>
             <Progress type="circle" percent={ checkCompletedCourse() ? 100 : completedPercent()} size={"small"}  strokeColor={{'0%': '#006241','100%': '#87d068',}} format={() => checkCompletedCourse() ? '100%' : completedPercent()+'%'}/>
           </Space>
+          </div>
+
       
           <div className="season_tabs">
             {topics[indexTopic] &&
@@ -615,11 +619,11 @@ return (
                     </>
                     :
                     <>
-                    <input  onChange={() => {setExercise(true) ; dispatch(getTopicQuizs(topic._id)); onChangeCheckedExercise(indexTopic);setIndexTopic(indexTopic)}} type="radio" id={`tabb-${indexTopic}`} name={`tab-group-1`} checked={checkedExercise[indexTopic]}/>
-                    <label className="d-flex justify-content-between" htmlFor={`tabb-${indexTopic}`}>
-                        <span>Bài tập</span>
-                        
-                    </label>
+                      <input  onChange={() => {setExercise(true) ; dispatch(getTopicQuizs(topic._id)); onChangeCheckedExercise(indexTopic);setIndexTopic(indexTopic)}} type="radio" id={`tabb-${indexTopic}`} name={`tab-group-1`} checked={checkedExercise[indexTopic]}/>
+                      <label className="d-flex justify-content-between" htmlFor={`tabb-${indexTopic}`}>
+                          <span>Bài tập</span>
+                          
+                      </label>
                     </>
                     }
 

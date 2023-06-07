@@ -146,26 +146,26 @@ const CoursesList = ({ history }) => {
                
             </Fragment>,
             actions: <Fragment>
-                <Link to={`/me/course/${course._id}`} className="btn btn-success py-1 px-2">
+                <Link to={`/me/course/${course._id}`} className="btn btn-success py-1 mt-1 px-2">
                     <i className="fa fa-pencil"></i>
                 </Link>
                 <Modal title="Xóa chủ đề" open={isModalOpenDel} onOk={() => handleOkDel(courseId)} onCancel={handleCancelDel} okText={"Hoàn thành"} cancelText={"Hủy bỏ"}>
                     Bạn có chắc sẽ xóa chủ đề này
                 </Modal>
-                <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => showModalDel(course._id)}>
+                <button className="btn btn-danger py-1 mt-1 px-2 ml-2" onClick={() => showModalDel(course._id)}>
                     <i className="fa fa-trash"></i>
                 </button>
-                <Link to={`/course/${course._id}`} className="btn btn-success py-1 px-2 ml-2">
+                <Link to={`/course/${course._id}`} className="btn btn-success py-1 mt-1 px-2 ml-2">
                     <i className="fa fa-eye"></i>
                 </Link>
                 {user.role === 'admin' && 
                     (course.accepted === false ?
-                    <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => acceptCourseHandler(course._id)}>
+                    <Button className="btn btn-danger py-1 mt-1 px-2 ml-2" onClick={() => acceptCourseHandler(course._id)}>
                         Phê duyệt
-                    </button> :
-                    <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => dispatch(changeStatusCourse(course._id))}>
+                    </Button> :
+                    <Button className="btn btn-danger py-1 mt-1 px-2 ml-2" onClick={() => dispatch(changeStatusCourse(course._id))}>
                         Ẩn 
-                    </button>)
+                    </Button>)
                 }
             </Fragment>
         })
