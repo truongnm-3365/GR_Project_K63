@@ -18,22 +18,29 @@ exports.getAll = async (req, res, next) => {
 
     let videoPaths = mediasTmp.map(item => process.env.BACKEND_URL + item.videos[0].replaceAll("\\","/"))
     
+  
     
     let totalDuration = 0;
 
-    for (const videoPath of videoPaths) {
-      const metadata = await new Promise((resolve, reject) => {
-        ffmpeg.ffprobe(videoPath, (error, metadata) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(metadata);
-          }
-        });
-      });
     
-      const duration = parseFloat(metadata.format.duration);
-      totalDuration += duration;
+    for (const videoPath of videoPaths) {
+      try {
+        const metadata = await new Promise((resolve, reject) => {
+          ffmpeg.ffprobe(videoPath, (error, metadata) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(metadata);
+            }
+          });
+        });
+      
+        const duration = parseFloat(metadata.format.duration);
+        totalDuration += duration;
+      } catch (error) {
+        console.log(error);
+      }
+
     }
     
 

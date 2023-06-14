@@ -492,7 +492,7 @@ return (
   
           </Modal>
 
-          {vid &&<Button onClick={showNoteList}>Danh sách ghi chú </Button>}
+          <Button onClick={showNoteList}>Danh sách ghi chú </Button>
           <Modal title={"Danh sách ghi chú"} open={isNoteListOpen} onOk={handleListOk} onCancel={handleListCancel} cancelText={"Hủy bỏ"}  width={1000}>
               {!notesLoading ? notes.map(item => {
                 return <div key={item._id} className="mb-3">
