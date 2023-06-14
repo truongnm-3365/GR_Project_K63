@@ -401,7 +401,8 @@ export const courseLessonsReducer = (state = {lessons:[]}, action) => {
             return {
                 ...state,
                 loading: false,
-                lessons: action.payload
+                lessons: action.payload.media,
+                totalDuration: action.payload.totalDuration
             }
 
         case GET_LESSONS_FAIL:

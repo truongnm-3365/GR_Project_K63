@@ -2,13 +2,40 @@ const Media = require("../models/media");
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const fs = require('fs');
 const Topic = require("../models/topic");
-const RegisterCourse = require("../models/registerCourse");
+
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+const ffprobePath = require('@ffprobe-installer/ffprobe').path;
+const ffmpeg = require('fluent-ffmpeg');
+
+ffmpeg.setFfmpegPath(ffmpegPath);
+ffmpeg.setFfprobePath(ffprobePath);
 
 
 exports.getAll = async (req, res, next) => {
   
     const mediasTmp = await Media.find({course: req.params.courseId});
     const topics = await Topic.find({courseId: req.params.courseId});
+
+    let videoPaths = mediasTmp.map(item => process.env.BACKEND_URL + item.videos[0].replaceAll("\\","/"))
+    
+    
+    let totalDuration = 0;
+
+    for (const videoPath of videoPaths) {
+      const metadata = await new Promise((resolve, reject) => {
+        ffmpeg.ffprobe(videoPath, (error, metadata) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(metadata);
+          }
+        });
+      });
+    
+      const duration = parseFloat(metadata.format.duration);
+      totalDuration += duration;
+    }
+    
 
     var media = [];
     topics.forEach(item => {
@@ -19,9 +46,11 @@ exports.getAll = async (req, res, next) => {
     });
 
 
+
     res.status(201).json({
       success: true,
-      media
+      media,
+      totalDuration
   });
 };
 

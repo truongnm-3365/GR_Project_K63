@@ -514,7 +514,6 @@ return (
         {exercise === false  && lessons.length !== 0 &&
               <div className="col-md-9">
                 <span style={{display:'none'}}>
-                {console.log(videoTime)}
                 { 
                  
                   videoTime !== -1 && vid && (vid.currentTime = videoTime )

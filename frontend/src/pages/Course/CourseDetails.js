@@ -40,7 +40,7 @@ const CourseDetails = ({ match }) => {
     const { error: reviewError, success } = useSelector(state => state.newReview)
     const { registerCourses } = useSelector(state => state.registerCourses)
     const { success: newSuccess} = useSelector(state => state.newRegisterCourse)
-    const { lessons  } = useSelector(state => state.courseLessons)
+    const { lessons, totalDuration  } = useSelector(state => state.courseLessons)
     const {  topics } = useSelector(state => state.courseTopics)
     const {success: newWishList} = useSelector(state => state.newWishList);
 
@@ -166,6 +166,16 @@ const CourseDetails = ({ match }) => {
             }
         }
     }
+
+
+    function convertSecondsToTime(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+      
+        const timeString = `${hours.toString().padStart(2, '0')} giờ ${minutes.toString().padStart(2, '0')} phút`;
+        
+        return timeString;
+      }
 
     function setUserRatings() {
         const stars = document.querySelectorAll('.star');
@@ -358,8 +368,13 @@ const CourseDetails = ({ match }) => {
                                 </>                                
                             }
 
-                        
-
+                            <hr/>
+                            <div>
+                                <i class="fa fa-clock-o" aria-hidden="true"></i> Thời lượng {convertSecondsToTime(totalDuration)}
+                            </div>
+                            <div>
+                                <i class="fa fa-film" aria-hidden="true"></i> Tổng số {lessons?.length} bài học
+                            </div>
                             <hr />
 
                             <h4 className="mt-2">Mô tả:</h4>

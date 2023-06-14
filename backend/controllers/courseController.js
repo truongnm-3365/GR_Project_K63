@@ -67,9 +67,9 @@ exports.getCourses = catchAsyncErrors(async (req, res, next) => {
     let courses = await apiFeatures.query;
     let filteredCoursesCount = courses.length;
 
-    if(Object.keys(req.query).length === 1){
+    if(Object.keys(req.query).length === 1 && Object.keys(req.query).includes("page")){
         apiFeatures.pagination(resPerPage)
-    }else if(Object.keys(req.query).length >= 4){
+    }else if(Object.keys(req.query).length >= 1){
         
         apiFeatures.pagination(resPerPageSearch)
     }

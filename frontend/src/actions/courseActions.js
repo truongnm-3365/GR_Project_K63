@@ -339,7 +339,7 @@ export const getCourseLessons = (id) => async (dispatch) => {
 
         dispatch({
             type: GET_LESSONS_SUCCESS,
-            payload: data.media
+            payload: data
         })
 
     } catch (error) {
