@@ -143,6 +143,7 @@ export const coursesReducer = (state = { courses: [] }, action) => {
                 courses: action.payload.courses,
                 coursesCount: action.payload.coursesCount,
                 resPerPage: action.payload.resPerPage,
+                resPerPageSearch: action.payload.resPerPageSearch,
                 filteredCoursesCount: action.payload.filteredCoursesCount
             }
 

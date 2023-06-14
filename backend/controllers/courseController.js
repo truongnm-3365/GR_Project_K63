@@ -57,6 +57,7 @@ exports.newCourse = catchAsyncErrors(async (req, res, next) => {
 exports.getCourses = catchAsyncErrors(async (req, res, next) => {
 
     const resPerPage = 8;
+    const resPerPageSearch = 4;
     const coursesCount = await Course.countDocuments({accepted: true});
 
     const apiFeatures = new APIFeatures(Course.find({accepted: true}).sort({ createdAt:-1}), req.query)
@@ -65,7 +66,16 @@ exports.getCourses = catchAsyncErrors(async (req, res, next) => {
 
     let courses = await apiFeatures.query;
     let filteredCoursesCount = courses.length;
-    apiFeatures.pagination(resPerPage)
+
+    if(Object.keys(req.query).length === 1){
+        apiFeatures.pagination(resPerPage)
+    }else if(Object.keys(req.query).length >= 4){
+        
+        apiFeatures.pagination(resPerPageSearch)
+    }
+    
+
+    
     courses = await apiFeatures.query;
     const registerCourse = await RegisterCourse.find();
     
@@ -85,6 +95,7 @@ exports.getCourses = catchAsyncErrors(async (req, res, next) => {
         success: true,
         coursesCount,
         resPerPage,
+        resPerPageSearch,
         filteredCoursesCount,
         courses:coursesTmp
     })

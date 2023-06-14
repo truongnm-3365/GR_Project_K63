@@ -116,16 +116,24 @@ import {
 
 } from '../constants/courseConstants'
 
-export const getCourses = (keyword = '', currentPage = 1, price, category, rating = 0) => async (dispatch) => {
+export const getCourses = (keyword = '', currentPage = 1, price, category, rating = 0,search) => async (dispatch) => {
     try {
 
         dispatch({ type: ALL_COURSES_REQUEST })
 
-        let link = `/api/v1/courses?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}&ratings[gte]=${rating}`
+        let link
 
-        if (category) {
-            link = `/api/v1/courses?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}&category=${category}&ratings[gte]=${rating}`
+        if(search === true){
+            link = `/api/v1/courses?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}&ratings[gte]=${rating}`
+
+            if (category) {
+                link = `/api/v1/courses?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}&category=${category}&ratings[gte]=${rating}`
+            }
+        }else{
+            link = `/api/v1/courses?&page=${currentPage}`
         }
+
+
 
         const { data } = await axios.get(link)
 

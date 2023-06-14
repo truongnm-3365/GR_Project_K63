@@ -8,7 +8,7 @@ const Search = ({ history }) => {
         e.preventDefault()
 
         if (keyword.trim()) {
-            history.push(`/search?keyword=${keyword}`)
+            history.push(`/search?keyword=${encodeURIComponent(keyword)}`)
         } else {
             history.push('/search')
         }
@@ -21,6 +21,7 @@ const Search = ({ history }) => {
                     type="text"
                     id="search_field"
                     className="form-control"
+                    pattern='[^\?]+'
                     placeholder="Nhập tên khóa học ..."
                     onChange={(e) => setKeyword(e.target.value)}
                 />

@@ -1,11 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import moment from "moment";
 import 'moment/locale/vi';
 import { Tag } from "antd";
 
 
 const Questions = ({ question }) => {
+  const history = useHistory();
   return (
     <div className="display-question-container">
       <div className="display-votes-ans">
@@ -30,7 +31,7 @@ const Questions = ({ question }) => {
         <div className="display-tags-time">
           <div className="display-tags">
             {question?.questionTags.map((tag) => (
-              <p key={tag}>{tag}</p>
+              <p style={{cursor:'pointer'}} onClick={(() => history.push(`/forum?keyword=${tag}`))} key={tag}>{tag}</p>
             ))}
           </div>
           <p className="display-time">

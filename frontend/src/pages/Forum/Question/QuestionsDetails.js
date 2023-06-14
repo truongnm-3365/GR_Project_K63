@@ -204,7 +204,7 @@ console.log(answeredUsers);
                      
                       <div className="question-details-tags">
                         {question.questionTags.map((tag) => (
-                          <p key={tag}>{tag}</p>
+                          <p style={{cursor:'pointer'}} onClick={(() => history.push(`/forum?keyword=${tag}`))} key={tag}>{tag}</p>
                         ))}
                       </div>
                       <div className="question-actions-user">

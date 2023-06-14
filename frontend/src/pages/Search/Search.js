@@ -1,6 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import Pagination from 'react-js-pagination'
-import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css';
 
 import MetaData from '../../components/layout/MetaData'
@@ -42,15 +41,22 @@ const Search = ({history}) => {
     const alert = useAlert();
     const dispatch = useDispatch();
 
-    const { loading, courses, error, coursesCount, resPerPage, filteredCoursesCount } = useSelector(state => state.courses)
+    const { loading, courses, error, coursesCount, resPerPageSearch, filteredCoursesCount } = useSelector(state => state.courses)
 
     
     const keyword = query.get("keyword") || ""
+
     const categoryQuery = query.get("category") || ""
     const ratingQuery = query.get("rating") || 0
     const minPriceQuery = query.get("price[gte]") || ""
     const maxPriceQuery = query.get("price[lte]") || ""
     const priceQuery = [minPriceQuery,maxPriceQuery].includes("") ? [0,1000000] : [minPriceQuery,maxPriceQuery]
+    
+
+    useEffect(() =>{
+        setCurrentPage(1)
+    },[keyword])
+
     
 
     useEffect(() => {
@@ -62,11 +68,15 @@ const Search = ({history}) => {
         }
 
       
-        dispatch(getCourses(keyword, currentPage, priceQuery, categoryQuery, ratingQuery));
+        dispatch(getCourses(keyword, currentPage, priceQuery, categoryQuery, ratingQuery,true));
         
         if(categoryQuery){
             setCategory(categoryQuery)
         }
+
+        
+        //setCurrentPage(1);
+        
        
 
 
@@ -190,12 +200,12 @@ const Search = ({history}) => {
                         </div>
                     </section>
 
-                    {resPerPage < filteredCoursesCount && (
+                    {resPerPageSearch < filteredCoursesCount && (
                         <div className="d-flex justify-content-center mt-5">
                             <Pagination
                                 activePage={currentPage}
-                                itemsCountPerPage={resPerPage}
-                                totalItemsCount={coursesCount}
+                                itemsCountPerPage={resPerPageSearch}
+                                totalItemsCount={filteredCoursesCount}
                                 onChange={setCurrentPageNo}
                                 nextPageText={'Tiếp'}
                                 prevPageText={'Trước'}

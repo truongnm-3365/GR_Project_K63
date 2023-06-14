@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Loader from '../../components/layout/Loader'
 import { clearErrors, getCourseLessons, getCourseLesson, getCourseTopics, getTopicQuizs, getCourseDetails, getCourseDocuments, newReview, getNotes, newNote, deleteNote } from '../../actions/courseActions'
 import { useDispatch, useSelector } from 'react-redux'
@@ -19,7 +19,8 @@ const { Text } = Typography;
 
 
 const Lessons = ({match}) => {
-  const vid = document.getElementById("video");
+  const videoRef = useRef(null)
+  const vid = videoRef.current
   const { Panel } = Collapse;
   const dispatch = useDispatch();
   const history = useHistory();
@@ -39,7 +40,7 @@ const Lessons = ({match}) => {
   const {user, isAuthenticated} = useSelector(state => state.auth)
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
-  const [videoTime, setVideoTime] = useState();
+  const [videoTime, setVideoTime] = useState(-1);
   const [isModalNoteOpen, setIsModalNoteOpen] = useState(false);
   const [isNoteListOpen, setIsNoteListOpen] = useState(false);
   const [note, setNote] = useState("");
@@ -65,8 +66,9 @@ const Lessons = ({match}) => {
   
 
   const showModalNote = () => {
-    setIsModalNoteOpen(true);
     vid.pause();
+    setIsModalNoteOpen(true);
+
   };
   const handleOk = () => {
 
@@ -476,8 +478,6 @@ const items = [
 
 
 
-
-
 return (
     <>
         {isRegister() ?
@@ -514,13 +514,15 @@ return (
         {exercise === false  && lessons.length !== 0 &&
               <div className="col-md-9">
                 <span style={{display:'none'}}>
+                {console.log(videoTime)}
                 { 
-                  typeof videoTime === 'number' && isFinite(videoTime) && vid && (vid.currentTime = videoTime )
+                 
+                  videoTime !== -1 && vid && (vid.currentTime = videoTime )
                 }
                 </span>
 
                 <video
-                    id="video"
+                    ref={videoRef}
                     onEnded={() => {
                       if(lessons[index +1]){
                         let data={
@@ -575,8 +577,8 @@ return (
                             {checkCompleteVideo(lesson._id) ? 
                             <div key={lesson._id} className="season_tab">
                             {index === 0 ? 
-                              <input  onChange={() => {onChangeChecked(index);setIndexTopic(indexTopic);setExercise(false);setVideoTime(0)}} type="radio" id={`tab-${index+1}`} name={`tab-group-1`} checked={checked[0]}/> 
-                              :<input onChange={() => {onChangeChecked(index);setIndexTopic(indexTopic);setExercise(false);setVideoTime(0)}} type="radio" id={`tab-${index+1}`} name={`tab-group-1`} checked={checked[index]}/>
+                              <input  onChange={() => {onChangeChecked(index);setIndexTopic(indexTopic);setExercise(false);setVideoTime(-1)}} type="radio" id={`tab-${index+1}`} name={`tab-group-1`} checked={checked[0]}/> 
+                              :<input onChange={() => {onChangeChecked(index);setIndexTopic(indexTopic);setExercise(false);setVideoTime(-1)}} type="radio" id={`tab-${index+1}`} name={`tab-group-1`} checked={checked[index]}/>
                               }
                           
                             <label className="d-flex justify-content-between" htmlFor={`tab-${index+1}`}>
