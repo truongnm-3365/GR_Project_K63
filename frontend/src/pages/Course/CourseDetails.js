@@ -12,7 +12,7 @@ import { NEW_REGISTER_COURSE_RESET } from '../../constants/registerCourseContant
 import { Button, Collapse, Modal, Pagination, Table } from 'antd'
 import './index.css'
 import { getAccessChat } from '../../actions/chatAction'
-import { addWishlist } from '../../actions/wishListAction'
+import { addWishlist, getMeWishList } from '../../actions/wishListAction'
 import { NEW_WISH_LIST_RESET } from '../../constants/wishListContant'
 import Course from '../../components/course/Course'
 const CourseDetails = ({ match }) => {
@@ -43,6 +43,7 @@ const CourseDetails = ({ match }) => {
     const { lessons, totalDuration  } = useSelector(state => state.courseLessons)
     const {  topics } = useSelector(state => state.courseTopics)
     const {success: newWishList} = useSelector(state => state.newWishList);
+    const { wishList } = useSelector(state => state.wishList)
 
     useEffect(() => {
         
@@ -51,6 +52,7 @@ const CourseDetails = ({ match }) => {
        
         if(isAuthenticated){
             dispatch(getMeRegisterCourses())
+            dispatch(getMeWishList());
         }
         dispatch(getCourseLessons(match.params.id))
         dispatch(getCourseTopics(match.params.id))
@@ -123,7 +125,7 @@ const CourseDetails = ({ match }) => {
 
 
     const isRegister = () =>{
-        if(user){
+        if(isAuthenticated){
             for(let i = 0; i < registerCourses?.length; i++){
                 if(registerCourses[i].course === match.params.id){
                     return true
@@ -133,6 +135,18 @@ const CourseDetails = ({ match }) => {
         }
         return false
 
+    }
+
+    const isInWishList = () =>{
+        if(isAuthenticated){
+            for(let i = 0; i < wishList?.length; i++){
+                if(wishList[i].course._id === match.params.id){
+                    return true
+                }
+            }
+            return false
+        }
+        return false
     }
 
 
@@ -160,8 +174,7 @@ const CourseDetails = ({ match }) => {
             if(registerCourses[i].course === match.params.id){
                 const day = new Date(registerCourses[i].createdAt)
                 day.setDate(day.getDate() + course.details.timeLimit*31)
-                console.log(day);
-                console.log(new Date(registerCourses[i].createdAt))
+                
                 return day;
             }
         }
@@ -362,7 +375,11 @@ const CourseDetails = ({ match }) => {
                                 {isAuthenticated ?
                                     <>
                                         <button onClick={() => addCourse()} type="button"  className="btn btn-success d-inline ml-4" >Đăng ký học</button>
-                                        <button onClick={() => dispatch(addWishlist(course.details._id))} type="button"  className="btn btn-success d-inline ml-4" >Thêm vào danh sách yêu thích</button>
+                                        
+                                        {isInWishList() ?  
+                                            <button  type="button"  className="btn btn-danger d-inline ml-4" >Đã thích</button> 
+                                            :<button onClick={() => dispatch(addWishlist(course.details._id))} type="button"  className="btn btn-success d-inline ml-4" >Yêu Thích</button>
+                                        }
                                     </>
                                 :  <div className="alert alert-danger mt-5" type='alert'>Đăng nhập để đăng ký khóa học</div> }
                                 </>                                
@@ -393,7 +410,7 @@ const CourseDetails = ({ match }) => {
                             
                             {course.user?._id === user?._id &&
                             <>
-                                <Button type="success" onClick={showModal}>
+                                <Button type="primary" onClick={showModal}>
                                     Danh sách học viên
                                 </Button>
                                 <Modal title="Danh sách học viên" open={isModalOpen}  onOk={handleOk} onCancel={handleCancel} okText="Đóng" cancelText="Hủy bỏ">

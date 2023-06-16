@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteWishlist, getMeWishList } from '../../actions/wishListAction';
 import Course from '../../components/course/Course';
-import { Button, Pagination } from 'antd';
+import { Alert, Button, Pagination, Space } from 'antd';
 import MetaData from '../../components/layout/MetaData';
 import { DELETE_WISH_LIST_RESET } from '../../constants/wishListContant';
 import { useAlert } from 'react-alert';
@@ -66,7 +66,17 @@ const WishList = () => {
             <section id="courses" className="mt-5">
                         <div className="row">
 
-
+                            {wishList.length === 0 && 
+                                <Space    
+                                    direction="vertical"
+                                    align='center'
+                                    style={{
+                                        width: '100%',
+                                    }}>
+                                    <Alert message="Không có khóa học yêu thích nào" type="warning" />
+                                </Space>
+                                
+                            }
                             {(
                                 Search(wishList?.filter((item,index) => index >= (currentPage - 1)*pageSize & index <= (currentPage*pageSize - 1) ))?.map(item => (
                                     <>
