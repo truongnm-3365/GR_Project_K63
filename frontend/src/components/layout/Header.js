@@ -24,9 +24,6 @@ const Header = () => {
 
 
     const { user, loading ,isAuthenticated } = useSelector(state => state.auth)
-    
-
-
     const { categories } = useSelector(state => state.categories);
     const { notifies, error, isDeleted } = useSelector(state => state.notifies)
 
@@ -40,6 +37,14 @@ const Header = () => {
     const deleteNotifiesHandler = () =>{
         dispatch(deleteAllNotifies(user._id))
     }
+
+    const shortenName = (name, maxLength) => {
+        if (name.length <= maxLength) {
+          return name; 
+        } else {
+          return name.slice(0, maxLength) + '...';
+        }
+      }
 
     useEffect(() => {
         dispatch(getCategories());
@@ -94,7 +99,7 @@ const Header = () => {
                     </div>
                     <div className="ml-1 dropdown d-inline dropdown-hover">
                         <Link to="#!" className="btn dropdown-toggle text-white mr-4" type="button" id="dropDownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span>Thể loại</span>
+                            <span>Thể loại</span>
                         </Link>
 
                         <div className="dropdown-menu dropdown-hover" aria-labelledby="dropDownMenuButton">
@@ -151,7 +156,7 @@ const Header = () => {
                                         className="rounded-circle"
                                     />
                                 </figure>
-                                <span>{user && user.name}</span>
+                                <span>{user && shortenName(user.name,12)}</span>
                             </Link>
 
                             <div className="dropdown-menu" aria-labelledby="dropDownMenuButton">

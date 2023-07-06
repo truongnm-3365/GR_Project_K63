@@ -439,12 +439,11 @@ exports.newTopic = catchAsyncErrors(async (req, res, next) => {
 exports.getCourseTopic = catchAsyncErrors(async (req, res, next) => {
     const topics = await Topic.find({courseId: req.params.courseId});
 
-    let topicsTmp = topics.filter(item => item.isFinalTest === false)
+    let topicsTmp = topics.filter(item => item.isFinalTest === false).sort((a,b) => a.createdAt - b.createdAt)
 
     let topicFinalTest = topics.filter(item => item.isFinalTest === true)
 
     topicsTmp = topicsTmp.concat(topicFinalTest)
-
 
     res.status(200).json({
         success: true,

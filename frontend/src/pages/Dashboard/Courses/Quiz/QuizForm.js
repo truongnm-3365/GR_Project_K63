@@ -74,20 +74,6 @@ const QuizForm = ({topicId}) => {
       </form>
 
 
-      {/* <form onSubmit={(e) => hadleSubmit(e)}>
-        <div className="form-group">
-          <label htmlFor="name">Câu hỏi</label>
-          <Editor 
-            value={question}
-            onChange={setQuestion}
-          />
-        </div>
-
-        <button style={{position:'absolute', bottom:'10px'}} type="submit" className="btn btn-success mt-2">
-          Hoàn thành
-        </button>
-      </form> */}
-
       <div className="form-group">
                 <label htmlFor="name">Phương án lựa chọn</label>
                 <Editor 
@@ -95,13 +81,6 @@ const QuizForm = ({topicId}) => {
                   value={choiceBody}
                   onChange={setChoiceBody}
                 />
-                {/* <input
-                  type="text"
-                  name="choice"
-                 
-                  className="form-control"
-                  onChange={(e) => setChoice({body: e.target.value, isCorrect:false})}
-                /> */}
         <button onClick={() => addChoice()} className="mt-1 btn btn-success float-right">Thêm</button>        
       </div>
        
@@ -115,8 +94,8 @@ const QuizForm = ({topicId}) => {
               <li index={index} class="list-group-item d-flex justify-content-between align-items-center">
                 <span dangerouslySetInnerHTML={{__html:choice.body}} ></span>
                 {choice.isCorrect &&<span class="badge badge-primary badge-pill">Đáp án đúng</span>}
-                <button onClick={() => addCorrect(choice.body)} className="btn btn-success float-right btn-sm mb-2">Đặt đúng</button>
-                <button onClick={() => deleteChoice(choice.body)} className="btn btn-success float-right btn-sm mb-2">Xóa</button>
+                <button onClick={() => addCorrect(choice.body)} className="btn btn-success float-right btn-sm mb-2 mx-1">Đặt đúng</button>
+                <button onClick={() => deleteChoice(choice.body)} className="btn btn-success float-right btn-sm mb-2 mx-1">Xóa</button>
               </li>
             )
           })}

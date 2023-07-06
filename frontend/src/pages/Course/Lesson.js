@@ -45,10 +45,9 @@ const Lessons = ({match}) => {
   const [isNoteListOpen, setIsNoteListOpen] = useState(false);
   const [note, setNote] = useState("");
   const { notes, loading:notesLoading } = useSelector(state => state.notes);
+  const {isDeleted} = useSelector(state => state.note )
   const { registerCourses } = useSelector(state => state.registerCourses)
  
-  console.log(quizs);
-
 
   function secondsToHms(d) {
     d = Number(d);
@@ -66,6 +65,9 @@ const Lessons = ({match}) => {
   
 
   const showModalNote = () => {
+    if(videoTime !== -1 && vid ){
+      setVideoTime(vid.currentTime);
+    }
     vid.pause();
     setIsModalNoteOpen(true);
 
@@ -73,9 +75,11 @@ const Lessons = ({match}) => {
   const handleOk = () => {
 
 
+
     if(!note){
       alert.error("Không được để trống ghi chú")
     }else{
+
       setIsModalNoteOpen(false);
       let data ={
         body: note,
@@ -96,6 +100,9 @@ const Lessons = ({match}) => {
 
   const showNoteList = () => {
     dispatch(getNotes(match.params.id))
+    if(videoTime !== -1 && vid ){
+      setVideoTime(vid.currentTime);
+    }
     setIsNoteListOpen(true);
   };
   const handleListOk = () => {
@@ -125,11 +132,13 @@ const Lessons = ({match}) => {
         setVideoTime(note.time);
         setIndex(i);
         onChangeChecked(i)
-        setIsNoteListOpen(false)
+        //setIsNoteListOpen(false)
         
         break;
       }
     }
+
+    
     
   } 
 
@@ -185,6 +194,10 @@ const Lessons = ({match}) => {
   
   }
 
+  useEffect(() => {
+    if(isDeleted)
+      dispatch(getNotes(match.params.id))
+  },[isDeleted])
 
   useEffect(() => {
     dispatch(getCourseLessons(match.params.id))
@@ -299,6 +312,7 @@ const checkCompleteVideo = (mediaId) =>{
 const checkCompletedVideo = (mediaId) =>{
   if(completeVideos && user){
     for(let i = 0; i < completeVideos.length; i++){
+      console.log(completeVideos[i]);
       if(completeVideos[i].user === user._id && completeVideos[i].completed && completeVideos[i].media === mediaId){
         return true
       }
@@ -496,9 +510,9 @@ return (
           <Modal title={"Danh sách ghi chú"} open={isNoteListOpen} onOk={handleListOk} onCancel={handleListCancel} cancelText={"Hủy bỏ"}  width={1000}>
               {!notesLoading ? notes.map(item => {
                 return <div key={item._id} className="mb-3">
-                    <Button danger onClick={() => handleVideoTiem(item) }>{secondsToHms(item.time)}</Button>
-                    <Button onClick={() => handleVideoTiem(item)} type="link"> <Text type="danger">{item.media.name} </Text> <Text strong>.{item.media.topic}</Text></Button>
-                    <Button className="float-right" onClick={() => {dispatch(deleteNote(item._id));handleListCancel();showNoteList()}} >Xóa</Button>
+                    <Button danger onClick={() => {handleVideoTiem(item)} }>{secondsToHms(item.time)}</Button>
+                    <Button onClick={() => {handleVideoTiem(item)}} type="link"> <Text type="danger">{item.media.name} </Text> <Text strong>.{item.media.topic}</Text></Button>
+                    <Button className="float-right" onClick={() => {dispatch(deleteNote(item._id))}} >Xóa</Button>
                     <div> <Text>{item.body}</Text></div>
                 </div>
               })
@@ -516,14 +530,16 @@ return (
                 <span style={{display:'none'}}>
                 { 
                  
-                  videoTime !== -1 && vid && (vid.currentTime = videoTime )
+                  videoTime !== -1 && vid && (vid.currentTime = videoTime) 
+
                 }
+
                 </span>
 
                 <video
                     ref={videoRef}
                     onEnded={() => {
-                      if(lessons[index +1]){
+                      if(lessons[index + 1]){
                         let data={
                           course: match.params.id,
                           topic: lessons[index + 1].topicId,

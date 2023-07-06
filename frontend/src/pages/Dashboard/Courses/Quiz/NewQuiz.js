@@ -70,7 +70,7 @@ const NewQuiz = ({match}) => {
                 style={{
                   height: "auto",
                   width: "auto",
-                  margin: "40px",
+                  margin: "40px -40px 40px 40px",
                   border: "1px solid black",
                   padding:"10px"
                 }}

@@ -24,7 +24,6 @@ exports.getDocument = async (req, res, next) => {
 
 exports.create = catchAsyncErrors(async (req, res, next) => {
   const { name, courseId, topicId} = req.body;
-  console.log(req.body);
   let documentsPaths = [];
 
   if (Array.isArray(req.files.documents) && req.files.documents.length > 0) {

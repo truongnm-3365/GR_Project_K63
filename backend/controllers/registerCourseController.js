@@ -2,8 +2,6 @@ const Course = require('../models/course')
 const User = require('../models/user')
 const Topic = require('../models/topic');
 const Media = require('../models/media');
-const mongoose = require('mongoose')
-const ErrorHandler = require('../utils/errorHandler');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const RegisterCourse = require('../models/registerCourse')
 
@@ -12,8 +10,11 @@ exports.registerCourse = catchAsyncErrors(async(req,res,next)=>{
     req.body.user = req.user.id
     req.body.course = req.params.id
     const course = await Course.findById(req.params.id)
-    const topic = await Topic.findOne({courseId: req.params.id})
-    const media = await Media.findOne({topicId: topic._id})
+    const topics = await Topic.find({courseId: req.params.id})
+    const topic = topics.sort((a,b)=>a.createdAt - b.createdAt)[0]
+    const medias = await Media.find({course: req.params.id})
+
+    const media = medias.sort((a,b)=>a.createdAt - b.createdAt)[0]
 
     req.body.topic = topic._id
     req.body.media = media._id
@@ -63,6 +64,7 @@ exports.completedVideo = catchAsyncErrors(async (req, res, next) => {
     req.body.user = req.user.id
     let completedVideo = await RegisterCourse.findOne(req.body);
 
+
     if (!completedVideo) {
         res.status(404).json({
             success: false,
@@ -70,7 +72,6 @@ exports.completedVideo = catchAsyncErrors(async (req, res, next) => {
         })
        
     }
-
     req.body.completed = true
 
     completedVideo = await RegisterCourse.findByIdAndUpdate(completedVideo._id, req.body, {
@@ -88,10 +89,7 @@ exports.completedVideo = catchAsyncErrors(async (req, res, next) => {
 
 exports.getRegisterCourse = catchAsyncErrors(async(req, res, next) =>{
     const coursesTmp = await RegisterCourse.find({user: req.user.id})
-    const courses = coursesTmp.filter(item => item.name !== undefined )
-    // let registerCourses = await RegisterCourse.find({user: req.user.id});
-
-    
+    const courses = coursesTmp.filter(item => item.name !== undefined ) 
 
     let coursesTmpp = courses.map(course => {
         let isPassed = false

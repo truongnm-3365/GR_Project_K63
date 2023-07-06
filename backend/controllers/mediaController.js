@@ -18,11 +18,8 @@ exports.getAll = async (req, res, next) => {
 
     let videoPaths = mediasTmp.map(item => process.env.BACKEND_URL + item.videos[0].replaceAll("\\","/"))
     
-  
-    
     let totalDuration = 0;
 
-    
     for (const videoPath of videoPaths) {
       try {
         const metadata = await new Promise((resolve, reject) => {
@@ -46,12 +43,11 @@ exports.getAll = async (req, res, next) => {
 
     var media = [];
     topics.forEach(item => {
-      let medias = mediasTmp.filter(e => e.topicId.toString() === item._id.toString())
+      let medias = mediasTmp.sort((a,b) => a.createdAt - b.createdAt).filter(e => e.topicId.toString() === item._id.toString())
       medias.forEach(item => {
         media.push(item);
       })
     });
-
 
 
     res.status(201).json({
