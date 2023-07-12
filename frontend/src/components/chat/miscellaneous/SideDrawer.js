@@ -1,7 +1,6 @@
 import { Drawer, Button, Input, Tooltip, Spin, notification  } from 'antd';
 import { useEffect, useState } from "react";
 import ChatLoading from "../ChatLoading";
-import { getSender } from "../../../config/ChatLogics";
 import UserListItem from "../userAvatar/UserListItem";
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';

@@ -57,6 +57,7 @@ exports.delete = catchAsyncErrors(async (req, res, next) => {
       })
       
   }
+  
 
   await document.remove();
   fs.unlink("../backend" + document.docs[0], (err => {

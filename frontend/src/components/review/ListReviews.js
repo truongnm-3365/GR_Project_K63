@@ -23,7 +23,7 @@ const ListReviews = ({ reviews,ratings }) => {
             <h3>Đánh giá: </h3>
             <div className='d-flex'>
                 <div className='text-center mr-3'>
-                    <h1 style={{fontSize:'90px'}}>{ratings}</h1>
+                    <h1 style={{fontSize:'90px'}}>{ratings.toFixed(1)}</h1>
                     <div style={{fontSize:'20px'}} className="rating-outer">
                         <div className="rating-inner" style={{ width: `${(ratings / 5) * 100}%` }}></div>
                     </div>
@@ -38,7 +38,7 @@ const ListReviews = ({ reviews,ratings }) => {
                                 </div>
                                 <div>
                                 <div style={{width:'100px'}} className='ml-2'>
-                                    {(ratingNumber(item)/reviews.length) *100}%
+                                    {((ratingNumber(item)/reviews.length) *100).toFixed(1)}%
                                     {rate === item && <Button onClick={() => setRate(0)} className='ml-1' shape="circle" size='small'>X</Button>}
                                 </div>
                                 

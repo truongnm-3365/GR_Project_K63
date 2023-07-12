@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getSender } from "../../config/ChatLogics";
+import { getSender } from "./config/ChatLogics";
 import ChatLoading from "./ChatLoading";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";

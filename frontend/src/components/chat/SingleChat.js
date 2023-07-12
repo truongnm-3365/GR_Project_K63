@@ -1,6 +1,6 @@
 import "./styles.css";
 
-import { getSender, getSenderFull } from "../../config/ChatLogics";
+import { getSender, getSenderFull } from "./config/ChatLogics";
 import { useEffect, useState } from "react";
 
 

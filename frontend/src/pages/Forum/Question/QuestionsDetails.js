@@ -24,7 +24,8 @@ import Editor from "../../../components/editor/Editor";
 const columns = [
   {
     title: 'Câu trả lời',
-    dataIndex: 'answerBody'
+    dataIndex: 'answerBody',
+    render: (text) => <p dangerouslySetInnerHTML={{__html:text}} ></p>
   },
   {
     title: 'Người trả lời',
@@ -142,7 +143,6 @@ const QuestionsDetails = () => {
   },
 };
 
-console.log(answeredUsers);
 
   return (
     <div className="container mt-2">

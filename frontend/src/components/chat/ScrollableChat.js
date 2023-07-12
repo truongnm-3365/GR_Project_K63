@@ -6,7 +6,7 @@ import {
   isSameSender,
   isSameSenderMargin,
   isSameUser,
-} from "../../config/ChatLogics";
+} from "./config/ChatLogics";
 import { useSelector } from "react-redux";
 
 const ScrollableChat = ({ messages }) => {
