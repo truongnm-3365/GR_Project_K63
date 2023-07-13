@@ -146,11 +146,11 @@ const CourseList = ({ history }) => {
                                             </div>
 
 
-                                            <div className="col-lg-2 mt-4 mt-lg-0">
+                                            {/* <div className="col-lg-2 mt-4 mt-lg-0">
                                                 <i className="fa fa-trash btn btn-danger" onClick={() => removeCourseHandler(item._id)} >
                                                     {' '}Hủy Đăng ký
                                                 </i>
-                                            </div>
+                                            </div> */}
 
                                         </div>
                                     </div>

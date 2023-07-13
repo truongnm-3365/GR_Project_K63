@@ -120,7 +120,7 @@ const CourseReviews = () => {
                                     <button
                                         id="search_button"
                                         type="submit"
-                                        className="btn btn-primary btn-block py-2"
+                                        className="btn btn-s btn-block py-2"
                                     >
                                         TÌM KIẾM
 								    </button>

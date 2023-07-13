@@ -17,6 +17,7 @@ import { bannerDetailsReducer, bannerReducer, bannersReducer, newBannerReducer }
 import questionsReducer, { questionReducer } from './reducers/questionReducer';
 import { accessChatReducer, chatsReducer, messagesReducer, searchChatReducer, selectedChatReducer, sendMessagesReducer } from './reducers/chatReducer';
 import { deleteWishListReducer, newWishListReducer, wishListReducer } from './reducers/wishListReducer';
+import { deleteFollowReducer, followersReducer, followingsReducer, newFollowReducer } from './reducers/followReducer';
 
 
 const reducer = combineReducers({
@@ -72,7 +73,11 @@ const reducer = combineReducers({
     selectedChat: selectedChatReducer,
     wishList: wishListReducer,
     newWishList: newWishListReducer,
-    deleteWishList: deleteWishListReducer
+    deleteWishList: deleteWishListReducer,
+    followers: followersReducer,
+    followings: followingsReducer,
+    newFollow: newFollowReducer,
+    deleteFollow: deleteFollowReducer
 })
 
 

@@ -414,7 +414,7 @@ const CourseDetails = ({ match }) => {
                                     Danh sách học viên
                                 </Button>
                                 <Modal title="Danh sách học viên" open={isModalOpen}  onOk={handleOk} onCancel={handleCancel} okText="Đóng" cancelText="Hủy bỏ">
-                                    <Table columns={columns} dataSource={course.registerUsers.map(item => {return {...item,key:item._id}})}></Table>
+                                    <Table locale={{ emptyText: "Không có dữ liệu" }} columns={columns} dataSource={course.registerUsers.map(item => {return {...item,key:item._id}})}></Table>
                                 </Modal>                            
                             </>
 

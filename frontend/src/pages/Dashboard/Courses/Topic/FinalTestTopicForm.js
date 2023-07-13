@@ -18,7 +18,7 @@ const FinalTestTopicForm = ({courseId, newTopic }) => {
     <>
       <form onSubmit={hadleSubmit}>
 
-        <button type="submit" className="btn btn-primary mt-2">
+        <button type="submit" className="btn btn-success mt-2">
           Thêm bài kiểm tra cuối khóa
         </button>
       </form>

@@ -241,7 +241,7 @@ const CoursesList = ({ history }) => {
                               </span>
                             </div>
 
-                            <Table columns={columns} dataSource={data} 
+                            <Table columns={columns} dataSource={data} locale={{ emptyText: "Không có dữ liệu" }}
                                    pagination={{ defaultPageSize: 4 }}
 
                             />
