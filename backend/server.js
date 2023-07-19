@@ -1,21 +1,17 @@
 const app = require('./app')
 const connectDatabase = require('./config/database')
 
-// const dotenv = require('dotenv');
 
-
-// Handle Uncaught exceptions
 process.on('uncaughtException', err => {
     console.log(`ERROR: ${err.stack}`);
     console.log('Shutting down due to uncaught exception');
     process.exit(1)
 })
 
-// Setting up config file
+
 if (process.env.NODE_ENV !== 'PRODUCTION') require('dotenv').config({ path: './config/config.env' })
 
 
-// Connecting to database
 connectDatabase();
 
 const server = app.listen(process.env.PORT, () => {
@@ -27,7 +23,6 @@ const io = require("socket.io")(server, {
     pingTimeout: 60000,
     cors: {
       origin: process.env.FRONTEND_URL,
-      // credentials: true,
     },
   });
   

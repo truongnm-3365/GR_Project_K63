@@ -12,6 +12,7 @@ const Topic = require('../models/topic');
 const Quiz = require('../models/quiz');
 const RegisterCourse = require('../models/registerCourse');
 const Note = require('../models/note');
+const Follow = require('../models/follow');
 
 // Create new course   =>   /api/v1/admin/course/new
 exports.newCourse = catchAsyncErrors(async (req, res, next) => {
@@ -153,6 +154,8 @@ exports.adminAcceptCourse = catchAsyncErrors(async (req, res, next) => {
 
     let courseNotAccept = await Course.findById(req.params.id);
 
+    
+
     if (!courseNotAccept) {
         res.status(404).json({
             success: false,
@@ -172,6 +175,16 @@ exports.adminAcceptCourse = catchAsyncErrors(async (req, res, next) => {
         content: `Quản trị viên đã phê duyệt khóa học ${course.name} của bạn`,
         course:course._id
     })
+    
+    const followers = await Follow.find({user: course.user })
+
+    for(let follower of followers){
+        await Notify.create({
+            user: follower.follower,
+            content: `Người bạn đang theo dõi đã thêm khóa học ${course.name}`,
+            course:course._id
+        })
+    }
 
     res.status(200).json({
         success: true,
@@ -184,6 +197,9 @@ exports.adminAcceptCourse = catchAsyncErrors(async (req, res, next) => {
 exports.adminChangeStatusCourse = catchAsyncErrors(async (req, res, next) => {
 
     let course = await Course.findById(req.params.id);
+
+    
+
 
     if (!course) {
         res.status(404).json({
