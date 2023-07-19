@@ -16,7 +16,7 @@ const Profile = ({ match }) => {
 
     const alert = useAlert();
 
-    const { user, loading, error } = useSelector(state => state.auth)
+    const { user, loading, error, isAuthenticated } = useSelector(state => state.auth)
 
     const { profile } = useSelector(state => state.profile)
 
@@ -92,7 +92,7 @@ const Profile = ({ match }) => {
 
     const isFollowing = () =>{
         for( let i = 0; i < followers?.length; i++){
-            if(followers[i].follower._id === user._id){
+            if(followers[i].follower._id === user?._id){
                 return true
             }
         }
@@ -108,7 +108,7 @@ const Profile = ({ match }) => {
           itemLayout="horizontal"
           locale={{ emptyText: "Không có dữ liệu" }}
           pagination={{pageSize:3}}
-          dataSource={followings.map(item => item.user)}
+          dataSource={followings?.map(item => item.user)}
           renderItem={(item, index) => (
             <List.Item>
               <List.Item.Meta
@@ -126,7 +126,7 @@ const Profile = ({ match }) => {
           itemLayout="horizontal"
           locale={{ emptyText: "Không có dữ liệu" }}
           pagination={{pageSize:3}}
-          dataSource={followers.map(item => item.follower)}
+          dataSource={followers?.map(item => item.follower)}
           renderItem={(item, index) => (
             <List.Item>
               <List.Item.Meta
@@ -184,7 +184,9 @@ const Profile = ({ match }) => {
                                 <h4 style={{color: '#006241'}}>{profile?.consumPoint}</h4>
                             </div>
                             
-                            {!(user?._id === profile?._id || !userId) &&
+                            
+
+                        {!(user?._id === profile?._id || !userId || !isAuthenticated) &&
                             <div className='d-flex'>
                                 {isFollowing() ? 
                                 <>

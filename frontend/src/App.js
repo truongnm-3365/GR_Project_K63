@@ -122,7 +122,7 @@ function App() {
           <Route path="/password/forgot" component={ForgotPassword} exact />
           <Route path="/password/reset/:token" component={NewPassword} exact />
           <ProtectedRoute path="/me" component={Profile} exact />
-          <ProtectedRoute path="/profile/:id" component={Profile} exact />
+          <Route path="/profile/:id" component={Profile} exact />
           <ProtectedRoute path="/me/update" component={UpdateProfile} exact />
           <ProtectedRoute path="/password/update" component={UpdatePassword} exact />
           
