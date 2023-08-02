@@ -28,11 +28,6 @@ const NewCourse = ({ history }) => {
    
     const [imagesPreview, setImagesPreview] = useState([])
 
-    // const categories = [
-    //     'Công nghệ thông tin',
-    //     'Ngoại ngữ'
-    // ]
-
     const alert = useAlert();
     const dispatch = useDispatch();
 
@@ -76,13 +71,20 @@ const NewCourse = ({ history }) => {
         //console.log(images)
         
 
-        if(name && price && description && category && images &&  timeLimit){
+        if(name && price && description && category && images && timeLimitFinalExam &&  timeLimit && images){
+            if(price <= 0 || timeLimitFinalExam <=0 || timeLimit <=0){
+                alert.error('Giá trị số phải lớn hơn 0');
+            }else if(name.length > 100){
+                alert.error('Tên phải ngắn hơn 100 kí tự');
+            }
+            else{
+                dispatch(newCourse(formData))
+            }
             
-            dispatch(newCourse(formData))
         }else{
             alert.error('Thông tin khóa học bị thiếu');
         }
-            
+        
     }
 
     const onChange = e => {
